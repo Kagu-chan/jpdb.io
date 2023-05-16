@@ -50,14 +50,12 @@ const BOTTOM_DECKS = [
   'Graveyard', //              Decks I dont learn anymore
 ];
 
-// 'default' decks and all other (non sorted) decks will be sorted by Coverage (if enabled), then by Vocabulary
 /**
  * Enabeling this will sort decks first by its Coverage, then Vocabulary.
  * If no coverage is available for a given deck, it will sort by Vocabulary only.
  */
 const SORT_BY_COV = true;
 
-// When sorting by Coverage or Vocab, REC (Recognition) will first sort by the targeted value (the one in parentheses), then the actual value (left)
 /**
  * Sort by recognition, then by known words.
  * Recognition is the value in parentheses (Words you have already seen, but do not "know" yet)
@@ -74,6 +72,15 @@ const SORT_BY_REC = true;
  * Only applies if SORT_BY_REC is true
  */
 const SWAP_REC_VOC = true;
+
+/**
+ * Threshold where a deck gets deprioritized (when using default sort)
+ *
+ * Used to move decks with a certain coverage automatically down
+ * Uses Coverage if available, otherwise Vocabulary.
+ * Respects SWAP_REC_VOC to choose the breaking point.
+ */
+const DEPRIORITIZE_AT = 90;
 
 // ##### END CONFIGURATION #####
 
@@ -372,6 +379,16 @@ class DeckSorter {
             ]),
       );
     } else priorityList.push([l.vk, r.vk]);
+
+    if (DEPRIORITIZE_AT) {
+        const [a, b] = SWAP_REC_VOC ? [l.ck, r.ck] : [l.cp, r.cp];
+
+        if (a + b < (DEPRIORITIZE_AT * 2)) {
+            // If both values together are more or equal to threshold * 2, both are above or at the threshold and sorted normally
+            if (a >= DEPRIORITIZE_AT) return 1;
+            if (b >= DEPRIORITIZE_AT) return -1;
+        }
+    }
 
     while (priorityList.length) {
       const [lv, rv] = priorityList.shift();
