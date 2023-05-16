@@ -35,9 +35,9 @@
 // Decks to put to the TOP
 const TOP_DECKS = [
   /^Prio:/i, // If there is a deck starting with 'Prio:', move it to the top
+  'Mining', //  'Mining' Deck
   /1K/i, //     Deck containing '1K' (in this case, 1K Frequency list) - this is a shortcut for writing out the name completely
   /N5/i, //     Deck containing 'N5' (in this case, the JLPT N5 Deck)
-  'Mining', //  'Mining' Deck
   'Refold', //  'Refold' Deck
 ];
 
@@ -50,19 +50,36 @@ const BOTTOM_DECKS = [
 ];
 
 // 'default' decks and all other (non sorted) decks will be sorted by Coverage (if enabled), then by Vocabulary
+/**
+ * Enabeling this will sort decks first by its Coverage, then Vocabulary.
+ * If no coverage is available for a given deck, it will sort by Vocabulary only.
+ */
 const SORT_BY_COV = true;
 
 // When sorting by Coverage or Vocab, REC (Recognition) will first sort by the targeted value (the one in parentheses), then the actual value (left)
+/**
+ * Sort by recognition, then by known words.
+ * Recognition is the value in parentheses (Words you have already seen, but do not "know" yet)
+ *
+ * If two decks have the same recognition value, it falls back to known words
+ * This priority applies separately for Coverage and Vocab
+ */
 const SORT_BY_REC = true;
 
-// Automatic Sorting on (true) or off (false) - if ON, on decklist enter the decks will be sorted if not already. if OFF, a new Menu item will be added to sort
+/**
+ * Reverses the priority between known words and recognition.
+ *
+ * If two decks have the same percentage of known words, it will be sorted by recognition as a lower priority (instead of vice versa).
+ * Only applies if SORT_BY_REC is true
+ */
+const SWAP_REC_VOC = true;
+
+/**
+ * Enable or disable automatic sorting.
+ *
+ * If disabled, a user control will be added on decklist controls
+ */
 const AUTO_SORT = false;
-
-// If true, no actual requests are send to the server, but the results are sill logged to the console
-const SIMULATE = false;
-
-// If this CAP is reached, the script will cancel - please keep in mind the https://jpdb.io/terms-of-use Terms of use
-const HARD_CAP = 100;
 
 // ##### END CONFIGURATION #####
 
@@ -79,6 +96,7 @@ class DeckSorter {
     // Actual sorting instructions for the server
     this.instructions = [];
     this.iterations = 0;
+    this.isSorting = false;
 
     // Auxiliary data
     this.deckNodes = Array.from(document.querySelectorAll('div.deck')).slice(0, -3);
@@ -87,7 +105,7 @@ class DeckSorter {
 
   deckNodeToObject(node, pos) {
     const titleBlock = node.querySelector('.deck-main .deck-title a');
-    const title = titleBlock.innerHTML.replace(/\d+\.\s/, '');
+    const title = titleBlock.innerText.replace(/\d+\.\s/, '');
     const cov = this.getCoverageStats(node);
     const id = Number(node.id.replace('deck-', ''));
 
@@ -122,7 +140,7 @@ class DeckSorter {
       `Found ${this.instructions.length} sorting instructions to sort your JPDB Deck List`,
     );
 
-    if (this.iterations < HARD_CAP && this.instructions.length && !SIMULATE) {
+    if (this.instructions.length) {
       console.debug('Start pushing sort instructions to server...');
       this.sortDecksRemote();
     }
@@ -217,6 +235,8 @@ class DeckSorter {
     const instruction = this.instructions.shift();
     console.debug('Send sort command to server', instruction);
 
+    this.isSorting = true;
+    this.updateInstructionsText();
     // eslint-disable-next-line no-undef
     xhr('POST', 'https://jpdb.io/change_deck_priority', instruction, () => {
       if (this.instructions.length) {
@@ -226,6 +246,7 @@ class DeckSorter {
 
         // eslint-disable-next-line no-undef
         virtual_refresh();
+        this.isSorting = false;
       }
     });
   }
@@ -326,14 +347,42 @@ class DeckSorter {
     const { cov: l } = left.e;
     const { cov: r } = right.e;
     const comp = (a, b) => (a < b ? 1 : -1);
+    const priorityList = [];
 
     if (SORT_BY_COV) {
-      if (SORT_BY_REC && l.cp !== r.cp) return comp(l.cp, r.cp);
-      if (l.ck !== r.ck) return comp(l.ck, r.ck);
+      if (SORT_BY_REC)
+        priorityList.push(
+          ...(SWAP_REC_VOC
+            ? [
+                [l.ck, r.ck],
+                [l.cp, r.cp],
+              ]
+            : [
+                [l.cp, r.cp],
+                [l.ck, r.ck],
+              ]),
+        );
+      else priorityList.push([l.ck, r.ck]);
     }
 
-    if (SORT_BY_REC && l.vp !== r.vp) return comp(l.vp, r.vp);
-    if (l.vk !== r.vk) return comp(l.vk, r.vk);
+    if (SORT_BY_REC)
+      priorityList.push(
+        ...(SWAP_REC_VOC
+          ? [
+              [l.vk, r.vk],
+              [l.vp, r.vp],
+            ]
+          : [
+              [l.vp, r.vp],
+              [l.vk, r.vk],
+            ]),
+      );
+    else priorityList.push([l.vk, r.vk]);
+
+    while (priorityList.length) {
+      const [lv, rv] = priorityList.shift();
+      if (lv !== rv) return comp(lv, rv);
+    }
 
     return l.w === r.w ? 0 : comp(l.w, r.w);
   }
@@ -381,15 +430,25 @@ class DeckSorter {
     this.allDecks = this.allDecks.filter(({ id }) => !ids.includes(id));
   }
 
+  updateInstructionsText() {
+    let text = this.isSorting
+      ? `Sending instructions... ${this.instructions.length} left`
+      : `Sort Decks (${this.instructions.length})`;
+
+    document.getElementById('sort-decks').innerHTML = text;
+  }
+
   attachToDom() {
     if (!this.instructions.length) return;
 
     console.debug('Add clickable object to deck controls');
     const menu = document.querySelector('body > div.container.bugfix > div:nth-child(2)');
-    const newEl = `<a style="flex-grow: 1;" class="outline" href="javascript:sortDecks()">Sort Decks (${this.instructions.length})</a>`;
+    const newEl = `<a style="flex-grow: 1;" class="outline" id="sort-decks" href="javascript:sortDecks()">Sort Decks</a>`;
 
     window.sortDecks = this.submitSort.bind(this);
     menu.innerHTML = `${menu.innerHTML}${newEl}`;
+
+    this.updateInstructionsText();
   }
 }
 
