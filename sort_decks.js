@@ -36,16 +36,17 @@
 const TOP_DECKS = [
   /^Prio:/i, // If there is a deck starting with 'Prio:', move it to the top
   'Mining', //  'Mining' Deck
-  /1K/i, //     Deck containing '1K' (in this case, 1K Frequency list) - this is a shortcut for writing out the name completely
   /N5/i, //     Deck containing 'N5' (in this case, the JLPT N5 Deck)
+  '1K Top Anime Frequency List', // 1K Anime Frequency list
   'Refold', //  'Refold' Deck
 ];
 
 // Decks to put to the BOTTOM
 const BOTTOM_DECKS = [
-  /10K/i, //                   Deck containing '10K' (in this case, 10K Frequency list)
+  /(?<defaut>\d+K Top)/i, //   Frequency Lists
   /- N(?<desc>\d)$/i, //       Decks ending with '- N' plus a number (The other JLPT Decks) - sorted DESC by the given number
   /Club (?<default>\d+):/i, // Decks match 'Club ' + a number + ':' (JPDB Anime Club XX: Title) - sorted by Coverage
+  /Mining/i, //                Other Mining Decks
   'Graveyard', //              Decks I dont learn anymore
 ];
 
@@ -73,13 +74,6 @@ const SORT_BY_REC = true;
  * Only applies if SORT_BY_REC is true
  */
 const SWAP_REC_VOC = true;
-
-/**
- * Enable or disable automatic sorting.
- *
- * If disabled, a user control will be added on decklist controls
- */
-const AUTO_SORT = false;
 
 // ##### END CONFIGURATION #####
 
@@ -240,7 +234,7 @@ class DeckSorter {
     // eslint-disable-next-line no-undef
     xhr('POST', 'https://jpdb.io/change_deck_priority', instruction, () => {
       if (this.instructions.length) {
-        this.sortDecksRemote();
+        setTimeout(() => this.sortDecksRemote(), 100);
       } else {
         console.debug('Trigger refresh of deck list');
 
@@ -350,7 +344,7 @@ class DeckSorter {
     const priorityList = [];
 
     if (SORT_BY_COV) {
-      if (SORT_BY_REC)
+      if (SORT_BY_REC) {
         priorityList.push(
           ...(SWAP_REC_VOC
             ? [
@@ -362,10 +356,10 @@ class DeckSorter {
                 [l.ck, r.ck],
               ]),
         );
-      else priorityList.push([l.ck, r.ck]);
+      } else priorityList.push([l.ck, r.ck]);
     }
 
-    if (SORT_BY_REC)
+    if (SORT_BY_REC) {
       priorityList.push(
         ...(SWAP_REC_VOC
           ? [
@@ -377,7 +371,7 @@ class DeckSorter {
               [l.vk, r.vk],
             ]),
       );
-    else priorityList.push([l.vk, r.vk]);
+    } else priorityList.push([l.vk, r.vk]);
 
     while (priorityList.length) {
       const [lv, rv] = priorityList.shift();
@@ -458,12 +452,5 @@ class DeckSorter {
   const deckSorter = new DeckSorter();
 
   deckSorter.sort();
-  if (AUTO_SORT) {
-    console.debug('Automatic sort submission enabled');
-
-    return deckSorter.submitSort();
-  }
-  console.debug('Automatic sort submission disabled');
-
   deckSorter.attachToDom();
 })();
