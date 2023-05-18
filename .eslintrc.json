@@ -1,8 +1,8 @@
 {
   "root": true,
   "env": {
-    "node": true,
-    "es2021": true
+    "commonjs": true,
+    "browser": true
   },
   "extends": [
     "plugin:@typescript-eslint/recommended",
@@ -106,13 +106,5 @@
       }
     ],
     "@typescript-eslint/explicit-function-return-type": ["error"]
-  },
-  "overrides": [
-    {
-      "files": ["**/tests/**/*.ts"],
-      "env": {
-        "jasmine": true
-      }
-    }
-  ]
+  }
 }

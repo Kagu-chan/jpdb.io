@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "ES2015",
+    "module": "CommonJS",
     "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -13,11 +13,11 @@
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "webpack.config.js"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
