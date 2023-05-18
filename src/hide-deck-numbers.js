@@ -12,11 +12,12 @@
 const JPDB = window.JPDBScriptRunner;
 const { Deck, Script, actions } = JPDB;
 
-
-JPDB.add(class HideDeckNumbers extends Script('/learn', '/deck-list') {
+JPDB.add(
+  class HideDeckNumbers extends Script('/learn', '/deck-list') {
     run() {
-        Deck.getDecks().forEach((deck) => (deck.titleNode.innerText = deck.title));
+      Deck.getDecks().forEach((deck) => (deck.titleNode.innerText = deck.title));
 
-        return true;
+      return true;
     }
-});
+  },
+);

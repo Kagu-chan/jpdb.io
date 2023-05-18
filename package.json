@@ -1,0 +1,37 @@
+{
+  "name": "jpdb.io-script-runer",
+  "version": "1.0.0",
+  "description": "JPDB.io Script Runner",
+  "main": "src/index.ts",
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kagu-chan/jpdb.io.git"
+  },
+  "author": "Kagu-chan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kagu-chan/jpdb.io/issues"
+  },
+  "homepage": "https://github.com/Kagu-chan/jpdb.io#readme",
+  "devDependencies": {
+    "@types/node": "^16.18.31",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "~2.26.0",
+    "eslint-plugin-jsdoc": "^39.6.4",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1"
+  }
+}

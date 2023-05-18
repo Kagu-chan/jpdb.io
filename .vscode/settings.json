@@ -1,0 +1,23 @@
+{
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "prettier.ignorePath": ".gitignore",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "[php]": {
+    "editor.tabSize": 4
+  },
+  "[html]": {
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": false
+  },
+  "eslint.options": {
+    "ignorePattern": "webpack.config.js"
+  }
+}
