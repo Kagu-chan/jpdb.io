@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Deck Sorter
+// @name         JPDB.io Deck Sorter
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0
 // @description  Sort decks based on expression | recognition => coverage | expression
