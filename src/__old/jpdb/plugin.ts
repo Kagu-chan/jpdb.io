@@ -1,7 +1,10 @@
-import { IJPDBPlugin } from './plugin.interface';
+import { IJPDBPlugin, PluginStatic } from '../types';
 
-export const JPDBPlugin = (...activeAt: (RegExp | string)[]) =>
+export const JPDBPlugin = (...activeAt: (RegExp | string)[]): PluginStatic =>
   class implements IJPDBPlugin {
+    public readonly path: string = window.location.pathname;
+    public readonly search: string = window.location.search.replace('?', '');
+
     protected static activeAt: (RegExp | string)[] = activeAt;
     protected static path: string = window.location.pathname;
 
