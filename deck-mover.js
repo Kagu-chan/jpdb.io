@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Mark for later
+// @name         JPDB.io Deck Mover
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0
 // @description  Mark decks for later by !moving them to specific decks
@@ -68,4 +68,6 @@ const MOVE_OPTIONS = [
     };
 
     init();
+
+    setTimeout(console.log(window));
 })();
