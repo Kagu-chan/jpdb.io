@@ -10,14 +10,8 @@
   },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.importModuleSpecifier": "relative",
-  "[php]": {
-    "editor.tabSize": 4
-  },
   "[html]": {
     "editor.formatOnSave": true,
     "files.insertFinalNewline": false
-  },
-  "eslint.options": {
-    "ignorePattern": "webpack.config.js"
   }
 }
