@@ -3,14 +3,12 @@ import { Root } from '../root';
 import { PluginOptions, PluginUserOption, PluginUserOptions } from '../types';
 
 export abstract class JPDBPlugin extends Root {
-  protected _pluginOptions: PluginOptions;
+  protected abstract _pluginOptions: PluginOptions;
   protected _userOptions: PluginUserOptions;
   protected _sleeps: boolean = false;
 
   constructor() {
     super();
-
-    this._pluginOptions = this.getPluginOptions();
   }
 
   public get pluginOptions(): PluginOptions {
@@ -92,6 +90,5 @@ export abstract class JPDBPlugin extends Root {
     return result;
   }
 
-  protected abstract getPluginOptions(): PluginOptions;
   protected abstract run(): void;
 }

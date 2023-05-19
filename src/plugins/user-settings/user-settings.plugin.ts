@@ -12,20 +12,18 @@ export class UserSettingsPlugin extends JPDBPlugin {
   protected dom: DOMContainer;
   protected api: UserSettingsPluginAPI;
 
+  protected _pluginOptions: PluginOptions = {
+    name: 'User-Settings',
+    activeAt: '/settings',
+    canBeDisabled: false,
+    runAgain: false,
+  };
+
   protected run(): void {
     this.api = new UserSettingsPluginAPI();
     this.dom = new UserSettingsContainer(this.api);
 
     this.api.buildMaps();
     this.dom.render();
-  }
-
-  protected getPluginOptions(): PluginOptions {
-    return {
-      name: 'User-Settings',
-      activeAt: '/settings',
-      canBeDisabled: false,
-      runAgain: false,
-    };
   }
 }
