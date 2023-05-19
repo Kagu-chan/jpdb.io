@@ -17,10 +17,17 @@ export abstract class JPDBPlugin extends Root {
     return this._pluginOptions;
   }
 
+  public loadUserSettings(): void {
+    if (!this._pluginOptions.userOptions?.length) {
+      return;
+    }
+
+    const options = this.applyDefaults(Globals.pluginManager.getOptions(this.constructor.name));
+    this._userOptions = options;
+  }
+
   public execute(): void {
     if (this.isActive()) {
-      this._userOptions = this.loadPluginOptions();
-
       this.run();
 
       if (!this._pluginOptions.runAgain) {
@@ -61,15 +68,6 @@ export abstract class JPDBPlugin extends Root {
     }
 
     return true;
-  }
-
-  protected loadPluginOptions(): PluginUserOptions {
-    if (!this._pluginOptions.userOptions?.length) {
-      return [];
-    }
-
-    const options = this.applyDefaults(Globals.pluginManager.getOptions(this.constructor.name));
-    this._userOptions = options;
   }
 
   protected applyDefaults(options: PluginUserOptions): PluginUserOptions {

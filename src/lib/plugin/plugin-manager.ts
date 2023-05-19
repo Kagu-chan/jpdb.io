@@ -21,6 +21,10 @@ export class PluginManager {
     this._plugins.set(plugin.constructor.name, plugin);
   }
 
+  public loadAll(): void {
+    this._plugins.forEach((plugin) => plugin.loadUserSettings());
+  }
+
   public runAll(): void {
     this._plugins.forEach((plugin) => plugin.execute());
   }
