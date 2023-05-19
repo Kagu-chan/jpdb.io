@@ -5,7 +5,7 @@ export class ScrollInSettingsPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
     activeAt: '/settings',
     canBeDisabled: true,
-    name: 'Scroll-Controls in Settings',
+    name: 'Scroll-Controls in settings',
     enabledByDefault: true,
     runAgain: false,
   };

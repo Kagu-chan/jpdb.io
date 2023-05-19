@@ -26,6 +26,8 @@ export class UserSettingsContainer extends DOMContainer {
     super.render();
 
     this._sections.forEach((s) => s.render());
+
+    this.addRemDiv();
     this._reset.render();
     this._save.render();
   }

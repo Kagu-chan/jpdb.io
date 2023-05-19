@@ -16,22 +16,32 @@ export class UserSettingsPluginAPI {
   }
 
   public buildMaps(): void {
-    this._plugins.forEach((p: JPDBPlugin) => {
-      const newSection: PluginSettingsSection = {
-        plugin: p,
-        header: p.pluginOptions.name,
-        options: p.userSettings.map((setting: PluginUserOption) => ({
-          key: setting.key,
-          text: setting.text,
-          type: setting.type,
-          description: setting.description,
-        })),
-      };
+    Array.from(this._plugins.values())
+      .sort((l, r) =>
+        l.pluginOptions.canBeDisabled !== r.pluginOptions.canBeDisabled
+          ? l.pluginOptions.canBeDisabled
+            ? -1
+            : 1
+          : l.pluginOptions.name > r.pluginOptions.name
+          ? 1
+          : -1,
+      )
+      .forEach((p: JPDBPlugin) => {
+        const newSection: PluginSettingsSection = {
+          plugin: p,
+          header: p.pluginOptions.name,
+          options: p.userSettings.map((setting: PluginUserOption) => ({
+            key: setting.key,
+            text: setting.text,
+            type: setting.type,
+            description: setting.description,
+          })),
+        };
 
-      if (newSection.options.length) {
-        this.sections.set(p.constructor.name, newSection);
-      }
-    });
+        if (newSection.options.length) {
+          this.sections.set(p.constructor.name, newSection);
+        }
+      });
   }
 
   public resetSettings(): void {

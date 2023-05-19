@@ -1,6 +1,6 @@
 export type CTOR<T, TArgs extends [...any[]] = []> = new (...args: [...TArgs]) => T;
 
-export type PluginUserOptionType = 'boolean' | 'text' | 'textarea';
+export type PluginUserOptionType = 'boolean' | 'text' | 'number' | 'textarea';
 export type PluginUserOption = {
   key: string;
   text: string;

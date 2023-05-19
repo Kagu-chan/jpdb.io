@@ -15,16 +15,21 @@ export class UserSettingsSection extends DOMContainer {
     private _name: string,
     private _data: PluginSettingsSection,
   ) {
-    super(`user-settings-${_name}`, _data.header);
+    super(
+      `user-settings-${_name}`,
+      _data.plugin.pluginOptions.canBeDisabled ? undefined : _data.header,
+    );
   }
 
   public render(): void {
     super.render();
 
-    this.headingElement.classList.add('subsection-header');
+    if (this.headingElement) {
+      this.headingElement.classList.add('subsection-header');
+      this.headingElement.style.marginTop = '1rem';
+    }
 
     this.renderOptions();
-    this.addRemDiv();
   }
 
   protected attachToDom(element: HTMLDivElement): void {
@@ -36,18 +41,24 @@ export class UserSettingsSection extends DOMContainer {
   protected renderOptions(): void {
     const [first, ...after] = this._data.options;
 
-    this.addChangeEvent(this.renderFirst(first), first);
+    this.addChangeEvent(this.renderFirst(first, after?.length > 0), first);
     after.forEach((o) => this.addChangeEvent(this.renderOption(o), o));
   }
 
-  protected renderFirst(option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
+  protected renderFirst(
+    option: AppliedUserOption,
+    hasMultiple: boolean,
+  ): HTMLInputElement | HTMLTextAreaElement {
     if (option.key === 'enabled') {
       this.renderActivator();
-      this.renderActivatedContainer();
 
-      this.addAndRunEventListener(this._activator, 'change', (): void => {
-        this.hidden(this._container, !this._activator.checked);
-      });
+      if (hasMultiple) {
+        this.renderActivatedContainer();
+
+        this.addAndRunEventListener(this._activator, 'change', (): void => {
+          this.hidden(this._container, !this._activator.checked);
+        });
+      }
 
       return this._activator;
     }
@@ -74,7 +85,6 @@ export class UserSettingsSection extends DOMContainer {
         'data-group': this.groupName,
       },
       style: {
-        marginTop: '1rem',
         marginLeft: '2rem',
       },
     });
@@ -88,6 +98,7 @@ export class UserSettingsSection extends DOMContainer {
       case 'boolean':
         return this.renderCheckbox(name, option, value as boolean);
       case 'text':
+      case 'number':
         return this.renderTextbox(name, option, value as string);
       case 'textarea':
         return this.renderTextarea(name, option, value as string);
@@ -126,16 +137,12 @@ export class UserSettingsSection extends DOMContainer {
 
   protected renderTextbox(
     name: string,
-    { text, description }: AppliedUserOption,
+    { text, description, type }: AppliedUserOption,
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLInputElement {
     const outerDiv = this.appendNewElement(this._container, 'div', { class: ['form-box'] });
-    const innerDiv = this.appendNewElement(outerDiv, 'div', {
-      style: {
-        marginBottom: '1rem',
-      },
-    });
+    const innerDiv = this.appendNewElement(outerDiv, 'div');
 
     this.appendNewElement(innerDiv, 'label', {
       innerText: text,
@@ -146,8 +153,9 @@ export class UserSettingsSection extends DOMContainer {
       id: name,
       attributes: {
         name,
+        type,
+        min: type === 'number' ? '0' : undefined,
         value: value ?? '',
-        type: 'text',
         placeholder: text,
         ...extraAttributes,
       },
