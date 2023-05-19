@@ -54,9 +54,6 @@ export abstract class JPDBPlugin extends Root {
 
       Globals.persistence.set('plugins', allPlugins);
     }
-
-    // eslint-disable-next-line no-console
-    console.log(this);
   }
 
   public execute(): void {
