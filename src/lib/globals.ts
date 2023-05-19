@@ -1,4 +1,3 @@
-import { CSSManager } from './browser/css-manager';
 import { DOMManager } from './browser/dom-manager';
 import { Persistence } from './browser/persistence';
 import { VERSION } from './constants';
@@ -13,7 +12,6 @@ export class Globals {
   public static readonly scriptRunner = new ScriptRunner();
   public static readonly persistence = new Persistence();
   public static readonly domManager = new DOMManager();
-  public static readonly cssManager = new CSSManager();
 
   public static makePublic(key: keyof typeof Globals, as: string = key): void {
     (window as unknown as Record<string, unknown>)[as] = this[key];
