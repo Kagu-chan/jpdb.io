@@ -1,5 +1,5 @@
-import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { NAME } from '../lib/constants';
+import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
 export class GreetingsPlugin extends JPDBPlugin {
@@ -10,6 +10,7 @@ export class GreetingsPlugin extends JPDBPlugin {
 
   protected getPluginOptions(): PluginOptions {
     return {
+      name: 'Greetings',
       activeAt: /.*/,
       canBeDisabled: false,
       runAgain: false,

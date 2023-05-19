@@ -11,6 +11,10 @@ export type PluginUserOption = {
 export type PluginUserOptions = PluginUserOption[];
 export type PluginOptions = {
   /**
+   * @var {string} name Human Readable Plugin Name
+   */
+  name: string;
+  /**
    * @var {string | RegExp} activeAt Regular Expression or literal stating on which pathname this plugin should interact
    */
   activeAt: string | RegExp;

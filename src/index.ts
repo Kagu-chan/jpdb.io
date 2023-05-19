@@ -9,5 +9,6 @@ Globals.makePublic('jpdb');
 
 Globals.scriptRunner.registerDefaults();
 Globals.pluginManager.registerPlugins(...UserPlugins);
+Globals.pluginManager.loadAll();
 
 Globals.scriptRunner.run();

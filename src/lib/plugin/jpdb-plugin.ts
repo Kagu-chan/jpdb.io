@@ -17,6 +17,10 @@ export abstract class JPDBPlugin extends Root {
     return this._pluginOptions;
   }
 
+  public get userOptions(): PluginUserOptions {
+    return this._userOptions;
+  }
+
   public loadUserSettings(): void {
     if (!this._pluginOptions.userOptions?.length) {
       return;
