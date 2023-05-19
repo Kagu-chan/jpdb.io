@@ -1,3 +1,4 @@
+import { DOMManager } from '../browser/dom-manager';
 import { Globals } from '../globals';
 import { Root } from '../root';
 import { PluginOptions, PluginUserOptions } from '../types';
@@ -7,6 +8,8 @@ export abstract class JPDBPlugin extends Root {
   protected _userSettings: PluginUserOptions = [];
   protected _usersSettings: Record<string, unknown> = {};
   protected _sleeps: boolean = false;
+
+  protected _dom: DOMManager;
 
   constructor() {
     super();
@@ -32,9 +35,13 @@ export abstract class JPDBPlugin extends Root {
     this._usersSettings[key] = value;
   }
 
-  public loadUsersSettings(): void {
+  public initialize(): void {
     this.unshiftEnableSetting();
 
+    this._dom = Globals.domManager;
+  }
+
+  public loadUsersSettings(): void {
     const allPlugins = Globals.persistence.get('plugins') ?? {};
     const thisPlugin = allPlugins[this.constructor.name] ?? {};
     let persistDefaults: boolean = false;

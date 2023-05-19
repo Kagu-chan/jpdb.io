@@ -21,7 +21,10 @@ export class PluginManager {
   }
 
   public loadAll(): void {
-    this._plugins.forEach((plugin) => plugin.loadUsersSettings());
+    this._plugins.forEach((plugin) => {
+      plugin.initialize();
+      plugin.loadUsersSettings();
+    });
   }
 
   public runAll(): void {
