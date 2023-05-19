@@ -1,6 +1,7 @@
 const path = require('path');
 const { readFileSync } = require('fs');
-const { BannerPlugin } = require('webpack');
+const { BannerPlugin, DefinePlugin } = require('webpack');
+const { version } = require('./package.json');
 
 module.exports = {
   entry: './src/index.ts',
@@ -16,6 +17,10 @@ module.exports = {
   },
   plugins: [
     new BannerPlugin({ banner: () => readFileSync('./userscript.js', 'utf-8'), raw: true }),
+    new DefinePlugin({
+      'process.env.VERSION': JSON.stringify('v' + version),
+      'process.env.NAME': JSON.stringify('JPDBScriptRunner'),
+    }),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
