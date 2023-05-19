@@ -1,5 +1,4 @@
-import { Globals } from '../globals';
-import { CTOR, PluginUserOptions } from '../types';
+import { CTOR } from '../types';
 import { JPDBPlugin } from './jpdb-plugin';
 
 export class PluginManager {
@@ -22,34 +21,10 @@ export class PluginManager {
   }
 
   public loadAll(): void {
-    this._plugins.forEach((plugin) => plugin.loadUserSettings());
+    this._plugins.forEach((plugin) => plugin.loadUsersSettings());
   }
 
   public runAll(): void {
     this._plugins.forEach((plugin) => plugin.execute());
-  }
-
-  public isPluginEnabled(key: string): boolean {
-    return Globals.persistence.get('enabled')[key];
-  }
-
-  public setPluginEnabled(key: string, enabled: boolean): void {
-    const current = Globals.persistence.get('enabled');
-
-    if (current[key] === enabled) return;
-
-    current[key] = enabled;
-    Globals.persistence.set('enabled', current);
-  }
-
-  public getOptions(key: string): PluginUserOptions {
-    return Globals.persistence.get('pluginOptions')[key] ?? [];
-  }
-
-  public setOptions(key: string, options: PluginUserOptions): void {
-    const current = Globals.persistence.get('pluginOptions');
-
-    current[key] = options;
-    Globals.persistence.set('pluginOptions', current);
   }
 }

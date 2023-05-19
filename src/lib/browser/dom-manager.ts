@@ -6,7 +6,7 @@ type DOMElementOptions = {
   attributes?: Record<string, string | boolean>;
   style?: Partial<CSSStyleDeclaration>;
   innerText?: string;
-  handler?: () => void;
+  handler?: (ev?: MouseEvent) => void;
 };
 
 export class DOMManager extends Root {

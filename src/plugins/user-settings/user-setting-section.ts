@@ -62,7 +62,7 @@ export class UserSettingSection extends DOMContainer {
     this._activator = this.renderCheckbox(
       name,
       option.text,
-      this._options.options[0].value as boolean,
+      false, // this._options.options[0].value as boolean,
       {
         'data-when-unchecked-hide': this.groupName,
       },
@@ -77,19 +77,20 @@ export class UserSettingSection extends DOMContainer {
     });
   }
 
-  protected renderOption(option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
-    const name = [this._id, option.key].join('-');
+  protected renderOption(_option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
+    return;
+    // const name = [this._id, option.key].join('-');
 
-    switch (option.type) {
-      case 'boolean':
-        return this.renderCheckbox(name, option.text, option.value as boolean);
-      case 'text':
-        return this.renderTextbox(name, option.text, option.value as string);
-      case 'textarea':
-        return this.renderTextarea(name, option.text, option.value as string);
-      default:
-        break;
-    }
+    // switch (option.type) {
+    //   case 'boolean':
+    //     return this.renderCheckbox(name, option.text, option.value as boolean);
+    //   case 'text':
+    //     return this.renderTextbox(name, option.text, option.value as string);
+    //   case 'textarea':
+    //     return this.renderTextarea(name, option.text, option.value as string);
+    //   default:
+    //     break;
+    // }
   }
 
   protected renderCheckbox(
@@ -179,7 +180,7 @@ export class UserSettingSection extends DOMContainer {
 
   protected addChangeEvent(e: HTMLInputElement | HTMLTextAreaElement, o: AppliedUserOption): void {
     this.addEventListener(e, 'change', (): void => {
-      o.value = e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value;
+      // o.value = e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value;
 
       this._api.updateSetting(this._name, o);
     });

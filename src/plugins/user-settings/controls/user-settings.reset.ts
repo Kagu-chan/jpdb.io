@@ -1,8 +1,8 @@
-import { DOMContainer } from '../../lib/browser/dom-container';
-import { UserSettingsPluginAPI } from './user-settings-plugin.api';
+import { DOMContainer } from '../../../lib/browser/dom-container';
+import { UserSettingsContainer } from '../user-settings.container';
 
 export class UserSettingsReset extends DOMContainer {
-  constructor(private _parent: DOMContainer, private _api: UserSettingsPluginAPI) {
+  constructor(private _root: UserSettingsContainer) {
     super('reset-user-settings');
   }
 
@@ -14,9 +14,9 @@ export class UserSettingsReset extends DOMContainer {
       class: ['outline', 'v1'],
       attributes: {
         type: 'submit',
-        value: 'Reset Extension-Settings',
+        value: 'Reset Extension settings',
       },
-      handler: () => this._api.resetSettings(),
+      handler: () => this._root.api.resetSettings(),
     });
     this.appendNewElement(this.dom, 'p', {
       innerText: 'This will reset all Settings to default and reload the page.',
@@ -27,6 +27,6 @@ export class UserSettingsReset extends DOMContainer {
   }
 
   protected attachToDom(element: HTMLDivElement): void {
-    this.appendElement(this._parent.dom, element);
+    this.appendElement(this._root.dom, element);
   }
 }

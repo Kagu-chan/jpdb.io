@@ -1,5 +1,5 @@
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../lib/types';
+import { PluginOptions, PluginUserOptions } from '../lib/types';
 
 export class UserCSSPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
@@ -7,15 +7,15 @@ export class UserCSSPlugin extends JPDBPlugin {
     activeAt: /.*/,
     canBeDisabled: true,
     runAgain: true,
-    userOptions: [
-      {
-        key: 'styles',
-        text: 'Custom CSS',
-        type: 'textarea',
-        default: '',
-      },
-    ],
   };
+  protected _userSettings: PluginUserOptions = [
+    {
+      key: 'styles',
+      text: 'Custom CSS',
+      type: 'textarea',
+      default: '',
+    },
+  ];
 
   protected run(): void {
     // eslint-disable-next-line no-console

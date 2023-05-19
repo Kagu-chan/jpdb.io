@@ -1,10 +1,11 @@
 import { Globals } from '../globals';
 import { Root } from '../root';
-import { PluginOptions, PluginUserOption, PluginUserOptions } from '../types';
+import { PluginOptions, PluginUserOptions } from '../types';
 
 export abstract class JPDBPlugin extends Root {
   protected abstract _pluginOptions: PluginOptions;
-  protected _userOptions: PluginUserOptions;
+  protected _userSettings: PluginUserOptions = [];
+  protected _usersSettings: Record<string, unknown> = {};
   protected _sleeps: boolean = false;
 
   constructor() {
@@ -15,17 +16,47 @@ export abstract class JPDBPlugin extends Root {
     return this._pluginOptions;
   }
 
-  public get userOptions(): PluginUserOptions {
-    return this._userOptions;
+  public get userSettings(): PluginUserOptions {
+    return this._userSettings;
   }
 
-  public loadUserSettings(): void {
-    if (!this._pluginOptions.userOptions?.length) {
-      return;
+  public get usersSettings(): Record<string, unknown> {
+    return this._usersSettings;
+  }
+
+  public getUsersSetting<T = unknown>(key: string): T {
+    return this._usersSettings[key] as T;
+  }
+
+  public setUsersSetting<T = unknown>(key: string, value: T): void {
+    this._usersSettings[key] = value;
+  }
+
+  public loadUsersSettings(): void {
+    this.unshiftEnableSetting();
+
+    const allPlugins = Globals.persistence.get('plugins') ?? {};
+    const thisPlugin = allPlugins[this.constructor.name] ?? {};
+    let persistDefaults: boolean = false;
+
+    this._userSettings.forEach(({ key, default: defaulValue }) => {
+      if (thisPlugin[key] === undefined) {
+        thisPlugin[key] = defaulValue;
+
+        persistDefaults = true;
+      }
+
+      this._usersSettings[key] = thisPlugin[key];
+    });
+
+    if (persistDefaults) {
+      allPlugins[this.constructor.name] = thisPlugin;
+
+      Globals.persistence.set('plugins', allPlugins);
     }
 
-    const options = this.applyDefaults(Globals.pluginManager.getOptions(this.constructor.name));
-    this._userOptions = options;
+    // eslint-disable-next-line no-console
+    console.log(this);
   }
 
   public execute(): void {
@@ -38,12 +69,14 @@ export abstract class JPDBPlugin extends Root {
     }
   }
 
+  protected abstract run(): void;
+
   /**
    * Checks if the plugin is active (by pathname) and enabled
    *
    * @returns {boolean}
    */
-  protected isActive(): boolean {
+  private isActive(): boolean {
     return (
       !this._sleeps &&
       this.isEnabled() &&
@@ -58,37 +91,25 @@ export abstract class JPDBPlugin extends Root {
    *
    * @returns {boolean}
    */
-  protected isEnabled(): boolean {
-    const { name } = this.constructor;
-
+  private isEnabled(): boolean {
     if (this._pluginOptions.canBeDisabled) {
-      if (Globals.pluginManager.isPluginEnabled(name) === undefined) {
-        Globals.pluginManager.setPluginEnabled(name, this._pluginOptions.enabledByDefault ?? false);
-      }
-
-      return Globals.pluginManager.isPluginEnabled(name);
+      return this.getUsersSetting('enabled');
     }
 
     return true;
   }
 
-  protected applyDefaults(options: PluginUserOptions): PluginUserOptions {
-    const result: PluginUserOptions = [];
-
-    this._pluginOptions.userOptions.forEach((data: PluginUserOption) => {
-      result.push({
-        key: data.key,
-        text: data.text,
-        type: data.type,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        default: data.default,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        value: options.find(({ key }) => data.key === key)?.value ?? data.default,
+  private unshiftEnableSetting(): void {
+    if (this._pluginOptions.canBeDisabled) {
+      this._userSettings.unshift({
+        key: 'enabled',
+        text: `Enable ${this._pluginOptions.name}`,
+        type: 'boolean',
+        default:
+          this._pluginOptions.enabledByDefault === undefined
+            ? false
+            : this._pluginOptions.enabledByDefault,
       });
-    });
-
-    return result;
+    }
   }
-
-  protected abstract run(): void;
 }

@@ -5,7 +5,6 @@ export type PluginUserOption = {
   key: string;
   text: string;
   default?: any;
-  value?: any;
   type: PluginUserOptionType;
 };
 export type PluginUserOptions = PluginUserOption[];
@@ -30,8 +29,4 @@ export type PluginOptions = {
    * @var {boolean} [enabledByDefault] Weather or not the plugin is enabled by default or not. Only effective if `canBeDisabled` is true. Defaults to false
    */
   enabledByDefault?: boolean;
-  /**
-   * @var {PluginUserOptions} [userOptions=[]] Options adjustable by the user via settings page
-   */
-  userOptions?: PluginUserOptions;
 };

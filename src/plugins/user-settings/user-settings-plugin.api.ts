@@ -15,32 +15,29 @@ export class UserSettingsPluginAPI {
   }
 
   public buildMaps(): void {
-    this._plugins.forEach((p) => {
-      const options: AppliedUserOption[] = [];
-
-      if (p.pluginOptions.canBeDisabled) {
-        options.push({
-          text: `Enable ${p.pluginOptions.name}`,
-          key: 'enable',
-          type: 'boolean',
-          value: Globals.pluginManager.isPluginEnabled(p.constructor.name),
-        });
-      }
-
-      p.pluginOptions.userOptions?.forEach((o) => {
-        options.push({
-          text: o.text,
-          key: o.key,
-          type: o.type,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: p.userOptions.find(({ key }) => o.key === key).value,
-        });
-      });
-
-      if (options.length) {
-        this.sections.set(p.constructor.name, { header: p.pluginOptions.name, options });
-      }
-    });
+    // this._plugins.forEach((p) => {
+    //   const options: AppliedUserOption[] = [];
+    //   if (p.pluginOptions.canBeDisabled) {
+    //     options.push({
+    //       text: `Enable ${p.pluginOptions.name}`,
+    //       key: 'enable',
+    //       type: 'boolean',
+    //       value: Globals.pluginManager.isPluginEnabled(p.constructor.name),
+    //     });
+    //   }
+    //   p.pluginOptions.userOptions?.forEach((o) => {
+    //     options.push({
+    //       text: o.text,
+    //       key: o.key,
+    //       type: o.type,
+    //       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    //       value: p.userSettings.find(({ key }) => o.key === key).value,
+    //     });
+    //   });
+    //   if (options.length) {
+    //     this.sections.set(p.constructor.name, { header: p.pluginOptions.name, options });
+    //   }
+    // });
   }
 
   public resetSettings(): void {
@@ -49,21 +46,26 @@ export class UserSettingsPluginAPI {
     window.location.reload();
   }
 
-  public updateSetting(pluginName: string, option: AppliedUserOption): void {
-    if (option.key === 'enable') {
-      return Globals.pluginManager.setPluginEnabled(pluginName, option.value as boolean);
-    }
+  public saveSettings(): void {
+    window.location.reload();
+  }
 
-    const currentOptions = Globals.pluginManager.getOptions(pluginName);
-    const relevantOption = currentOptions.find(({ key }) => key === option.key);
+  public updateSetting(_pluginName: string, _option: AppliedUserOption): void {
+    return;
+    // if (option.key === 'enable') {
+    //   // return Globals.pluginManager.setPluginEnabled(pluginName, option.value as boolean);
+    // }
 
-    if (relevantOption) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      relevantOption.value = option.value;
-    } else {
-      currentOptions.push(option);
-    }
+    // const currentOptions = Globals.pluginManager.getOptions(pluginName);
+    // const relevantOption = currentOptions.find(({ key }) => key === option.key);
 
-    Globals.pluginManager.setOptions(pluginName, currentOptions);
+    // if (relevantOption) {
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    //   // relevantOption.value = option.value;
+    // } else {
+    //   currentOptions.push(option);
+    // }
+
+    // Globals.pluginManager.setOptions(pluginName, currentOptions);
   }
 }

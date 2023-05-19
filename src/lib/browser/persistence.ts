@@ -1,16 +1,17 @@
 import { NAME } from '../constants';
-import { PluginUserOptions } from '../types';
 
+type PluginName = string;
+type OptionName = string;
+type OptionValue = unknown;
+type PluginOptions = Record<OptionName, OptionValue>;
 type Settings = {
-  enabled?: Record<string, boolean>;
-  pluginOptions?: Record<string, PluginUserOptions>;
+  plugins?: Record<PluginName, PluginOptions>;
 };
 
 export class Persistence {
   private _storage: Storage;
   private _defaults: Required<Settings> = {
-    enabled: {},
-    pluginOptions: {},
+    plugins: {},
   };
   private _settings: Settings = {};
 
