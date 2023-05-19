@@ -4,6 +4,7 @@ export type PluginUserOptionType = 'boolean' | 'text' | 'textarea';
 export type PluginUserOption = {
   key: string;
   text: string;
+  description?: string;
   default?: any;
   type: PluginUserOptionType;
 };

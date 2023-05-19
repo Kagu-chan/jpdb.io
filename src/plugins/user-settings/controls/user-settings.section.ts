@@ -60,7 +60,7 @@ export class UserSettingsSection extends DOMContainer {
     const name = [this._id, option.key].join('-');
     this._activator = this.renderCheckbox(
       name,
-      option.text,
+      option,
       this._data.plugin.getUsersSetting('enabled'),
       {
         'data-when-unchecked-hide': this.groupName,
@@ -73,6 +73,10 @@ export class UserSettingsSection extends DOMContainer {
       attributes: {
         'data-group': this.groupName,
       },
+      style: {
+        marginTop: '1rem',
+        marginLeft: '2rem',
+      },
     });
   }
 
@@ -82,11 +86,11 @@ export class UserSettingsSection extends DOMContainer {
 
     switch (option.type) {
       case 'boolean':
-        return this.renderCheckbox(name, option.text, value as boolean);
+        return this.renderCheckbox(name, option, value as boolean);
       case 'text':
-        return this.renderTextbox(name, option.text, value as string);
+        return this.renderTextbox(name, option, value as string);
       case 'textarea':
-        return this.renderTextarea(name, option.text, value as string);
+        return this.renderTextarea(name, option, value as string);
       default:
         break;
     }
@@ -94,7 +98,7 @@ export class UserSettingsSection extends DOMContainer {
 
   protected renderCheckbox(
     name: string,
-    text: string,
+    { text, description }: AppliedUserOption,
     value: boolean,
     extraAttributes: Record<string, string> = {},
   ): HTMLInputElement {
@@ -113,6 +117,8 @@ export class UserSettingsSection extends DOMContainer {
       attributes: { for: name },
     });
 
+    if (description?.length) this.renderHelpText(this._container, description, '2rem');
+
     input.checked = value;
 
     return input;
@@ -120,23 +126,27 @@ export class UserSettingsSection extends DOMContainer {
 
   protected renderTextbox(
     name: string,
-    text: string,
+    { text, description }: AppliedUserOption,
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLInputElement {
     const outerDiv = this.appendNewElement(this._container, 'div', { class: ['form-box'] });
-    const innerDiv = this.appendNewElement(outerDiv, 'div');
+    const innerDiv = this.appendNewElement(outerDiv, 'div', {
+      style: {
+        marginBottom: '1rem',
+      },
+    });
 
     this.appendNewElement(innerDiv, 'label', {
       innerText: text,
       attributes: { for: name },
     });
 
-    return this.appendNewElement(innerDiv, 'input', {
+    const input = this.appendNewElement(innerDiv, 'input', {
       id: name,
       attributes: {
         name,
-        value,
+        value: value ?? '',
         type: 'text',
         placeholder: text,
         ...extraAttributes,
@@ -145,11 +155,15 @@ export class UserSettingsSection extends DOMContainer {
         maxWidth: '16rem',
       },
     });
+
+    if (description?.length) this.renderHelpText(innerDiv, description);
+
+    return input;
   }
 
   protected renderTextarea(
     name: string,
-    text: string,
+    { text, description }: AppliedUserOption,
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLTextAreaElement {
@@ -160,9 +174,10 @@ export class UserSettingsSection extends DOMContainer {
 
     const container = this.appendNewElement(this._container, 'div', {
       class: ['style-textarea-handle'],
+      style: { marginTop: '1rem' },
     });
 
-    return this.appendNewElement(container, 'textarea', {
+    const input = this.appendNewElement(container, 'textarea', {
       id: name,
       innerText: value,
       attributes: {
@@ -173,6 +188,20 @@ export class UserSettingsSection extends DOMContainer {
       },
       style: {
         height: '20rem',
+      },
+    });
+
+    if (description?.length) this.renderHelpText(this._container, description);
+
+    return input;
+  }
+
+  protected renderHelpText(target: HTMLElement, description: string, marginLeft?: string): void {
+    this.appendNewElement(target, 'p', {
+      innerText: description,
+      style: {
+        opacity: '.8',
+        marginLeft,
       },
     });
   }

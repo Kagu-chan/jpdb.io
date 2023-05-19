@@ -24,6 +24,7 @@ export class UserSettingsPluginAPI {
           key: setting.key,
           text: setting.text,
           type: setting.type,
+          description: setting.description,
         })),
       };
 
