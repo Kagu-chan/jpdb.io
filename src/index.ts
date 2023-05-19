@@ -1,5 +1,5 @@
 import { Globals } from './lib/globals';
-import { UserPlugins } from './user-plugins';
+import { UserPlugins } from './user-plugins/index';
 
 declare global {
   const virtual_refresh: () => void;
