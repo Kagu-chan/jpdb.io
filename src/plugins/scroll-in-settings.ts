@@ -1,7 +1,7 @@
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
-export class BackToTopPlugin extends JPDBPlugin {
+export class ScrollInSettingsPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
     activeAt: '/settings',
     canBeDisabled: true,

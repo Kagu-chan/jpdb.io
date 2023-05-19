@@ -1,3 +1,4 @@
+import { Globals } from '../globals';
 import { CTOR } from '../types';
 import { JPDBPlugin } from './jpdb-plugin';
 
@@ -29,5 +30,21 @@ export class PluginManager {
 
   public runAll(): void {
     this._plugins.forEach((plugin) => plugin.execute());
+  }
+
+  public abandonDeadData(): void {
+    const pluginData = Globals.persistence.get('plugins');
+    const keys = Object.keys(pluginData);
+    const knownKeys = Array.from(this._plugins.keys());
+    let deletedData: boolean = false;
+
+    keys
+      .filter((key) => !knownKeys.includes(key))
+      .forEach((key) => {
+        delete pluginData[key];
+        deletedData = true;
+      });
+
+    if (deletedData) Globals.persistence.set('plugins', pluginData);
   }
 }

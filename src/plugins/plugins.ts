@@ -1,6 +1,6 @@
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { AutoSortDecksPlugin } from './auto-sort-decks.plugin';
-import { BackToTopPlugin } from './back-to-top.plugin';
+import { ScrollInSettingsPlugin } from './scroll-in-settings';
 import { CSSPlugin } from './css.plugin';
 import { GreetingsPlugin } from './greetings.plugin';
 import { UserCSSPlugin } from './user-css.plugin';
@@ -11,6 +11,6 @@ export const Plugins: JPDBPlugin[] = [
   new GreetingsPlugin(),
   new UserSettingsPlugin(),
   new UserCSSPlugin(),
-  new BackToTopPlugin(),
+  new ScrollInSettingsPlugin(),
   new AutoSortDecksPlugin(),
 ];
