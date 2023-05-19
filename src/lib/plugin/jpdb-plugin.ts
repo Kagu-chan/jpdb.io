@@ -81,12 +81,15 @@ export abstract class JPDBPlugin extends Root {
    * @returns {boolean}
    */
   private isActive(): boolean {
+    const isActive = (activeAt: string | RegExp): boolean =>
+      typeof activeAt === 'string' ? activeAt === this.PATH : activeAt.test(this.PATH);
+
     return (
       !this._sleeps &&
       this.isEnabled() &&
-      (typeof this._pluginOptions.activeAt === 'string'
-        ? this._pluginOptions.activeAt === this.PATH
-        : this._pluginOptions.activeAt.test(this.PATH))
+      (Array.isArray(this._pluginOptions.activeAt)
+        ? !!this._pluginOptions.activeAt.find((a) => isActive(a))
+        : isActive(this._pluginOptions.activeAt))
     );
   }
 
