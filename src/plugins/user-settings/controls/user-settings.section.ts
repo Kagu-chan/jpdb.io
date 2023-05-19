@@ -1,8 +1,8 @@
-import { DOMContainer } from '../../lib/browser/dom-container';
-import { UserSettingsPluginAPI } from './user-settings-plugin.api';
-import { AppliedUserOption, PluginSettingsSection } from './user-settings.types';
+import { DOMContainer } from '../../../lib/browser/dom-container';
+import { UserSettingsContainer } from '../user-settings.container';
+import { AppliedUserOption, PluginSettingsSection } from '../user-settings.types';
 
-export class UserSettingSection extends DOMContainer {
+export class UserSettingsSection extends DOMContainer {
   private _activator: HTMLInputElement;
   private _container: HTMLDivElement;
 
@@ -11,12 +11,11 @@ export class UserSettingSection extends DOMContainer {
   }
 
   constructor(
-    private _parent: DOMContainer,
-    private _api: UserSettingsPluginAPI,
+    private _root: UserSettingsContainer,
     private _name: string,
-    private _options: PluginSettingsSection,
+    private _data: PluginSettingsSection,
   ) {
-    super(`user-settings-${_name}`, _options.header);
+    super(`user-settings-${_name}`, _data.header);
   }
 
   public render(): void {
@@ -29,20 +28,20 @@ export class UserSettingSection extends DOMContainer {
   }
 
   protected attachToDom(element: HTMLDivElement): void {
-    this.appendElement(this._parent.dom, element);
+    this.appendElement(this._root.dom, element);
 
     this._container = element;
   }
 
   protected renderOptions(): void {
-    const [first, ...after] = this._options.options;
+    const [first, ...after] = this._data.options;
 
     this.addChangeEvent(this.renderFirst(first), first);
     after.forEach((o) => this.addChangeEvent(this.renderOption(o), o));
   }
 
   protected renderFirst(option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
-    if (option.key === 'enable') {
+    if (option.key === 'enabled') {
       this.renderActivator();
       this.renderActivatedContainer();
 
@@ -57,12 +56,12 @@ export class UserSettingSection extends DOMContainer {
   }
 
   protected renderActivator(): void {
-    const [option] = this._options.options;
+    const [option] = this._data.options;
     const name = [this._id, option.key].join('-');
     this._activator = this.renderCheckbox(
       name,
       option.text,
-      false, // this._options.options[0].value as boolean,
+      this._data.plugin.getUsersSetting('enabled'),
       {
         'data-when-unchecked-hide': this.groupName,
       },
@@ -77,20 +76,20 @@ export class UserSettingSection extends DOMContainer {
     });
   }
 
-  protected renderOption(_option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
-    return;
-    // const name = [this._id, option.key].join('-');
+  protected renderOption(option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
+    const name = [this._id, option.key].join('-');
+    const value = this._data.plugin.getUsersSetting(option.key);
 
-    // switch (option.type) {
-    //   case 'boolean':
-    //     return this.renderCheckbox(name, option.text, option.value as boolean);
-    //   case 'text':
-    //     return this.renderTextbox(name, option.text, option.value as string);
-    //   case 'textarea':
-    //     return this.renderTextarea(name, option.text, option.value as string);
-    //   default:
-    //     break;
-    // }
+    switch (option.type) {
+      case 'boolean':
+        return this.renderCheckbox(name, option.text, value as boolean);
+      case 'text':
+        return this.renderTextbox(name, option.text, value as string);
+      case 'textarea':
+        return this.renderTextarea(name, option.text, value as string);
+      default:
+        break;
+    }
   }
 
   protected renderCheckbox(
@@ -165,9 +164,9 @@ export class UserSettingSection extends DOMContainer {
 
     return this.appendNewElement(container, 'textarea', {
       id: name,
+      innerText: value,
       attributes: {
         name,
-        value,
         placeholder: text,
         spellcheck: 'false',
         ...extraAttributes,
@@ -180,92 +179,9 @@ export class UserSettingSection extends DOMContainer {
 
   protected addChangeEvent(e: HTMLInputElement | HTMLTextAreaElement, o: AppliedUserOption): void {
     this.addEventListener(e, 'change', (): void => {
-      // o.value = e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value;
+      const value = e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value;
 
-      this._api.updateSetting(this._name, o);
+      this._data.plugin.setUsersSetting(o.key, value);
     });
   }
-  /*
-  
-  private getFirstSectionControl(
-    into: HTMLDivElement,
-    key: string,
-    first: AppliedUserOption,
-  ): HTMLDivElement {
-    if (first.key === 'enable') {
-      const input = this.addEnableDisable(into, key, first);
-      const target = this.addDataGroup(into, key, first);
-
-      Globals.domManager.addAndRunEventListener(input, 'change', (): void =>
-        Globals.domManager.hidden(target, !input.checked),
-      );
-
-      return target;
-    }
-
-    const e = Globals.domManager.findOne(`#user-settings-${key}`, 'div');
-
-    this.addSettingsObject(e, first);
-
-    return e;
-  }
-
-  private addSection(key: string, header: string): HTMLDivElement {
-    Globals.domManager.appendNewElement(this.domElement, 'div', {
-      innerText: header,
-      class: ['subsection-header'],
-    });
-
-    return Globals.domManager.appendNewElement(this.domElement, 'div', {
-      id: 'user-settings-' + key,
-    });
-  }
-
-  private addEnableDisable(
-    into: HTMLDivElement,
-    parent: string,
-    options: AppliedUserOption,
-  ): HTMLInputElement {
-    const name = `${parent}-${options.key}`;
-    const checkbox = Globals.domManager.appendNewElement(into, 'div', { class: ['checkbox'] });
-    const input = Globals.domManager.appendNewElement(checkbox, 'input', {
-      id: name,
-      attributes: {
-        name,
-        type: 'checkbox',
-        'data-when-unchecked-hide': `dep-${name}`,
-        checked: options.value as boolean,
-      },
-    });
-    input.checked = options.value as boolean;
-
-    Globals.domManager.appendNewElement(checkbox, 'label', {
-      innerText: options.text,
-      attributes: { for: name },
-    });
-
-    return input;
-  }
-
-  private addDataGroup(
-    into: HTMLDivElement,
-    parent: string,
-    options: AppliedUserOption,
-  ): HTMLDivElement {
-    const name = `dep-${parent}-${options.key}`;
-
-    return Globals.domManager.appendNewElement(into, 'div', {
-      innerText: 'Lorem Ipsum',
-      attributes: {
-        'data-group': name,
-      },
-    });
-  }
-
-  private addSettingsObject(into: HTMLDivElement, object: AppliedUserOption): HTMLElement {
-    return Globals.domManager.appendNewElement(into, 'p', {
-      innerText: JSON.stringify(object),
-    });
-  }
-  */
 }

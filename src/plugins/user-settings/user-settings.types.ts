@@ -1,4 +1,9 @@
+import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginUserOption } from '../../lib/types';
 
-export type AppliedUserOption = Omit<PluginUserOption, 'default'>;
-export type PluginSettingsSection = { header: string; options: AppliedUserOption[] };
+export type AppliedUserOption = Pick<PluginUserOption, 'text' | 'key' | 'type'>;
+export type PluginSettingsSection = {
+  plugin: JPDBPlugin;
+  header: string;
+  options: AppliedUserOption[];
+};
