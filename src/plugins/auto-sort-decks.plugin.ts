@@ -7,7 +7,7 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
     activeAt: ['/learn', '/deck-list'],
     canBeDisabled: true,
-    name: 'Automatic Deck Sorting',
+    name: 'Automatic deck sorting',
     runAgain: true,
   };
 

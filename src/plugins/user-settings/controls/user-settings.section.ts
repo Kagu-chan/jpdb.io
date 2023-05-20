@@ -142,7 +142,7 @@ export class UserSettingsSection extends DOMContainer {
 
     if (text?.length) {
       this.appendNewElement(checkbox, 'label', {
-        innerText: text,
+        innerHTML: text,
         attributes: { for: name },
       });
     }
@@ -169,7 +169,7 @@ export class UserSettingsSection extends DOMContainer {
 
     if (text?.length) {
       this.appendNewElement(innerDiv, 'label', {
-        innerText: text,
+        innerHTML: text,
         attributes: { for: name },
       });
     }
@@ -205,7 +205,7 @@ export class UserSettingsSection extends DOMContainer {
   ): HTMLTextAreaElement {
     if (text) {
       this.appendNewElement(targetContainer, 'label', {
-        innerText: text,
+        innerHTML: text,
         attributes: { for: name },
       });
     }
@@ -217,7 +217,7 @@ export class UserSettingsSection extends DOMContainer {
 
     const input = this.appendNewElement(container, 'textarea', {
       id: name,
-      innerText: value,
+      innerHTML: value,
       attributes: {
         name,
         placeholder: text?.length ? text : '',

@@ -7,7 +7,8 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
     activeAt: '/deck-list',
     canBeDisabled: true,
-    name: 'Scroll-Controls in deck list',
+    name: 'Scroll controls in deck list',
+    enableText: 'Add <b>To top</b> and <b>To bottom</b> in deck list',
     runAgain: true,
   };
   protected _userSettings: PluginUserOptions = [
@@ -55,7 +56,7 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
       class: ['outline', 'v2'],
       attributes: {
         type: 'submit',
-        value: 'To Bottom',
+        value: 'To bottom',
       },
       style: {
         marginLeft: '1.2rem',
@@ -73,7 +74,7 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
       class: ['outline', 'v2', 'scroll', 'right'],
       attributes: {
         type: 'submit',
-        value: 'To Top',
+        value: 'To top',
       },
       style: {
         marginLeft: 'auto',

@@ -34,6 +34,6 @@ export class CSSPlugin extends JPDBPlugin {
     this._styles.forEach((s, k) => {
       styles.push(`/*!BEGIN ${k}*/\n${s}\n/*!END ${k}*/`);
     });
-    this._style.innerText = styles.join('\n\n');
+    this._style.innerHTML = styles.join('\n\n');
   }
 }

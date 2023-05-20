@@ -5,7 +5,8 @@ export class ScrollInSettingsPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
     activeAt: '/settings',
     canBeDisabled: true,
-    name: 'Scroll-Controls in settings',
+    name: 'Scroll controls in settings',
+    enableText: 'Add <b>To top</b> and <b>To bottom</b> in settings',
     runAgain: false,
   };
 

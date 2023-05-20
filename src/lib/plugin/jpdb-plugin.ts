@@ -126,7 +126,7 @@ export abstract class JPDBPlugin extends Root {
       key: 'enabled',
       type: 'checkbox',
       default: false,
-      text: enableText ?? `Enable ${name}`,
+      text: enableText ?? `Enable ${name.charAt(0).toLowerCase()}${name.slice(1)}`,
     };
 
     if (sourceLink?.length || author?.length) {
