@@ -1,14 +1,48 @@
 export type CTOR<T, TArgs extends [...any[]] = []> = new (...args: [...TArgs]) => T;
 
-export type PluginUserOptionType = 'boolean' | 'text' | 'number' | 'textarea';
-export type PluginUserOption = {
-  key: string;
+type ReservedKey = 'enabled';
+
+export type PluginUserOptionEnabled = {
+  key: ReservedKey;
   text: string;
-  description?: string;
-  default?: any;
-  type: PluginUserOptionType;
+  type: 'boolean';
+  default: boolean;
+  description: undefined;
 };
+
+type PluginUserOptionBase<T> = {
+  key: Exclude<string, ReservedKey>;
+  text?: string;
+  description?: string;
+  default?: T;
+};
+
+type PluginUserOptionCheckbox = PluginUserOptionBase<boolean> & {
+  type: 'boolean';
+};
+type PluginUserOptionText = PluginUserOptionBase<string> & {
+  type: 'text';
+  placeholder?: string;
+};
+type PluginUserOptionTextarea = PluginUserOptionBase<string> & {
+  type: 'textarea';
+  placeholder?: string;
+};
+type PluginUserOptionNumber = PluginUserOptionBase<number> & {
+  type: 'number';
+  placeholder?: string;
+  min?: number;
+  max?: number;
+};
+
+export type PluginUserOption =
+  | PluginUserOptionEnabled
+  | PluginUserOptionCheckbox
+  | PluginUserOptionText
+  | PluginUserOptionTextarea
+  | PluginUserOptionNumber;
 export type PluginUserOptions = PluginUserOption[];
+
 export type PluginOptions = {
   /**
    * @var {string} name Human Readable Plugin Name

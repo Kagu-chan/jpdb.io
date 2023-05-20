@@ -5,7 +5,7 @@ import { CSSPlugin } from './css.plugin';
 
 export class UserCSSPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
-    name: 'CSS-Manager',
+    name: 'Custom CSS',
     activeAt: /.*/,
     canBeDisabled: true,
     runAgain: true,
@@ -13,7 +13,7 @@ export class UserCSSPlugin extends JPDBPlugin {
   protected _userSettings: PluginUserOptions = [
     {
       key: 'styles',
-      text: 'Custom CSS',
+      // text: 'Custom CSS',
       type: 'textarea',
       default: '',
     },

@@ -123,10 +123,12 @@ export class UserSettingsSection extends DOMContainer {
       },
     });
 
-    this.appendNewElement(checkbox, 'label', {
-      innerText: text,
-      attributes: { for: name },
-    });
+    if (text?.length) {
+      this.appendNewElement(checkbox, 'label', {
+        innerText: text,
+        attributes: { for: name },
+      });
+    }
 
     if (description?.length) this.renderHelpText(this._container, description, '2rem');
 
@@ -144,10 +146,12 @@ export class UserSettingsSection extends DOMContainer {
     const outerDiv = this.appendNewElement(this._container, 'div', { class: ['form-box'] });
     const innerDiv = this.appendNewElement(outerDiv, 'div');
 
-    this.appendNewElement(innerDiv, 'label', {
-      innerText: text,
-      attributes: { for: name },
-    });
+    if (text?.length) {
+      this.appendNewElement(innerDiv, 'label', {
+        innerText: text,
+        attributes: { for: name },
+      });
+    }
 
     const input = this.appendNewElement(innerDiv, 'input', {
       id: name,
@@ -156,7 +160,7 @@ export class UserSettingsSection extends DOMContainer {
         type,
         min: type === 'number' ? '0' : undefined,
         value: value ?? '',
-        placeholder: text,
+        placeholder: text?.length ? text : '',
         ...extraAttributes,
       },
       style: {
@@ -175,10 +179,12 @@ export class UserSettingsSection extends DOMContainer {
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLTextAreaElement {
-    this.appendNewElement(this._container, 'label', {
-      innerText: text,
-      attributes: { for: name },
-    });
+    if (text) {
+      this.appendNewElement(this._container, 'label', {
+        innerText: text,
+        attributes: { for: name },
+      });
+    }
 
     const container = this.appendNewElement(this._container, 'div', {
       class: ['style-textarea-handle'],
@@ -190,7 +196,7 @@ export class UserSettingsSection extends DOMContainer {
       innerText: value,
       attributes: {
         name,
-        placeholder: text,
+        placeholder: text?.length ? text : '',
         spellcheck: 'false',
         ...extraAttributes,
       },

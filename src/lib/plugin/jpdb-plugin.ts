@@ -36,6 +36,7 @@ export abstract class JPDBPlugin extends Root {
   }
 
   public initialize(): void {
+    this.validateGivenOptions();
     this.unshiftEnableSetting();
 
     this._dom = Globals.domManager;
@@ -107,16 +108,42 @@ export abstract class JPDBPlugin extends Root {
   }
 
   private unshiftEnableSetting(): void {
-    if (this._pluginOptions.canBeDisabled) {
-      this._userSettings.unshift({
-        key: 'enabled',
-        text: `Enable ${this._pluginOptions.name}`,
-        type: 'boolean',
-        default:
-          this._pluginOptions.enabledByDefault === undefined
-            ? false
-            : this._pluginOptions.enabledByDefault,
-      });
-    }
+    if (!this._pluginOptions.canBeDisabled) return;
+
+    const enableSetting = this._userSettings.find(({ key }) => key === 'enabled') ?? {
+      key: 'enabled',
+      text: `Enable ${this._pluginOptions.name}`,
+      type: 'boolean',
+      default:
+        this._pluginOptions.enabledByDefault === undefined
+          ? false
+          : this._pluginOptions.enabledByDefault,
+    };
+    const sortedOptions = [
+      enableSetting,
+      ...this._userSettings.filter(({ key }) => key !== 'enabled'),
+    ];
+
+    this._userSettings = sortedOptions;
+  }
+
+  private validateGivenOptions(): void {
+    const keys: string[] = [];
+
+    this._userSettings?.forEach((options) => {
+      if (keys.includes(options.key))
+        throw new Error(`Option key '${options.key}' is already in use`);
+
+      if (
+        options.key === 'enabled' &&
+        (options.description || options.default || options.type !== 'boolean')
+      )
+        throw new Error(
+          // eslint-disable-next-line max-len
+          "Option key 'enabled' is a reserved keyword and must be used as 'boolean' value! Check type 'PluginUserOptionEnabled'",
+        );
+
+      keys.push(options.key);
+    });
   }
 }
