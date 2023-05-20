@@ -15,7 +15,11 @@ export class UserSettingsReset extends DOMContainer {
         type: 'submit',
         value: 'Reset Extension settings',
       },
-      handler: () => this._root.api.resetSettings(),
+      handler: (e) => {
+        e.preventDefault();
+
+        this._root.api.resetSettings();
+      },
     });
     this.appendNewElement(this.dom, 'p', {
       innerText: 'This will reset all Settings to default and reload the page.',

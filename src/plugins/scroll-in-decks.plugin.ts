@@ -8,7 +8,6 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
     activeAt: '/deck-list',
     canBeDisabled: true,
     name: 'Scroll-Controls in deck list',
-    enabledByDefault: true,
     runAgain: true,
   };
   protected _userSettings: PluginUserOptions = [

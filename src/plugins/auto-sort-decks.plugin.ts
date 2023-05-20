@@ -9,7 +9,6 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
     canBeDisabled: true,
     name: 'Automatic Deck Sorting',
     runAgain: true,
-    enabledByDefault: true,
   };
 
   protected run(): void {

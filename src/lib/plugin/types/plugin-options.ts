@@ -16,19 +16,15 @@ export type PluginOptions = {
    */
   canBeDisabled: boolean;
   /**
-   * @var {boolean} [enabledByDefault] Weather or not the plugin is enabled by default or not. Only effective if `canBeDisabled` is true. Defaults to false
-   */
-  enabledByDefault?: boolean;
-  /**
    * @var {string} [enableText='Enable $PLUGINNAME'] Text to enable or disable the plugin
    */
   enableText?: string;
   /**
-   * @var {string} [sourceLink] If set, forces `canBeDisabled` to `true` and `enabledByDefault` to false. Display the original source besides the enable control in settings
+   * @var {string} [sourceLink] If set, forces `canBeDisabled` to `true`. Display the original source besides the enable control in settings
    */
   sourceLink?: string;
   /**
-   * @var {string} [author] If set, forces `canBeDisabled` to `true` and `enabledByDefault` to false. Display the original author besides the enable control in settings
+   * @var {string} [author] If set, forces `canBeDisabled` to `true`. Display the original author besides the enable control in settings
    */
   author?: string;
   /**

@@ -7,7 +7,6 @@ export class HideDeckNumbersPlugin extends JPDBPlugin {
     canBeDisabled: true,
     name: 'Hide Deck-Numbers',
     runAgain: true,
-    enabledByDefault: false,
     enableText: 'Hide deck numbers on learn page and deck list',
   };
 

@@ -51,9 +51,9 @@ export abstract class JPDBPlugin extends Root {
     const thisPlugin = allPlugins[this.constructor.name] ?? {};
     let persistDefaults: boolean = false;
 
-    this._userSettings.forEach(({ key, default: defaulValue }) => {
+    this._userSettings.forEach(({ key, default: defaultValue }) => {
       if (thisPlugin[key] === undefined) {
-        thisPlugin[key] = defaulValue;
+        thisPlugin[key] = defaultValue;
 
         persistDefaults = true;
       }
@@ -125,7 +125,7 @@ export abstract class JPDBPlugin extends Root {
     const option: PluginUserOption = {
       key: 'enabled',
       type: 'checkbox',
-      default: canBeDisabled ?? false,
+      default: false,
       text: enableText ?? `Enable ${name}`,
     };
 
@@ -158,7 +158,6 @@ export abstract class JPDBPlugin extends Root {
   private applyThirdPartyChecks(): void {
     if (this._pluginOptions.author?.length || this._pluginOptions.sourceLink?.length) {
       this._pluginOptions.canBeDisabled = true;
-      this._pluginOptions.enabledByDefault = false;
     }
   }
 }
