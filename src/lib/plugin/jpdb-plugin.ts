@@ -37,6 +37,7 @@ export abstract class JPDBPlugin extends Root {
   }
 
   public initialize(): void {
+    this.applyThirdPartyChecks();
     this.validateGivenOptions();
     this.unshiftEnableOption();
 
@@ -115,14 +116,29 @@ export abstract class JPDBPlugin extends Root {
   }
 
   private unshiftEnableOption(): void {
-    if (!this._pluginOptions.canBeDisabled) return;
+    const { canBeDisabled, enableText, name, sourceLink, author, authorLink } = this._pluginOptions;
+
+    if (!canBeDisabled) return;
 
     const option: PluginUserOption = {
       key: 'enabled',
       type: 'checkbox',
-      default: this._pluginOptions.canBeDisabled ?? false,
-      text: this._pluginOptions.enableText ?? `Enable ${this._pluginOptions.name}`,
+      default: canBeDisabled ?? false,
+      text: enableText ?? `Enable ${name}`,
     };
+
+    if (sourceLink?.length || author?.length) {
+      const authorText = author?.length
+        ? `Provided by <b>${
+            authorLink?.length ? `<a href="${authorLink}" target="_blank">${author}</a>` : author
+          }</b>`
+        : undefined;
+      const linkText = sourceLink?.length
+        ? `Original source code available <b><a href="${sourceLink}" target="_blank">here</a></b>`
+        : undefined;
+
+      option.description = [authorText, linkText].filter((t) => !!t).join(' - ');
+    }
 
     this._userSettings.unshift(option);
 
@@ -135,5 +151,12 @@ export abstract class JPDBPlugin extends Root {
           hideOrDisable: 'hide',
         });
       });
+  }
+
+  private applyThirdPartyChecks(): void {
+    if (this._pluginOptions.author?.length || this._pluginOptions.sourceLink?.length) {
+      this._pluginOptions.canBeDisabled = true;
+      this._pluginOptions.enabledByDefault = false;
+    }
   }
 }

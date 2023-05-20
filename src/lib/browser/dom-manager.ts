@@ -6,6 +6,7 @@ type DOMElementOptions = {
   attributes?: Record<string, string | boolean>;
   style?: Partial<CSSStyleDeclaration>;
   innerText?: string;
+  innerHTML?: string;
   handler?: (ev?: MouseEvent) => void;
 };
 type FilterFn = (e: HTMLElement, index: number) => boolean;
@@ -158,6 +159,7 @@ export class DOMManager extends Root {
 
     if (options.id) e.setAttribute('id', options.id);
     if (options.innerText) e.innerText = options.innerText;
+    if (options.innerHTML) e.innerHTML = options.innerHTML;
     if (options.handler) e.onclick = options.handler;
 
     Object.keys(options.attributes ?? {}).forEach((key: string) => {

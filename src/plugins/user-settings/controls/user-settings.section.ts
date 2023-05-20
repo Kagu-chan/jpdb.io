@@ -237,7 +237,7 @@ export class UserSettingsSection extends DOMContainer {
 
   protected renderHelpText(target: HTMLElement, description: string, marginLeft?: string): void {
     this.appendNewElement(target, 'p', {
-      innerText: description,
+      innerHTML: description,
       style: {
         opacity: '.8',
         marginLeft,
