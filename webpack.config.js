@@ -1,7 +1,10 @@
 const path = require('path');
 const { readFileSync } = require('fs');
 const { BannerPlugin, DefinePlugin } = require('webpack');
-const { version } = require('./package.json');
+const { version, bugs, homepage } = require('./package.json');
+
+const bugUrl = bugs.url;
+const gitUrl = homepage;
 
 module.exports = {
   entry: './src/index.ts',
@@ -20,6 +23,8 @@ module.exports = {
     new DefinePlugin({
       'process.env.VERSION': JSON.stringify('v' + version),
       'process.env.NAME': JSON.stringify('JPDBScriptRunner'),
+      'process.env.LINK': JSON.stringify(gitUrl),
+      'process.env.BUGS': JSON.stringify(bugUrl),
     }),
   ],
   resolve: {

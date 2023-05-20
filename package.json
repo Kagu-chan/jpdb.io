@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/Kagu-chan/jpdb.io/issues"
   },
-  "homepage": "https://github.com/Kagu-chan/jpdb.io#readme",
+  "homepage": "https://github.com/Kagu-chan/jpdb.io/releases",
   "devDependencies": {
     "@types/node": "^16.18.31",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
