@@ -11,6 +11,7 @@ export abstract class JPDBPlugin extends Root {
   protected _sleeps: boolean = false;
 
   protected _dom: DOMManager;
+  protected _body: HTMLBodyElement;
 
   constructor() {
     super();
@@ -42,6 +43,7 @@ export abstract class JPDBPlugin extends Root {
     this.unshiftEnableOption();
 
     this._dom = Globals.domManager;
+    this._body = this._dom.findOne<'body'>('body');
   }
 
   public loadUsersSettings(): void {

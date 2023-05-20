@@ -179,8 +179,8 @@ export class UserSettingsSection extends DOMContainer {
       attributes: {
         name,
         type,
-        min: isNumberField(options) ? options.min?.toString() ?? '0' : undefined,
-        max: isNumberField(options) ? options.max?.toString() ?? '0' : undefined,
+        min: isNumberField(options) ? options.min?.toString() : undefined,
+        max: isNumberField(options) ? options.max?.toString() : undefined,
         value: value ?? '',
         placeholder: text?.length ? text : '',
         'data-key': options.key,
