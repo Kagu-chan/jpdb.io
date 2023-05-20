@@ -8,16 +8,27 @@ type DOMElementOptions = {
   innerText?: string;
   handler?: (ev?: MouseEvent) => void;
 };
+type FilterFn = (e: HTMLElement, index: number) => boolean;
 
 export class DOMManager extends Root {
   //#region Selectors
   public find(selector: string): HTMLElement[];
   public find<K extends keyof HTMLElementTagNameMap>(
     selector: string,
-    resultTag: K,
+    resultTag?: K,
   ): HTMLElementTagNameMap[K][];
-  public find(selector: string, _?: string): HTMLElement[] {
-    return Array.from(document.querySelectorAll(selector));
+  public find(domElement: HTMLElement, selector: string): HTMLElement[];
+  public find<K extends keyof HTMLElementTagNameMap>(
+    domElement: HTMLElement,
+    selector: string,
+    resultTag?: K,
+  ): HTMLElementTagNameMap[K][];
+
+  public find(p0: string | HTMLElement, p1?: string, _?: string): HTMLElement[] {
+    const root = typeof p0 === 'string' ? document : p0;
+    const selector = typeof p0 === 'string' ? p0 : p1;
+
+    return Array.from(root.querySelectorAll(selector));
   }
 
   public filter(
@@ -27,23 +38,50 @@ export class DOMManager extends Root {
   public filter<K extends keyof HTMLElementTagNameMap>(
     selector: string,
     filterFn: (e: HTMLElementTagNameMap[K], index: number) => boolean,
-    resultTag: K,
+    resultTag?: K,
   ): HTMLElementTagNameMap[K][];
   public filter(
+    domElement: HTMLElement,
     selector: string,
     filterFn: (e: HTMLElement, index: number) => boolean,
+  ): HTMLElement[];
+  public filter<K extends keyof HTMLElementTagNameMap>(
+    domElement: HTMLElement,
+    selector: string,
+    filterFn: (e: HTMLElementTagNameMap[K], index: number) => boolean,
+    resultTag?: K,
+  ): HTMLElementTagNameMap[K][];
+
+  public filter(
+    p0: string | HTMLElement,
+    p1: string | FilterFn,
+    p2?: string | FilterFn,
     _?: string,
   ): HTMLElement[] {
-    return this.find(selector).filter(filterFn);
+    if (typeof p0 === 'string') {
+      return this.find(p0).filter(p1 as FilterFn);
+    }
+
+    return this.find(p0, p1 as string).filter(p2 as FilterFn);
   }
 
   public findOne(selector: string): HTMLElement;
   public findOne<K extends keyof HTMLElementTagNameMap>(
     selector: string,
-    tagName: K,
+    resultTag?: K,
   ): HTMLElementTagNameMap[K];
-  public findOne(selector: string, _?: string): HTMLElement {
-    return document.querySelector(selector);
+  public findOne(domElement: HTMLElement, selector: string): HTMLElement;
+  public findOne<K extends keyof HTMLElementTagNameMap>(
+    domElement: HTMLElement,
+    selector: string,
+    resultTag?: K,
+  ): HTMLElementTagNameMap[K];
+
+  public findOne(p0: string | HTMLElement, p1?: string, _?: string): HTMLElement {
+    const root = typeof p0 === 'string' ? document : p0;
+    const selector = typeof p0 === 'string' ? p0 : p1;
+
+    return root.querySelector(selector);
   }
 
   public filterOne(
@@ -53,14 +91,31 @@ export class DOMManager extends Root {
   public filterOne<K extends keyof HTMLElementTagNameMap>(
     selector: string,
     filterFn: (e: HTMLElementTagNameMap[K], index: number) => boolean,
-    resultTag: K,
+    resultTag?: K,
   ): HTMLElementTagNameMap[K];
   public filterOne(
+    domElement: HTMLElement,
     selector: string,
     filterFn: (e: HTMLElement, index: number) => boolean,
+  ): HTMLElement;
+  public filterOne<K extends keyof HTMLElementTagNameMap>(
+    domElement: HTMLElement,
+    selector: string,
+    filterFn: (e: HTMLElementTagNameMap[K], index: number) => boolean,
+    resultTag?: K,
+  ): HTMLElementTagNameMap[K];
+
+  public filterOne(
+    p0: string | HTMLElement,
+    p1: string | FilterFn,
+    p2?: string | FilterFn,
     _?: string,
   ): HTMLElement {
-    return this.find(selector).filter(filterFn)[0];
+    if (typeof p0 === 'string') {
+      return this.find(p0).filter(p1 as FilterFn)[0];
+    }
+
+    return this.find(p0, p1 as string).filter(p2 as FilterFn)[0];
   }
   //#endregion
 

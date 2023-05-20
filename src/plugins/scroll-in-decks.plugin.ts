@@ -13,13 +13,15 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
     {
       key: 'set-threshold',
       text: 'Only show after a certain deck threshold',
-      type: 'boolean',
+      type: 'checkbox',
       default: true,
     },
     {
       key: 'threshold',
       type: 'number',
-      // showWhen: 'set-treshold',
+      dependsOn: 'set-threshold',
+      hideOrDisable: 'hide',
+      indent: true,
       default: 50,
       description: 'If you have less decks, the scroll controls wont be shown in the deck list',
     },

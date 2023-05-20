@@ -1,7 +1,6 @@
 import { Globals } from '../../lib/globals';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginManager } from '../../lib/plugin/plugin-manager';
-import { PluginUserOption } from '../../lib/types';
 import { PluginSettingsSection } from './user-settings.types';
 
 export class UserSettingsPluginAPI {
@@ -30,12 +29,7 @@ export class UserSettingsPluginAPI {
         const newSection: PluginSettingsSection = {
           plugin: p,
           header: p.pluginOptions.name,
-          options: p.userSettings.map((setting: PluginUserOption) => ({
-            key: setting.key,
-            text: setting.text,
-            type: setting.type,
-            description: setting.description,
-          })),
+          options: p.userSettings,
         };
 
         if (newSection.options.length) {

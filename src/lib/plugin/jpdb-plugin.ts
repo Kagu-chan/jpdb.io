@@ -1,7 +1,8 @@
 import { DOMManager } from '../browser/dom-manager';
 import { Globals } from '../globals';
 import { Root } from '../root';
-import { PluginOptions, PluginUserOptions } from '../types';
+import { PluginUserOption, PluginUserOptions } from '../types';
+import { PluginOptions } from './types/plugin-options';
 
 export abstract class JPDBPlugin extends Root {
   protected abstract _pluginOptions: PluginOptions;
@@ -37,7 +38,7 @@ export abstract class JPDBPlugin extends Root {
 
   public initialize(): void {
     this.validateGivenOptions();
-    this.unshiftEnableSetting();
+    this.unshiftEnableOption();
 
     this._dom = Globals.domManager;
   }
@@ -107,43 +108,32 @@ export abstract class JPDBPlugin extends Root {
     return true;
   }
 
-  private unshiftEnableSetting(): void {
-    if (!this._pluginOptions.canBeDisabled) return;
-
-    const enableSetting = this._userSettings.find(({ key }) => key === 'enabled') ?? {
-      key: 'enabled',
-      text: `Enable ${this._pluginOptions.name}`,
-      type: 'boolean',
-      default:
-        this._pluginOptions.enabledByDefault === undefined
-          ? false
-          : this._pluginOptions.enabledByDefault,
-    };
-    const sortedOptions = [
-      enableSetting,
-      ...this._userSettings.filter(({ key }) => key !== 'enabled'),
-    ];
-
-    this._userSettings = sortedOptions;
+  private validateGivenOptions(): void {
+    if (this._userSettings.find(({ key }) => key === 'enabled')) {
+      throw new Error('Key `enabled` is reserved and not allowed as user setting');
+    }
   }
 
-  private validateGivenOptions(): void {
-    const keys: string[] = [];
+  private unshiftEnableOption(): void {
+    if (!this._pluginOptions.canBeDisabled) return;
 
-    this._userSettings?.forEach((options) => {
-      if (keys.includes(options.key))
-        throw new Error(`Option key '${options.key}' is already in use`);
+    const option: PluginUserOption = {
+      key: 'enabled',
+      type: 'checkbox',
+      default: this._pluginOptions.canBeDisabled ?? false,
+      text: this._pluginOptions.enableText ?? `Enable ${this._pluginOptions.name}`,
+    };
 
-      if (
-        options.key === 'enabled' &&
-        (options.description || options.default || options.type !== 'boolean')
-      )
-        throw new Error(
-          // eslint-disable-next-line max-len
-          "Option key 'enabled' is a reserved keyword and must be used as 'boolean' value! Check type 'PluginUserOptionEnabled'",
-        );
+    this._userSettings.unshift(option);
 
-      keys.push(options.key);
-    });
+    this._userSettings
+      .filter(({ key, dependsOn }) => key !== 'enabled' && !dependsOn)
+      .forEach((object: PluginUserOption) => {
+        Object.assign(object, {
+          dependsOn: 'enabled',
+          indent: true,
+          hideOrDisable: 'hide',
+        });
+      });
   }
 }

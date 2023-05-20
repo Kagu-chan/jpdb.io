@@ -1,14 +1,15 @@
 import { DOMContainer } from '../../../lib/browser/dom-container';
+import {
+  PluginUserOption,
+  PluginUserOptionDep,
+  PluginUserOptionNumber,
+  PluginUserOptions,
+} from '../../../lib/types';
 import { UserSettingsContainer } from '../user-settings.container';
-import { AppliedUserOption, PluginSettingsSection } from '../user-settings.types';
+import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.types';
 
 export class UserSettingsSection extends DOMContainer {
-  private _activator: HTMLInputElement;
   private _container: HTMLDivElement;
-
-  private get groupName(): string {
-    return ['dep', this._name].join('-');
-  }
 
   constructor(
     private _root: UserSettingsContainer,
@@ -39,86 +40,102 @@ export class UserSettingsSection extends DOMContainer {
   }
 
   protected renderOptions(): void {
-    const [first, ...after] = this._data.options;
+    const { childs }: PluginSectionContainer = this.buildNestedContainers(this._data.options, {
+      childs: [],
+    });
 
-    this.addChangeEvent(this.renderFirst(first, after?.length > 0), first);
-    after.forEach((o) => this.addChangeEvent(this.renderOption(o), o));
+    childs.forEach((c) => this.renderContainer(c, this._container));
+    this.applyInteractionEvents();
+    this.applyChangeEvents();
   }
 
-  protected renderFirst(
-    option: AppliedUserOption,
-    hasMultiple: boolean,
-  ): HTMLInputElement | HTMLTextAreaElement {
-    if (option.key === 'enabled') {
-      this.renderActivator();
+  protected buildNestedContainers(
+    sortSet: PluginUserOptions,
+    parent: PluginSectionContainer,
+  ): PluginSectionContainer {
+    const searchFor = parent.key;
+    const result = sortSet.filter(({ dependsOn }) => dependsOn === searchFor).map(({ key }) => key);
+    const nextSortSet = sortSet.filter(({ key }) => !result.includes(key));
 
-      if (hasMultiple) {
-        this.renderActivatedContainer();
+    result.forEach((key: string) => {
+      const next: PluginSectionContainer = {
+        key,
+        childs: [],
+      };
 
-        this.addAndRunEventListener(this._activator, 'change', (): void => {
-          this.hidden(this._container, !this._activator.checked);
-        });
+      if (nextSortSet.length) {
+        this.buildNestedContainers(nextSortSet, next);
       }
 
-      return this._activator;
-    }
-
-    return this.renderOption(option);
-  }
-
-  protected renderActivator(): void {
-    const [option] = this._data.options;
-    const name = [this._id, option.key].join('-');
-    this._activator = this.renderCheckbox(
-      name,
-      option,
-      this._data.plugin.getUsersSetting('enabled'),
-      {
-        'data-when-unchecked-hide': this.groupName,
-      },
-    );
-  }
-
-  protected renderActivatedContainer(): void {
-    this._container = this.appendNewElement(this._container, 'div', {
-      attributes: {
-        'data-group': this.groupName,
-      },
-      style: {
-        marginLeft: '2rem',
-      },
+      parent.childs.push(next);
     });
+
+    parent.childs = parent.childs.sort((l, r) =>
+      l.childs.length === r.childs.length ? 0 : l.childs.length > r.childs.length ? 1 : -1,
+    );
+
+    return parent;
   }
 
-  protected renderOption(option: AppliedUserOption): HTMLInputElement | HTMLTextAreaElement {
+  protected renderContainer(container: PluginSectionContainer, domContainer: HTMLDivElement): void {
+    const settingsObject = this._data.options.find(({ key }) => key === container.key);
+    const firstChild = this._data.options.find(
+      ({ key }) => key === container.childs[0]?.key,
+    ) as PluginUserOptionDep;
+    const activator = this.renderOption(settingsObject, domContainer);
+    const interactionKey = [this._name, container.key].join('_');
+
+    if (container.childs.length) {
+      activator.setAttribute('data-interaction-key', interactionKey);
+      activator.setAttribute('data-interaction-action', firstChild.hideOrDisable);
+
+      const childsContainer = this.appendNewElement(domContainer, 'div', {
+        attributes: {
+          'data-interacted-by': interactionKey,
+        },
+        style: {
+          marginLeft: firstChild.indent ? '2rem' : undefined,
+        },
+      });
+
+      container.childs.forEach((child) => this.renderContainer(child, childsContainer));
+    }
+  }
+
+  protected renderOption(
+    option: PluginUserOption,
+    targetContainer: HTMLDivElement,
+  ): HTMLInputElement | HTMLTextAreaElement {
     const name = [this._id, option.key].join('-');
     const value = this._data.plugin.getUsersSetting(option.key);
 
     switch (option.type) {
-      case 'boolean':
-        return this.renderCheckbox(name, option, value as boolean);
+      case 'checkbox':
+        return this.renderCheckbox(targetContainer, name, option, value as boolean);
       case 'text':
       case 'number':
-        return this.renderTextbox(name, option, value as string);
+        return this.renderTextbox(targetContainer, name, option, value as string);
       case 'textarea':
-        return this.renderTextarea(name, option, value as string);
+        return this.renderTextarea(targetContainer, name, option, value as string);
       default:
         break;
     }
   }
 
   protected renderCheckbox(
+    targetContainer: HTMLDivElement,
     name: string,
-    { text, description }: AppliedUserOption,
+    { text, description, key }: PluginUserOption,
     value: boolean,
     extraAttributes: Record<string, string> = {},
   ): HTMLInputElement {
-    const checkbox = this.appendNewElement(this._container, 'div', { class: ['checkbox'] });
+    const checkbox = this.appendNewElement(targetContainer, 'div', { class: ['checkbox'] });
     const input = this.appendNewElement(checkbox, 'input', {
       id: name,
       attributes: {
         name,
         type: 'checkbox',
+        'data-key': key,
         ...extraAttributes,
       },
     });
@@ -130,7 +147,7 @@ export class UserSettingsSection extends DOMContainer {
       });
     }
 
-    if (description?.length) this.renderHelpText(this._container, description, '2rem');
+    if (description?.length) this.renderHelpText(targetContainer, description, '2rem');
 
     input.checked = value;
 
@@ -138,12 +155,16 @@ export class UserSettingsSection extends DOMContainer {
   }
 
   protected renderTextbox(
+    targetContainer: HTMLDivElement,
     name: string,
-    { text, description, type }: AppliedUserOption,
+    options: PluginUserOption,
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLInputElement {
-    const outerDiv = this.appendNewElement(this._container, 'div', { class: ['form-box'] });
+    const isNumberField = (arg: PluginUserOption): arg is PluginUserOptionNumber =>
+      arg.type === 'number';
+    const { text, type, description } = options;
+    const outerDiv = this.appendNewElement(targetContainer, 'div', { class: ['form-box'] });
     const innerDiv = this.appendNewElement(outerDiv, 'div');
 
     if (text?.length) {
@@ -158,9 +179,11 @@ export class UserSettingsSection extends DOMContainer {
       attributes: {
         name,
         type,
-        min: type === 'number' ? '0' : undefined,
+        min: isNumberField(options) ? options.min?.toString() ?? '0' : undefined,
+        max: isNumberField(options) ? options.max?.toString() ?? '0' : undefined,
         value: value ?? '',
         placeholder: text?.length ? text : '',
+        'data-key': options.key,
         ...extraAttributes,
       },
       style: {
@@ -174,19 +197,20 @@ export class UserSettingsSection extends DOMContainer {
   }
 
   protected renderTextarea(
+    targetContainer: HTMLDivElement,
     name: string,
-    { text, description }: AppliedUserOption,
+    { text, description, key }: PluginUserOption,
     value: string,
     extraAttributes: Record<string, string> = {},
   ): HTMLTextAreaElement {
     if (text) {
-      this.appendNewElement(this._container, 'label', {
+      this.appendNewElement(targetContainer, 'label', {
         innerText: text,
         attributes: { for: name },
       });
     }
 
-    const container = this.appendNewElement(this._container, 'div', {
+    const container = this.appendNewElement(targetContainer, 'div', {
       class: ['style-textarea-handle'],
       style: { marginTop: '1rem' },
     });
@@ -198,6 +222,7 @@ export class UserSettingsSection extends DOMContainer {
         name,
         placeholder: text?.length ? text : '',
         spellcheck: 'false',
+        'data-key': key,
         ...extraAttributes,
       },
       style: {
@@ -205,7 +230,7 @@ export class UserSettingsSection extends DOMContainer {
       },
     });
 
-    if (description?.length) this.renderHelpText(this._container, description);
+    if (description?.length) this.renderHelpText(targetContainer, description);
 
     return input;
   }
@@ -220,11 +245,34 @@ export class UserSettingsSection extends DOMContainer {
     });
   }
 
-  protected addChangeEvent(e: HTMLInputElement | HTMLTextAreaElement, o: AppliedUserOption): void {
-    this.addEventListener(e, 'change', (): void => {
-      const value = e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value;
+  protected applyInteractionEvents(): void {
+    this.find<'input' | 'textarea'>(this._container, 'input, textarea').forEach((e) => {
+      this.addEventListener(e, 'change', () =>
+        this._data.plugin.setUsersSetting(
+          e.dataset.key,
+          e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value,
+        ),
+      );
+    });
+  }
 
-      this._data.plugin.setUsersSetting(o.key, value);
+  protected applyChangeEvents(): void {
+    this.find<'input'>(this._container, '[data-interaction-key]').forEach((e) => {
+      const { interactionKey, interactionAction } = e.dataset;
+      const isHide = interactionAction === 'hide';
+      const searchKey: string = `[data-interacted-by="${interactionKey}"]${isHide ? '' : ' input'}`;
+
+      const childs = this.find<'div' | 'input'>(this._container, searchKey);
+      const callback: () => void = isHide
+        ? (): void => childs.forEach((c) => this.hidden(c, !e.checked))
+        : (): void => {
+            if (e.checked) {
+              return childs.forEach((c) => c.removeAttribute('disabled'));
+            }
+            childs.forEach((c) => c.setAttribute('disabled', ''));
+          };
+
+      this.addAndRunEventListener(e, 'change', callback);
     });
   }
 }
