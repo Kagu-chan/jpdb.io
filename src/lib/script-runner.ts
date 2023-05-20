@@ -8,5 +8,7 @@ export class ScriptRunner {
 
   public run(): void {
     Globals.pluginManager.runAll();
+
+    document.addEventListener('virtual-refresh', () => Globals.pluginManager.runAll());
   }
 }

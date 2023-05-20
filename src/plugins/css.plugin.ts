@@ -6,7 +6,7 @@ export class CSSPlugin extends JPDBPlugin {
     activeAt: /.*/,
     canBeDisabled: false,
     name: 'CSS Injector',
-    runAgain: true,
+    runAgain: false,
   };
 
   private _style: HTMLStyleElement;
