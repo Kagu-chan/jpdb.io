@@ -240,6 +240,7 @@ export class UserSettingsSection extends DOMContainer {
 
   /**
    * @TODO: Refactor in own classes (directory `inputs`)
+   * @TODO: Make such lists collapsible
    */
   protected renderList(
     targetContainer: HTMLDivElement,
