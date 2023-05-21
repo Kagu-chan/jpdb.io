@@ -38,6 +38,7 @@ export type PluginUserOptionNumber = PluginUserOptionBase<number> & {
 
 export type PluginUserOptionList = PluginUserOptionBaseRequired<string[]> & {
   type: 'list';
+  text: string;
 };
 
 export type ObjectSchema = Array<{
@@ -49,6 +50,7 @@ export type ObjectSchema = Array<{
 }>;
 export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> & {
   type: 'objectlist';
+  text: string;
   schema: ObjectSchema;
 };
 

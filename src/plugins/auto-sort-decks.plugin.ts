@@ -94,7 +94,7 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
     {
       key: 'bottom-decks',
       text: 'Decks to put at the end of the list',
-      description: 'The same as above',
+      description: deckListDescription, // 'The same as above',
       type: 'list',
       default: [
         '/(?<defaut>\\d+K Top)/i',

@@ -3,6 +3,7 @@ import { Input } from './input.class';
 export class WordListInput extends Input<string[], HTMLInputElement> {
   private _workingValue: string[];
 
+  private _innerContainer: HTMLDivElement;
   private _inputs: HTMLDivElement | HTMLLabelElement;
   private _inputCollection: HTMLInputElement[];
   private _controls: HTMLDivElement;
@@ -24,11 +25,12 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
       style: { display: 'none' },
     });
 
-    this.renderInputContainer();
+    this.renderMainContainer();
+    this.renderInputsContainer();
     this.renderContents(false);
 
     this.renderControls();
-    this.renderDescription(this.container);
+    this.renderDescription(this._innerContainer);
 
     return hiddenInput;
   }
@@ -37,27 +39,29 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
     return this._value;
   }
 
-  private renderInputContainer(): void {
-    if (!this.options.text?.length) {
-      this._inputs = this.append('inputs', this.container, 'div');
-
-      return;
-    }
-
-    const label = this.append('label', this.container, 'label', {
-      innerHTML: this.options.text,
+  private renderMainContainer(): void {
+    const details = this.append('root', this.container, 'details', {
+      class: ['accordion', 'user-settings'],
     });
 
-    this.append('1rem', label, 'div', { style: { marginBottom: '1rem' } });
-    this._inputs = this.append('inputs', label, 'div');
+    this.append('label', details, 'summary', {
+      innerText: this.options.text,
+    });
+
+    this._innerContainer = this.append('inner', details, 'div', { class: ['word-list'] });
+  }
+
+  private renderInputsContainer(): void {
+    this._inputs = this.append('inputs', this._innerContainer, 'div', { class: ['input-list'] });
   }
 
   private renderControls(): void {
-    this._controls = this.append('controls', this.container, 'div');
+    this._controls = this.append('controls', this._innerContainer, 'div', {
+      class: ['controls-list'],
+    });
 
     this._add = this.append('add', this._controls, 'input', {
       attributes: { type: 'submit', value: 'Add' },
-      style: { marginRight: '1rem' },
       class: ['outline'],
       handler: (e) => {
         e.preventDefault();
@@ -69,7 +73,6 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
 
     this.append('update', this._controls, 'input', {
       attributes: { type: 'submit', value: 'Update' },
-      style: { marginRight: '1rem' },
       class: ['outline', 'v4'],
       handler: (e) => {
         e.preventDefault();
@@ -108,7 +111,6 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
           type: 'text',
         },
         style: {
-          maxWidth: '32rem',
           marginRight: '1rem',
           marginBottom: '.5rem',
         },
