@@ -13,6 +13,18 @@ export abstract class Root {
     return window.location.search.replace('?', '');
   }
 
+  public static get QUERY(): Record<string, string> {
+    const payload: Record<string, string> = {};
+
+    this.SEARCH.split('&').forEach((c) => {
+      const [key, val] = c.split('=');
+
+      payload[key] = val;
+    });
+
+    return payload;
+  }
+
   public get VERSION(): string {
     return Root.VERSION;
   }
