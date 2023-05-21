@@ -26,7 +26,12 @@ const collapsibleCSS = `
 
 .user-settings .input-list input[type=text] {
   width: calc(100% - 123px);
+  margin: 0 1rem .5rem 0;
   padding: 0 1rem;
+}
+
+.user-settings .input-list input[type=submit] {
+  margin-bottom: .5rem;
 }
 `;
 

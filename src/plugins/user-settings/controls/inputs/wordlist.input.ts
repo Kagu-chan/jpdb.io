@@ -22,7 +22,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
         'data-key': this.options.key,
         disabled: true,
       },
-      style: { display: 'none' },
+      class: ['hidden'],
     });
 
     this.renderMainContainer();
@@ -110,10 +110,6 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
           value: v,
           type: 'text',
         },
-        style: {
-          marginRight: '1rem',
-          marginBottom: '.5rem',
-        },
       });
 
       this._dom.appendNewElement(c, 'input', {
@@ -122,7 +118,6 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
           type: 'submit',
           value: '-',
         },
-        style: { marginBottom: '.5rem' },
         class: ['outline', 'v1'],
         handler: (e) => {
           e.preventDefault();
