@@ -14,15 +14,19 @@ export abstract class Root {
   }
 
   public static get QUERY(): Record<string, string> {
+    return this.queryToObject(this.SEARCH);
+  }
+
+  public static queryToObject<T extends object>(query: string): T {
     const payload: Record<string, string> = {};
 
-    this.SEARCH.split('&').forEach((c) => {
+    query.split('&').forEach((c) => {
       const [key, val] = c.split('=');
 
       payload[key] = val;
     });
 
-    return payload;
+    return payload as T;
   }
 
   public get VERSION(): string {
@@ -35,5 +39,13 @@ export abstract class Root {
 
   public get SEARCH(): string {
     return Root.SEARCH;
+  }
+
+  public get QUERY(): Record<string, string> {
+    return Root.QUERY;
+  }
+
+  public queryToObject<T extends object>(query: string): T {
+    return Root.queryToObject(query);
   }
 }
