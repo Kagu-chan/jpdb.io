@@ -41,13 +41,14 @@ export type PluginUserOptionList = PluginUserOptionBaseRequired<string[]> & {
   text: string;
 };
 
-export type ObjectSchema = Array<{
+export type ObjectSchemaItem = {
   key: string;
   label: string;
-  type: 'number' | 'string';
+  type: 'number' | 'text';
   min?: number;
   max?: number;
-}>;
+};
+export type ObjectSchema = ObjectSchemaItem[];
 export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> & {
   type: 'objectlist';
   text: string;

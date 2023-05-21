@@ -26,7 +26,7 @@ export class MoveCardPlugin extends JPDBPlugin {
         {
           key: 'label',
           label: 'Label',
-          type: 'string',
+          type: 'text',
         },
       ],
     },

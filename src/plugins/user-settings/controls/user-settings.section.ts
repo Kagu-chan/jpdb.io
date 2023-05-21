@@ -5,9 +5,10 @@ import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.
 import { CheckBoxInput } from './inputs/checkbox.input';
 import { Input } from './inputs/input.class';
 import { NumberInput } from './inputs/number.input';
+import { ObjectListInput } from './inputs/object-list.input';
 import { TextAreaInput } from './inputs/textarea.input';
 import { TextBoxInput } from './inputs/textbox.input';
-import { WordListInput } from './inputs/wordlist.input';
+import { WordListInput } from './inputs/word-list.input';
 
 export class UserSettingsSection extends DOMContainer {
   private _container: HTMLDivElement;
@@ -123,8 +124,14 @@ export class UserSettingsSection extends DOMContainer {
         return new TextAreaInput(targetContainer, name, option, value as string);
       case 'list':
         return new WordListInput(targetContainer, name, option, value as string[]);
+      case 'objectlist':
+        return new ObjectListInput(
+          targetContainer,
+          name,
+          option,
+          value as Record<string, string | number>[],
+        );
       default:
-        // return this.renderHelpText(targetContainer, option.text) as unknown as HTMLInputElement;
         break;
     }
   }

@@ -24,7 +24,8 @@ const collapsibleCSS = `
   margin: .5rem .5rem 0 0;
 }
 
-.user-settings .input-list input[type=text] {
+.user-settings .input-list input[type=text],
+.user-settings .input-list input[type=number] {
   width: calc(100% - 123px);
   margin: 0 1rem .5rem 0;
   padding: 0 1rem;
@@ -32,6 +33,20 @@ const collapsibleCSS = `
 
 .user-settings .input-list input[type=submit] {
   margin-bottom: .5rem;
+}
+
+.user-settings .object-list .float-container {
+  width: calc(100% - 73px);
+  display: inline-flex;
+}
+
+.user-settings .object-list .float-container.labels {
+  justify-content: space-around;
+}
+
+.user-settings .object-list .float-container input[type=text],
+.user-settings .object-list .float-container input[type=number] {
+  width: 100%;
 }
 `;
 

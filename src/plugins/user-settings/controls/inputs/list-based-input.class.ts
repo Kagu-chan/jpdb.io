@@ -1,14 +1,14 @@
 import { Input } from './input.class';
 
-export class WordListInput extends Input<string[], HTMLInputElement> {
-  private _workingValue: string[];
+export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLInputElement> {
+  protected _workingValue: TListType[];
 
-  private _innerContainer: HTMLDivElement;
-  private _inputs: HTMLDivElement | HTMLLabelElement;
-  private _inputCollection: HTMLInputElement[];
-  private _controls: HTMLDivElement;
+  protected _innerContainer: HTMLDivElement;
+  protected _inputs: HTMLDivElement | HTMLLabelElement;
+  protected _inputCollection: HTMLInputElement[];
+  protected _controls: HTMLDivElement;
 
-  private _add: HTMLInputElement;
+  protected _add: HTMLInputElement;
 
   protected render(): HTMLInputElement {
     this._workingValue = [...this.value];
@@ -18,7 +18,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
       attributes: {
         name: this.name,
         type: 'text',
-        value: JSON.stringify(this.value),
+        value: this.itemsToString(this.value),
         'data-key': this.options.key,
         disabled: true,
       },
@@ -27,7 +27,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
 
     this.renderMainContainer();
     this.renderInputsContainer();
-    this.renderContents(false);
+    this.renderInputList(false);
 
     this.renderControls();
     this.renderDescription(this._innerContainer);
@@ -35,27 +35,48 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
     return hiddenInput;
   }
 
-  protected readValue(): string[] {
+  protected abstract getItemListClass(): string;
+  protected abstract openOnStart(): boolean;
+
+  protected abstract getEmptyItem(): TListType;
+
+  protected abstract stringToItem(val: string): TListType;
+  protected abstract itemToString(val: TListType): string;
+
+  protected abstract stringToItems(val: string): TListType[];
+  protected abstract itemsToString(val: TListType[]): string;
+
+  protected abstract renderInputItem(
+    target: HTMLElement,
+    value: TListType,
+    id: number,
+  ): HTMLInputElement;
+
+  protected readValue(): TListType[] {
     return this._value;
   }
 
-  private renderMainContainer(): void {
+  protected renderMainContainer(): void {
     const details = this.append('root', this.container, 'details', {
       class: ['accordion', 'user-settings'],
     });
+
+    if (this.openOnStart()) details.setAttribute('open', '');
 
     this.append('label', details, 'summary', {
       innerText: this.options.text,
     });
 
-    this._innerContainer = this.append('inner', details, 'div', { class: ['word-list'] });
+    this._innerContainer = this.append('inner', details, 'div', {
+      class: [this.getItemListClass()],
+    });
   }
 
-  private renderInputsContainer(): void {
+  protected renderInputsContainer(): void {
     this._inputs = this.append('inputs', this._innerContainer, 'div', { class: ['input-list'] });
   }
 
-  private renderControls(): void {
+  protected renderControls(): void {
     this._controls = this.append('controls', this._innerContainer, 'div', {
       class: ['controls-list'],
     });
@@ -66,8 +87,8 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
       handler: (e) => {
         e.preventDefault();
 
-        this._workingValue.push('');
-        this.rerenderContents();
+        this._workingValue.push(this.getEmptyItem());
+        this.refresh();
       },
     });
 
@@ -78,7 +99,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
         e.preventDefault();
 
         this._value = [...this._workingValue];
-        this._mainElement.value = JSON.stringify(this.value);
+        this._mainElement.value = this.itemsToString(this.value);
 
         this._mainElement.dispatchEvent(new Event('change'));
       },
@@ -91,26 +112,19 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
         e.preventDefault();
 
         this._workingValue = [...this.value];
-        this.rerenderContents();
+        this.refresh();
       },
     });
   }
 
-  private renderContents(focusLatest: boolean): void {
+  protected renderInputList(focusLatest: boolean): void {
     this._inputCollection = [];
 
-    this._workingValue.forEach((v: string, id: number) => {
+    this._workingValue.forEach((v: TListType, id: number) => {
       const last = id === this._workingValue.length - 1;
 
       const c = this._dom.appendNewElement(this._inputs, 'div');
-      const i = this._dom.appendNewElement(c, 'input', {
-        id: `${this.name}-${id}`,
-        attributes: {
-          name: `${this.name}-${id}`,
-          value: v,
-          type: 'text',
-        },
-      });
+      const i = this.renderInputItem(c, v, id);
 
       this._dom.appendNewElement(c, 'input', {
         id: `${this.name}-${id}-rem`,
@@ -123,7 +137,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
           e.preventDefault();
 
           this._workingValue.splice(id, 1);
-          this.rerenderContents();
+          this.refresh();
         },
       });
 
@@ -131,7 +145,7 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
 
       if (focusLatest && last) i.focus();
 
-      i.addEventListener('change', () => (this._workingValue[id] = i.value));
+      i.addEventListener('change', () => (this._workingValue[id] = this.stringToItem(i.value)));
       i.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
@@ -150,15 +164,15 @@ export class WordListInput extends Input<string[], HTMLInputElement> {
 
           this._workingValue.splice(id, 1);
 
-          this.rerenderContents();
+          this.refresh();
         }
       });
     });
   }
 
-  private rerenderContents(): void {
+  protected refresh(): void {
     this._inputs.replaceChildren();
 
-    this.renderContents(true);
+    this.renderInputList(true);
   }
 }
