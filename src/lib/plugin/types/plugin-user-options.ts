@@ -1,10 +1,11 @@
+export type PluginUserOptionDepAction = 'hide' | 'disable';
 export type PluginUserOptionNoDep = {
   dependsOn?: undefined;
 };
 export type PluginUserOptionDep = {
   dependsOn: string;
   indent: boolean;
-  hideOrDisable: 'hide' | 'disable';
+  hideOrDisable: PluginUserOptionDepAction;
 };
 export type PluginUserOptionDependsOn = PluginUserOptionNoDep | PluginUserOptionDep;
 

@@ -1,6 +1,6 @@
 import { Root } from '../root';
 
-type DOMElementOptions = {
+export type DOMElementOptions = {
   id?: string;
   class?: string[];
   attributes?: Record<string, string | boolean>;
@@ -9,7 +9,7 @@ type DOMElementOptions = {
   innerHTML?: string;
   handler?: (ev?: MouseEvent) => void;
 };
-type FilterFn = (e: HTMLElement, index: number) => boolean;
+export type DOMFilterFn = (e: HTMLElement, index: number) => boolean;
 
 export class DOMManager extends Root {
   //#region Selectors
@@ -55,15 +55,15 @@ export class DOMManager extends Root {
 
   public filter(
     p0: string | HTMLElement,
-    p1: string | FilterFn,
-    p2?: string | FilterFn,
+    p1: string | DOMFilterFn,
+    p2?: string | DOMFilterFn,
     _?: string,
   ): HTMLElement[] {
     if (typeof p0 === 'string') {
-      return this.find(p0).filter(p1 as FilterFn);
+      return this.find(p0).filter(p1 as DOMFilterFn);
     }
 
-    return this.find(p0, p1 as string).filter(p2 as FilterFn);
+    return this.find(p0, p1 as string).filter(p2 as DOMFilterFn);
   }
 
   public findOne(selector: string): HTMLElement;
@@ -108,15 +108,15 @@ export class DOMManager extends Root {
 
   public filterOne(
     p0: string | HTMLElement,
-    p1: string | FilterFn,
-    p2?: string | FilterFn,
+    p1: string | DOMFilterFn,
+    p2?: string | DOMFilterFn,
     _?: string,
   ): HTMLElement {
     if (typeof p0 === 'string') {
-      return this.find(p0).filter(p1 as FilterFn)[0];
+      return this.find(p0).filter(p1 as DOMFilterFn)[0];
     }
 
-    return this.find(p0, p1 as string).filter(p2 as FilterFn)[0];
+    return this.find(p0, p1 as string).filter(p2 as DOMFilterFn)[0];
   }
   //#endregion
 

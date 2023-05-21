@@ -1,15 +1,17 @@
 import { DOMContainer } from '../../../lib/browser/dom-container';
-import {
-  PluginUserOption,
-  PluginUserOptionDep,
-  PluginUserOptionNumber,
-  PluginUserOptions,
-} from '../../../lib/types';
+import { PluginUserOption, PluginUserOptionDep, PluginUserOptions } from '../../../lib/types';
 import { UserSettingsContainer } from '../user-settings.container';
 import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.types';
+import { CheckBoxInput } from './inputs/checkbox.input';
+import { Input } from './inputs/input.class';
+import { NumberInput } from './inputs/number.input';
+import { TextAreaInput } from './inputs/textarea.input';
+import { TextBoxInput } from './inputs/textbox.input';
+import { WordListInput } from './inputs/wordlist.input';
 
 export class UserSettingsSection extends DOMContainer {
   private _container: HTMLDivElement;
+  private _inputs: Input<unknown, HTMLElement>[] = [];
 
   constructor(
     private _root: UserSettingsContainer,
@@ -45,8 +47,8 @@ export class UserSettingsSection extends DOMContainer {
     });
 
     childs.forEach((c) => this.renderContainer(c, this._container));
-    this.applyInteractionEvents();
     this.applyChangeEvents();
+    this.applyInteractionEvents();
   }
 
   protected buildNestedContainers(
@@ -86,8 +88,7 @@ export class UserSettingsSection extends DOMContainer {
     const interactionKey = [this._name, container.key].join('_');
 
     if (container.childs.length) {
-      activator.setAttribute('data-interaction-key', interactionKey);
-      activator.setAttribute('data-interaction-action', firstChild.hideOrDisable);
+      activator.setInteractable(interactionKey, firstChild.hideOrDisable);
 
       const childsContainer = this.appendNewElement(domContainer, 'div', {
         attributes: {
@@ -100,319 +101,45 @@ export class UserSettingsSection extends DOMContainer {
 
       container.childs.forEach((child) => this.renderContainer(child, childsContainer));
     }
+
+    this._inputs.push(activator);
   }
 
   protected renderOption(
     option: PluginUserOption,
     targetContainer: HTMLDivElement,
-  ): HTMLInputElement | HTMLTextAreaElement {
+  ): Input<unknown, HTMLElement> {
     const name = [this._id, option.key].join('-');
     const value = this._data.plugin.getUsersSetting(option.key);
 
     switch (option.type) {
-      case 'checkbox':
-        return this.renderCheckbox(targetContainer, name, option, value as boolean);
       case 'text':
+        return new TextBoxInput(targetContainer, name, option, value as string);
       case 'number':
-        return this.renderTextbox(targetContainer, name, option, value as string);
+        return new NumberInput(targetContainer, name, option, value as number);
+      case 'checkbox':
+        return new CheckBoxInput(targetContainer, name, option, value as boolean);
       case 'textarea':
-        return this.renderTextarea(targetContainer, name, option, value as string);
+        return new TextAreaInput(targetContainer, name, option, value as string);
       case 'list':
-        return this.renderList(targetContainer, name, option, value as string[]);
+        return new WordListInput(targetContainer, name, option, value as string[]);
       default:
-        return this.renderHelpText(targetContainer, option.text) as unknown as HTMLInputElement;
+        // return this.renderHelpText(targetContainer, option.text) as unknown as HTMLInputElement;
         break;
     }
   }
 
-  protected renderCheckbox(
-    targetContainer: HTMLDivElement,
-    name: string,
-    { text, description, key }: PluginUserOption,
-    value: boolean,
-    extraAttributes: Record<string, string> = {},
-  ): HTMLInputElement {
-    const checkbox = this.appendNewElement(targetContainer, 'div', { class: ['checkbox'] });
-    const input = this.appendNewElement(checkbox, 'input', {
-      id: name,
-      attributes: {
-        name,
-        type: 'checkbox',
-        'data-key': key,
-        ...extraAttributes,
-      },
-    });
-
-    if (text?.length) {
-      this.appendNewElement(checkbox, 'label', {
-        innerHTML: text,
-        attributes: { for: name },
-      });
-    }
-
-    if (description?.length) this.renderHelpText(targetContainer, description, '2rem');
-
-    input.checked = value;
-
-    return input;
-  }
-
-  protected renderTextbox(
-    targetContainer: HTMLDivElement,
-    name: string,
-    options: PluginUserOption,
-    value: string,
-    extraAttributes: Record<string, string> = {},
-  ): HTMLInputElement {
-    const isNumberField = (arg: PluginUserOption): arg is PluginUserOptionNumber =>
-      arg.type === 'number';
-    const { text, type, description } = options;
-    const outerDiv = this.appendNewElement(targetContainer, 'div', { class: ['form-box'] });
-    const innerDiv = this.appendNewElement(outerDiv, 'div');
-
-    if (text?.length) {
-      this.appendNewElement(innerDiv, 'label', {
-        innerHTML: text,
-        attributes: { for: name },
-      });
-    }
-
-    const input = this.appendNewElement(innerDiv, 'input', {
-      id: name,
-      attributes: {
-        name,
-        type,
-        min: isNumberField(options) ? options.min?.toString() : undefined,
-        max: isNumberField(options) ? options.max?.toString() : undefined,
-        value: value ?? '',
-        placeholder: text?.length ? text : '',
-        'data-key': options.key,
-        ...extraAttributes,
-      },
-      style: {
-        maxWidth: '16rem',
-      },
-    });
-
-    if (description?.length) this.renderHelpText(innerDiv, description);
-
-    return input;
-  }
-
-  protected renderTextarea(
-    targetContainer: HTMLDivElement,
-    name: string,
-    { text, description, key }: PluginUserOption,
-    value: string,
-    extraAttributes: Record<string, string> = {},
-  ): HTMLTextAreaElement {
-    if (text) {
-      this.appendNewElement(targetContainer, 'label', {
-        innerHTML: text,
-        attributes: { for: name },
-      });
-    }
-
-    const container = this.appendNewElement(targetContainer, 'div', {
-      class: ['style-textarea-handle'],
-      style: { marginTop: '1rem' },
-    });
-
-    const input = this.appendNewElement(container, 'textarea', {
-      id: name,
-      innerHTML: value,
-      attributes: {
-        name,
-        placeholder: text?.length ? text : '',
-        spellcheck: 'false',
-        'data-key': key,
-        ...extraAttributes,
-      },
-      style: {
-        height: '20rem',
-      },
-    });
-
-    if (description?.length) this.renderHelpText(targetContainer, description);
-
-    return input;
-  }
-
-  /**
-   * @TODO: Refactor in own classes (directory `inputs`)
-   * @TODO: Make such lists collapsible
-   * @TODO: When in own classes, add "disable" utility function
-   */
-  protected renderList(
-    targetContainer: HTMLDivElement,
-    name: string,
-    options: PluginUserOption,
-    value: string[],
-  ): HTMLInputElement {
-    const hiddenInput = this.appendNewElement(targetContainer, 'input', {
-      attributes: {
-        name,
-        type: 'text',
-        value: JSON.stringify(value),
-        disabled: true,
-      },
-      style: {
-        display: 'none',
-      },
-    });
-
-    let containerElement: HTMLDivElement | HTMLLabelElement;
-    let workingValue: string[] = [...value];
-
-    // eslint-disable-next-line prefer-const
-    let addBtn: HTMLInputElement;
-
-    const renderContents = (focusLast: boolean = false): void => {
-      const inputElements: HTMLInputElement[] = [];
-
-      workingValue.forEach((v, id) => {
-        const c = this.appendNewElement(containerElement, 'div');
-        const i = this.appendNewElement(c, 'input', {
-          id: `${name}-${id}`,
-          attributes: {
-            name: `${name}-${id}`,
-            value: v,
-            type: 'text',
-          },
-          style: {
-            maxWidth: '32rem',
-            marginRight: '1rem',
-            marginBottom: '.5rem',
-          },
-        });
-
-        this.appendNewElement(c, 'input', {
-          id: `${name}-${id}-rem`,
-          attributes: {
-            type: 'submit',
-            value: '-',
-          },
-          style: { marginBottom: '.5rem' },
-          class: ['outline', 'v1'],
-          handler: (e) => {
-            e.preventDefault();
-
-            workingValue.splice(id, 1);
-            rerenderContents();
-          },
-        });
-
-        inputElements.push(i);
-
-        i.addEventListener('change', () => (workingValue[id] = i.value));
-        i.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-
-            if (id === workingValue.length - 1) {
-              addBtn.click();
-            } else {
-              inputElements[id + 1].focus();
-            }
-          }
-        });
-
-        if (focusLast && id === workingValue.length - 1) {
-          i.focus();
-        }
-      });
-    };
-
-    const rerenderContents = (): void => {
-      containerElement.replaceChildren();
-
-      renderContents(true);
-    };
-
-    if (options.text) {
-      const l = this.appendNewElement(targetContainer, 'label', {
-        innerHTML: options.text,
-      });
-      this.appendNewElement(l, 'div', { style: { marginBottom: '1rem' } });
-
-      containerElement = this.appendNewElement(l, 'div');
-    } else containerElement = this.appendNewElement(targetContainer, 'div');
-
-    renderContents();
-
-    const controlsContainer = this.appendNewElement(targetContainer, 'div');
-
-    addBtn = this.appendNewElement(controlsContainer, 'input', {
-      attributes: {
-        type: 'submit',
-        value: 'Add',
-      },
-      style: { marginRight: '1rem' },
-      class: ['outline'],
-      handler: (e) => {
-        e.preventDefault();
-
-        workingValue.push('');
-        rerenderContents();
-      },
-    });
-
-    this.appendNewElement(controlsContainer, 'input', {
-      attributes: {
-        type: 'submit',
-        value: 'Apply',
-      },
-      style: { marginRight: '1rem' },
-      class: ['outline', 'v4'],
-      handler: (e) => {
-        e.preventDefault();
-
-        value = [...workingValue];
-        hiddenInput.value = JSON.stringify(value);
-      },
-    });
-
-    this.appendNewElement(controlsContainer, 'input', {
-      attributes: {
-        type: 'submit',
-        value: 'Reset',
-      },
-      class: ['outline', 'v3'],
-      handler: (e) => {
-        e.preventDefault();
-
-        workingValue = [...value];
-        rerenderContents();
-      },
-    });
-
-    if (options.description?.length) this.renderHelpText(targetContainer, options.description);
-
-    return hiddenInput;
-  }
-
-  protected renderHelpText(target: HTMLElement, description: string, marginLeft?: string): void {
-    this.appendNewElement(target, 'p', {
-      innerHTML: description,
-      style: {
-        opacity: '.8',
-        marginLeft,
-      },
+  protected applyChangeEvents(): void {
+    this._inputs.forEach((e: Input<unknown, HTMLElement>) => {
+      // @TODO: Remove
+      if (!e) return;
+      e.onchange = (val: unknown): void => {
+        this._data.plugin.setUsersSetting(e.key, val);
+      };
     });
   }
 
   protected applyInteractionEvents(): void {
-    this.find<'input' | 'textarea'>(this._container, 'input, textarea').forEach((e) => {
-      this.addEventListener(e, 'change', () =>
-        this._data.plugin.setUsersSetting(
-          e.dataset.key,
-          e.type === 'checkbox' ? (e as HTMLInputElement).checked : e.value,
-        ),
-      );
-    });
-  }
-
-  protected applyChangeEvents(): void {
     this.find<'input'>(this._container, '[data-interaction-key]').forEach((e) => {
       const { interactionKey, interactionAction } = e.dataset;
       const isHide = interactionAction === 'hide';
