@@ -131,8 +131,8 @@ export class UserSettingsSection extends DOMContainer {
 
   protected applyChangeEvents(): void {
     this._inputs.forEach((e: Input<unknown, HTMLElement>) => {
-      // @TODO: Remove
       if (!e) return;
+
       e.onchange = (val: unknown): void => {
         this._data.plugin.setUsersSetting(e.key, val);
       };
