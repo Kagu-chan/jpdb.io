@@ -117,7 +117,10 @@ export class UserSettingsSection extends DOMContainer {
         return this.renderTextbox(targetContainer, name, option, value as string);
       case 'textarea':
         return this.renderTextarea(targetContainer, name, option, value as string);
+      case 'list':
+        return this.renderList(targetContainer, name, option, value as string[]);
       default:
+        return this.renderHelpText(targetContainer, option.text) as unknown as HTMLInputElement;
         break;
     }
   }
@@ -233,6 +236,157 @@ export class UserSettingsSection extends DOMContainer {
     if (description?.length) this.renderHelpText(targetContainer, description);
 
     return input;
+  }
+
+  /**
+   * @TODO: Refactor in own classes (directory `inputs`)
+   */
+  protected renderList(
+    targetContainer: HTMLDivElement,
+    name: string,
+    options: PluginUserOption,
+    value: string[],
+  ): HTMLInputElement {
+    const hiddenInput = this.appendNewElement(targetContainer, 'input', {
+      attributes: {
+        name,
+        type: 'text',
+        value: JSON.stringify(value),
+        disabled: true,
+      },
+      style: {
+        display: 'none',
+      },
+    });
+
+    let containerElement: HTMLDivElement | HTMLLabelElement;
+    let workingValue: string[] = [...value];
+
+    // eslint-disable-next-line prefer-const
+    let addBtn: HTMLInputElement;
+
+    const renderContents = (focusLast: boolean = false): void => {
+      const inputElements: HTMLInputElement[] = [];
+
+      workingValue.forEach((v, id) => {
+        const c = this.appendNewElement(containerElement, 'div');
+        const i = this.appendNewElement(c, 'input', {
+          id: `${name}-${id}`,
+          attributes: {
+            name: `${name}-${id}`,
+            value: v,
+            type: 'text',
+          },
+          style: {
+            maxWidth: '32rem',
+            marginRight: '1rem',
+            marginBottom: '.5rem',
+          },
+        });
+
+        this.appendNewElement(c, 'input', {
+          id: `${name}-${id}-rem`,
+          attributes: {
+            type: 'submit',
+            value: '-',
+          },
+          style: { marginBottom: '.5rem' },
+          class: ['outline', 'v1'],
+          handler: (e) => {
+            e.preventDefault();
+
+            workingValue.splice(id, 1);
+            rerenderContents();
+          },
+        });
+
+        inputElements.push(i);
+
+        i.addEventListener('change', () => (workingValue[id] = i.value));
+        i.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+
+            if (id === workingValue.length - 1) {
+              addBtn.click();
+            } else {
+              inputElements[id + 1].focus();
+            }
+          }
+        });
+
+        if (focusLast && id === workingValue.length - 1) {
+          i.focus();
+        }
+      });
+    };
+
+    const rerenderContents = (): void => {
+      containerElement.replaceChildren();
+
+      renderContents(true);
+    };
+
+    if (options.text) {
+      const l = this.appendNewElement(targetContainer, 'label', {
+        innerHTML: options.text,
+      });
+      this.appendNewElement(l, 'div', { style: { marginBottom: '1rem' } });
+
+      containerElement = this.appendNewElement(l, 'div');
+    } else containerElement = this.appendNewElement(targetContainer, 'div');
+
+    renderContents();
+
+    const controlsContainer = this.appendNewElement(targetContainer, 'div');
+
+    addBtn = this.appendNewElement(controlsContainer, 'input', {
+      attributes: {
+        type: 'submit',
+        value: 'Add',
+      },
+      style: { marginRight: '1rem' },
+      class: ['outline'],
+      handler: (e) => {
+        e.preventDefault();
+
+        workingValue.push('');
+        rerenderContents();
+      },
+    });
+
+    this.appendNewElement(controlsContainer, 'input', {
+      attributes: {
+        type: 'submit',
+        value: 'Apply',
+      },
+      style: { marginRight: '1rem' },
+      class: ['outline', 'v4'],
+      handler: (e) => {
+        e.preventDefault();
+
+        value = [...workingValue];
+        hiddenInput.value = JSON.stringify(value);
+      },
+    });
+
+    this.appendNewElement(controlsContainer, 'input', {
+      attributes: {
+        type: 'submit',
+        value: 'Reset',
+      },
+      class: ['outline', 'v3'],
+      handler: (e) => {
+        e.preventDefault();
+
+        workingValue = [...value];
+        rerenderContents();
+      },
+    });
+
+    if (options.description?.length) this.renderHelpText(targetContainer, options.description);
+
+    return hiddenInput;
   }
 
   protected renderHelpText(target: HTMLElement, description: string, marginLeft?: string): void {

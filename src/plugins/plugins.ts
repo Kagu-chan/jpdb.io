@@ -3,6 +3,7 @@ import { AutoSortDecksPlugin } from './auto-sort-decks.plugin';
 import { CSSPlugin } from './css.plugin';
 import { GreetingsPlugin } from './greetings.plugin';
 import { HideDeckNumbersPlugin } from './hide-deck-numbers.plugin';
+import { MoveCardPlugin } from './move-card.plugin';
 import { ScrollInDecksPlugin } from './scroll-in-decks.plugin';
 import { ScrollInSettingsPlugin } from './scroll-in-settings.plugin';
 import { UserCSSPlugin } from './user-css.plugin';
@@ -17,4 +18,5 @@ export const Plugins: JPDBPlugin[] = [
   new ScrollInDecksPlugin(),
   new AutoSortDecksPlugin(),
   new HideDeckNumbersPlugin(),
+  new MoveCardPlugin(),
 ];

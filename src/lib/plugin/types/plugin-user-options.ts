@@ -14,6 +14,8 @@ type PluginUserOptionBase<T> = PluginUserOptionDependsOn & {
   description?: string;
   default?: T;
 };
+type PluginUserOptionBaseRequired<T> = PluginUserOptionBase<T> &
+  Required<Pick<PluginUserOptionBase<T>, 'default'>>;
 
 export type PluginUserOptionCheckbox = PluginUserOptionBase<boolean> & {
   type: 'checkbox';
@@ -33,6 +35,22 @@ export type PluginUserOptionNumber = PluginUserOptionBase<number> & {
   max?: number;
 };
 
+export type PluginUserOptionList = PluginUserOptionBaseRequired<string[]> & {
+  type: 'list';
+};
+
+export type ObjectSchema = Array<{
+  key: string;
+  label: string;
+  type: 'number' | 'string';
+  min?: number;
+  max?: number;
+}>;
+export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> & {
+  type: 'objectlist';
+  schema: ObjectSchema;
+};
+
 export type PluginUserOptionEnabled = PluginUserOptionNoDep & {
   key: 'enabled';
   text: string;
@@ -45,5 +63,7 @@ export type PluginUserOption =
   | PluginUserOptionCheckbox
   | PluginUserOptionText
   | PluginUserOptionTextarea
-  | PluginUserOptionNumber;
+  | PluginUserOptionNumber
+  | PluginUserOptionList
+  | PluginUserOptionObjectList;
 export type PluginUserOptions = PluginUserOption[];
