@@ -241,6 +241,7 @@ export class UserSettingsSection extends DOMContainer {
   /**
    * @TODO: Refactor in own classes (directory `inputs`)
    * @TODO: Make such lists collapsible
+   * @TODO: When in own classes, add "disable" utility function
    */
   protected renderList(
     targetContainer: HTMLDivElement,

@@ -80,7 +80,7 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
       min: 1,
       max: 100,
       dependsOn: 'deprioritize-at-enabled',
-      hideOrDisable: 'hide',
+      hideOrDisable: 'disable',
       indent: true,
       placeholder: 'Deprioritize at',
     },
