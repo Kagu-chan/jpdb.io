@@ -381,13 +381,13 @@ class DeckSorter {
     } else priorityList.push([l.vk, r.vk]);
 
     if (DEPRIORITIZE_AT) {
-        const [a, b] = SWAP_REC_VOC ? [l.ck, r.ck] : [l.cp, r.cp];
+      const [a, b] = SWAP_REC_VOC ? [l.ck, r.ck] : [l.cp, r.cp];
 
-        if (a + b < (DEPRIORITIZE_AT * 2)) {
-            // If both values together are more or equal to threshold * 2, both are above or at the threshold and sorted normally
-            if (a >= DEPRIORITIZE_AT) return 1;
-            if (b >= DEPRIORITIZE_AT) return -1;
-        }
+      if (a + b < DEPRIORITIZE_AT * 2) {
+        // If both values together are more or equal to threshold * 2, both are above or at the threshold and sorted normally
+        if (a >= DEPRIORITIZE_AT) return 1;
+        if (b >= DEPRIORITIZE_AT) return -1;
+      }
     }
 
     while (priorityList.length) {
@@ -454,7 +454,8 @@ class DeckSorter {
 
     console.debug('Add clickable object to deck controls');
     const menu = document.querySelector('body > div.container.bugfix > div:nth-child(2)');
-    const newEl = `<a style="flex-grow: 1;" class="outline" id="sort-decks" href="javascript:sortDecks()">Sort Decks</a>`;
+    const newEl =
+      '<a style="flex-grow: 1;" class="outline" id="sort-decks" href="javascript:sortDecks()">Sort Decks</a>';
 
     window.sortDecks = this.submitSort.bind(this);
     menu.innerHTML = `${menu.innerHTML}${newEl}`;
