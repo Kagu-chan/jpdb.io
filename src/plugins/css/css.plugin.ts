@@ -1,5 +1,7 @@
-import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../lib/types';
+import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
+import { PluginOptions } from '../../lib/types';
+import { FixFn } from './css.types';
+import { customDefinitionFix } from './fixes/custom-definition.fix';
 
 export class CSSPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
@@ -11,6 +13,8 @@ export class CSSPlugin extends JPDBPlugin {
 
   private _style: HTMLStyleElement;
   private _styles = new Map<string, string>();
+
+  private _fixes: FixFn[] = [customDefinitionFix];
 
   public register(key: string, styles: string): void {
     this._styles.set(key, styles);
@@ -24,6 +28,10 @@ export class CSSPlugin extends JPDBPlugin {
     this._style = this._dom.appendNewElement(head, 'style', {
       id: 'jpdb-script-runner-css',
     });
+
+    this._fixes.forEach((fn) =>
+      fn((key: string, css: string) => this._styles.set(`fix:${key}`, css)),
+    );
 
     this.applyStyles();
   }

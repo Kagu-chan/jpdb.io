@@ -1,7 +1,7 @@
 import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptions } from '../lib/types';
-import { CSSPlugin } from './css.plugin';
+import { CSSPlugin } from './css/css.plugin';
 
 const deckListDescription = `A value can either be a simple string or a regular expression.<br />
 <br />

@@ -1,6 +1,6 @@
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { AutoSortDecksPlugin } from './auto-sort-decks.plugin';
-import { CSSPlugin } from './css.plugin';
+import { CSSPlugin } from './css/css.plugin';
 import { GreetingsPlugin } from './greetings.plugin';
 import { HideDeckNumbersPlugin } from './hide-deck-numbers.plugin';
 import { LearningStatsPlugin } from './learning-stats.plugin';
