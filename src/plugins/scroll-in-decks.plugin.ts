@@ -1,7 +1,7 @@
 import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptions } from '../lib/types';
-import { CSSPlugin } from './css.plugin';
+import { CSSPlugin } from './css/css.plugin';
 
 export class ScrollInDecksPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {

@@ -2,7 +2,7 @@ import { DOMContainer } from '../../lib/browser/dom-container';
 import { Globals } from '../../lib/globals';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../../lib/types';
-import { CSSPlugin } from '../css.plugin';
+import { CSSPlugin } from '../css/css.plugin';
 import { UserSettingsPluginAPI } from './user-settings-plugin.api';
 import { UserSettingsContainer } from './user-settings.container';
 import { PluginSettingsSection } from './user-settings.types';
