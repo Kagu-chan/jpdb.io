@@ -1,11 +1,27 @@
-export type PluginUserOptionDepAction = 'hide' | 'disable';
+export enum PluginUserOptionDependencyAction {
+  HIDE = 'hide',
+  DISABLE = 'disable',
+}
+
+export enum PluginUserOptionFieldType {
+  HEADER = 'header',
+  DIVIDER = 'divider',
+  CHECKBOX = 'checkbox',
+  TEXT = 'text',
+  TEXTAREA = 'textarea',
+  NUMBER = 'number',
+  LIST = 'list',
+  OBJECTLIST = 'objectlist',
+}
+
 export type PluginUserOptionNoDep = {
   dependsOn?: undefined;
 };
 export type PluginUserOptionDep = {
   dependsOn: string;
   indent: boolean;
-  hideOrDisable: PluginUserOptionDepAction;
+  hideOrDisable: PluginUserOptionDependencyAction;
+  indentWith?: string;
 };
 export type PluginUserOptionDependsOn = PluginUserOptionNoDep | PluginUserOptionDep;
 
@@ -18,39 +34,45 @@ type PluginUserOptionBase<T> = PluginUserOptionDependsOn & {
 type PluginUserOptionBaseRequired<T> = PluginUserOptionBase<T> &
   Required<Pick<PluginUserOptionBase<T>, 'default'>>;
 
+export type PluginUserOptionHeader = PluginUserOptionBase<void> & {
+  type: PluginUserOptionFieldType.HEADER;
+};
+export type PluginUserOptionDivider = PluginUserOptionBase<void> & {
+  type: PluginUserOptionFieldType.DIVIDER;
+};
 export type PluginUserOptionCheckbox = PluginUserOptionBase<boolean> & {
-  type: 'checkbox';
+  type: PluginUserOptionFieldType.CHECKBOX;
 };
 export type PluginUserOptionText = PluginUserOptionBase<string> & {
-  type: 'text';
+  type: PluginUserOptionFieldType.TEXT;
   placeholder?: string;
 };
 export type PluginUserOptionTextarea = PluginUserOptionBase<string> & {
-  type: 'textarea';
+  type: PluginUserOptionFieldType.TEXTAREA;
   placeholder?: string;
 };
 export type PluginUserOptionNumber = PluginUserOptionBase<number> & {
-  type: 'number';
+  type: PluginUserOptionFieldType.NUMBER;
   placeholder?: string;
   min?: number;
   max?: number;
 };
 
 export type PluginUserOptionList = PluginUserOptionBaseRequired<string[]> & {
-  type: 'list';
+  type: PluginUserOptionFieldType.LIST;
   text: string;
 };
 
 export type ObjectSchemaItem = {
   key: string;
   label: string;
-  type: 'number' | 'text';
+  type: PluginUserOptionFieldType.NUMBER | PluginUserOptionFieldType.TEXT;
   min?: number;
   max?: number;
 };
 export type ObjectSchema = ObjectSchemaItem[];
 export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> & {
-  type: 'objectlist';
+  type: PluginUserOptionFieldType.OBJECTLIST;
   text: string;
   schema: ObjectSchema;
 };
@@ -58,12 +80,14 @@ export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> 
 export type PluginUserOptionEnabled = PluginUserOptionNoDep & {
   key: 'enabled';
   text: string;
-  type: 'checkbox';
+  type: PluginUserOptionFieldType.CHECKBOX;
   default: boolean;
   description: undefined;
 };
 
 export type PluginUserOption =
+  | PluginUserOptionHeader
+  | PluginUserOptionDivider
   | PluginUserOptionCheckbox
   | PluginUserOptionText
   | PluginUserOptionTextarea

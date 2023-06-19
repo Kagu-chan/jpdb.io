@@ -1,5 +1,5 @@
 import { DOMElementOptions, DOMManager } from '../../../../lib/browser/dom-manager';
-import { PluginUserOption, PluginUserOptionDepAction } from '../../../../lib/types';
+import { PluginUserOption, PluginUserOptionDependencyAction } from '../../../../lib/types';
 
 export abstract class Input<TValue, TElement extends HTMLElement> {
   public onchange: (newValue: TValue) => void;
@@ -8,6 +8,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   protected _mainElement: TElement;
 
   protected _dom: DOMManager = new DOMManager();
+  protected _virtual: boolean = false;
 
   public get value(): TValue {
     return this._value;
@@ -15,6 +16,10 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
 
   public get key(): string {
     return this._mainElement.dataset.key;
+  }
+
+  public get isVirtual(): boolean {
+    return this._virtual;
   }
 
   constructor(
@@ -25,12 +30,14 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   ) {
     this._mainElement = this.render();
 
+    if (this._virtual) return;
+
     this._dom.addEventListener(this._mainElement, 'change', (): void => {
       if (this.onchange) this.onchange(this.readValue());
     });
   }
 
-  public setInteractable(key: string, action: PluginUserOptionDepAction): void {
+  public setInteractable(key: string, action: PluginUserOptionDependencyAction): void {
     this._mainElement.setAttribute('data-interaction-key', key);
     this._mainElement.setAttribute('data-interaction-action', action);
   }

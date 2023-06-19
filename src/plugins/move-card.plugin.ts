@@ -1,6 +1,6 @@
 import { JPDBRequest } from '../lib/jpdb.io/request';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptions } from '../lib/types';
+import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
 
 type DeckTarget = {
   deckId: number;
@@ -24,19 +24,19 @@ export class MoveCardPlugin extends JPDBPlugin {
     {
       key: 'objects',
       text: 'Target Decks',
-      type: 'objectlist',
+      type: PluginUserOptionFieldType.OBJECTLIST,
       default: [],
       schema: [
         {
           key: 'deckId',
           label: 'Deck ID',
-          type: 'number',
+          type: PluginUserOptionFieldType.NUMBER,
           min: 1,
         },
         {
           key: 'label',
           label: 'Label',
-          type: 'text',
+          type: PluginUserOptionFieldType.TEXT,
         },
       ],
     },
@@ -49,7 +49,7 @@ export class MoveCardPlugin extends JPDBPlugin {
 
     this._currentDeckId = Number(this.QUERY['id']);
 
-    const targets = (this.getUsersSetting<DeckTarget[]>('objects') ?? []).filter(
+    const targets = this.getUsersSetting<DeckTarget[]>('objects', []).filter(
       ({ deckId }) => deckId !== this._currentDeckId,
     );
 

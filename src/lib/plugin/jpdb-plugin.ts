@@ -1,7 +1,7 @@
 import { DOMManager } from '../browser/dom-manager';
 import { Globals } from '../globals';
 import { Root } from '../root';
-import { PluginUserOption, PluginUserOptions } from '../types';
+import { PluginUserOption, PluginUserOptionFieldType, PluginUserOptions } from '../types';
 import { PluginOptions } from './types/plugin-options';
 
 export abstract class JPDBPlugin extends Root {
@@ -29,8 +29,8 @@ export abstract class JPDBPlugin extends Root {
     return this._usersSettings;
   }
 
-  public getUsersSetting<T = unknown>(key: string): T {
-    return this._usersSettings[key] as T;
+  public getUsersSetting<T = unknown>(key: string, defaultValue?: T): T {
+    return (this._usersSettings[key] ?? defaultValue) as T;
   }
 
   public setUsersSetting<T = unknown>(key: string, value: T): void {
@@ -124,7 +124,7 @@ export abstract class JPDBPlugin extends Root {
 
     const option: PluginUserOption = {
       key: 'enabled',
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: false,
       text: enableText ?? `Enable ${name.charAt(0).toLowerCase()}${name.slice(1)}`,
     };

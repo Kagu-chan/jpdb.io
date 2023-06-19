@@ -1,6 +1,11 @@
 import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptions } from '../lib/types';
+import {
+  PluginOptions,
+  PluginUserOptionDependencyAction,
+  PluginUserOptionFieldType,
+  PluginUserOptions,
+} from '../lib/types';
 import { CSSPlugin } from './css/css.plugin';
 
 export class ScrollInDecksPlugin extends JPDBPlugin {
@@ -15,14 +20,14 @@ export class ScrollInDecksPlugin extends JPDBPlugin {
     {
       key: 'set-threshold',
       text: 'Only show after a certain deck threshold',
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: true,
     },
     {
       key: 'threshold',
-      type: 'number',
+      type: PluginUserOptionFieldType.NUMBER,
       dependsOn: 'set-threshold',
-      hideOrDisable: 'disable',
+      hideOrDisable: PluginUserOptionDependencyAction.DISABLE,
       indent: true,
       default: 50,
       description:

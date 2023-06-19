@@ -1,6 +1,11 @@
 import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptions } from '../lib/types';
+import {
+  PluginOptions,
+  PluginUserOptionDependencyAction,
+  PluginUserOptionFieldType,
+  PluginUserOptions,
+} from '../lib/types';
 import { CSSPlugin } from './css/css.plugin';
 
 const deckListDescription = `A value can either be a simple string or a regular expression.<br />
@@ -46,41 +51,41 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
       key: 'sort-by-cov',
       text: 'Enable sorting by coverage',
       description: 'Sorts decks by coverage. If a deck has no coverage, falls back to vocabulary.',
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: true,
     },
     {
       key: 'sort-by-rec',
       text: 'Sort decks by recognition',
       description: recognitionExplanation,
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: true,
     },
     {
       key: 'swap-rec-voc',
       text: 'Reverse priority between known and recognition',
       description: swapRecVocDescription,
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: true,
       dependsOn: 'sort-by-rec',
-      hideOrDisable: 'disable',
+      hideOrDisable: PluginUserOptionDependencyAction.DISABLE,
       indent: true,
     },
     {
       key: 'deprioritize-at-enabled',
       text: 'Deprioritize decks at a certain threshold',
       description: deprioritizeDescription,
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       default: false,
     },
     {
       key: 'deprioritize-at',
-      type: 'number',
+      type: PluginUserOptionFieldType.NUMBER,
       default: 90,
       min: 1,
       max: 100,
       dependsOn: 'deprioritize-at-enabled',
-      hideOrDisable: 'disable',
+      hideOrDisable: PluginUserOptionDependencyAction.DISABLE,
       indent: true,
       placeholder: 'Deprioritize at',
     },
@@ -88,14 +93,14 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
       key: 'top-decks',
       text: 'Decks to put at the top of the list',
       description: deckListDescription,
-      type: 'list',
+      type: PluginUserOptionFieldType.LIST,
       default: ['/^Prio:/i', 'Mining', '/N5/i', '1K Top Anime Frequency List', 'Refold'],
     },
     {
       key: 'bottom-decks',
       text: 'Decks to put at the end of the list',
       description: deckListDescription,
-      type: 'list',
+      type: PluginUserOptionFieldType.LIST,
       default: [
         '/(?<defaut>\\d+K Top)/i',
         '/- N(?<desc>\\d)$/i',

@@ -2,13 +2,8 @@ import { DOMContainer } from '../../../lib/browser/dom-container';
 import { PluginUserOption, PluginUserOptionDep, PluginUserOptions } from '../../../lib/types';
 import { UserSettingsContainer } from '../user-settings.container';
 import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.types';
-import { CheckBoxInput } from './inputs/checkbox.input';
 import { Input } from './inputs/input.class';
-import { NumberInput } from './inputs/number.input';
-import { ObjectListInput } from './inputs/object-list.input';
-import { TextAreaInput } from './inputs/textarea.input';
-import { TextBoxInput } from './inputs/textbox.input';
-import { WordListInput } from './inputs/word-list.input';
+import { SectionInputMap } from './section-input-map';
 
 export class UserSettingsSection extends DOMContainer {
   private _container: HTMLDivElement;
@@ -96,7 +91,7 @@ export class UserSettingsSection extends DOMContainer {
           'data-interacted-by': interactionKey,
         },
         style: {
-          marginLeft: firstChild.indent ? '2rem' : undefined,
+          marginLeft: firstChild.indent ? firstChild.indentWith ?? '2rem' : undefined,
         },
       });
 
@@ -112,33 +107,14 @@ export class UserSettingsSection extends DOMContainer {
   ): Input<unknown, HTMLElement> {
     const name = [this._id, option.key].join('-');
     const value = this._data.plugin.getUsersSetting(option.key);
+    const ctor = SectionInputMap[option.type];
 
-    switch (option.type) {
-      case 'text':
-        return new TextBoxInput(targetContainer, name, option, value as string);
-      case 'number':
-        return new NumberInput(targetContainer, name, option, value as number);
-      case 'checkbox':
-        return new CheckBoxInput(targetContainer, name, option, value as boolean);
-      case 'textarea':
-        return new TextAreaInput(targetContainer, name, option, value as string);
-      case 'list':
-        return new WordListInput(targetContainer, name, option, value as string[]);
-      case 'objectlist':
-        return new ObjectListInput(
-          targetContainer,
-          name,
-          option,
-          value as Record<string, string | number>[],
-        );
-      default:
-        break;
-    }
+    return ctor ? new ctor(targetContainer, name, option, value) : undefined;
   }
 
   protected applyChangeEvents(): void {
     this._inputs.forEach((e: Input<unknown, HTMLElement>) => {
-      if (!e) return;
+      if (!e || e.isVirtual) return;
 
       e.onchange = (val: unknown): void => {
         this._data.plugin.setUsersSetting(e.key, val);

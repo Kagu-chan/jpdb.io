@@ -1,6 +1,6 @@
 import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptions } from '../lib/types';
+import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
 import { CSSPlugin } from './css/css.plugin';
 
 export class UserCSSPlugin extends JPDBPlugin {
@@ -14,7 +14,7 @@ export class UserCSSPlugin extends JPDBPlugin {
     {
       key: 'styles',
       // text: 'Custom CSS',
-      type: 'textarea',
+      type: PluginUserOptionFieldType.TEXTAREA,
       default: '',
     },
   ];

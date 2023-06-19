@@ -1,5 +1,10 @@
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptions } from '../lib/types';
+import {
+  PluginOptions,
+  PluginUserOptionDependencyAction,
+  PluginUserOptionFieldType,
+  PluginUserOptions,
+} from '../lib/types';
 
 type LearningState = 'low' | 'at' | 'high';
 type LearningMeta = {
@@ -20,14 +25,14 @@ export class LearningStatsPlugin extends JPDBPlugin {
   protected _userSettings: PluginUserOptions = [
     {
       key: 'enable-learning-limit',
-      type: 'checkbox',
+      type: PluginUserOptionFieldType.CHECKBOX,
       text: 'Add learning limit',
     },
     {
       key: 'learning-limit',
-      type: 'number',
+      type: PluginUserOptionFieldType.NUMBER,
       min: 1,
-      hideOrDisable: 'disable',
+      hideOrDisable: PluginUserOptionDependencyAction.DISABLE,
       indent: false,
       dependsOn: 'enable-learning-limit',
       text: 'How many cards should be in learning state max',
