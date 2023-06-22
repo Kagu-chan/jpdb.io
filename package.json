@@ -8,7 +8,8 @@
     "build": "webpack",
     "lint": "eslint src --ext .ts",
     "preversion": "npm run lint && npm run build",
-    "version": "node update-version.js && git add userscripts/*"
+    "version": "node update-version.js && git add userscripts/*",
+    "postversion": "npm run build"
   },
   "repository": {
     "type": "git",
