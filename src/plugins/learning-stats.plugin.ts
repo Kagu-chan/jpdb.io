@@ -27,6 +27,8 @@ export class LearningStatsPlugin extends JPDBPlugin {
       key: 'enable-learning-limit',
       type: PluginUserOptionFieldType.CHECKBOX,
       text: 'Add learning limit',
+      description:
+        'This displays only a warning, when you`re about to have too many cards in learning state',
     },
     {
       key: 'learning-limit',
