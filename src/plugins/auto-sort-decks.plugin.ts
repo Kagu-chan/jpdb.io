@@ -13,7 +13,7 @@ const deckListDescription = `A value can either be a simple string or a regular 
 For <a href="https://en.wikipedia.org/wiki/Regular_expression#Basic_concepts" target="_blank">regular expressions (pattern search)</a>, enclose the value with slahes (<code>/</code>).<br />
 A regular expression may also end with a modifier (e.g. i for case insensitive).<br />
 <br />
-A pattern search can also contain capture groups (<code>/before(?<group>match)/i</code>) - those will be treated as pattern matches with specific behavior.<br />
+A pattern search can also contain capture groups (<code>/.*(?&lt;groupname&gt;match).*/i</code>) - those will be treated as pattern matches with specific behavior.<br />
 Valid groups are as follows:<br />
 <br />
 <ul>
