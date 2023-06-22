@@ -7,6 +7,7 @@ export enum PluginUserOptionFieldType {
   HEADER = 'header',
   DIVIDER = 'divider',
   CHECKBOX = 'checkbox',
+  RADIOBUTTON = 'radio',
   TEXT = 'text',
   TEXTAREA = 'textarea',
   NUMBER = 'number',
@@ -42,6 +43,11 @@ export type PluginUserOptionDivider = PluginUserOptionBase<void> & {
 };
 export type PluginUserOptionCheckbox = PluginUserOptionBase<boolean> & {
   type: PluginUserOptionFieldType.CHECKBOX;
+};
+export type PluginUserOptionRadioButton = PluginUserOptionBase<string> & {
+  type: PluginUserOptionFieldType.RADIOBUTTON;
+  options: object;
+  labels: object;
 };
 export type PluginUserOptionText = PluginUserOptionBase<string> & {
   type: PluginUserOptionFieldType.TEXT;
@@ -89,6 +95,7 @@ export type PluginUserOption =
   | PluginUserOptionHeader
   | PluginUserOptionDivider
   | PluginUserOptionCheckbox
+  | PluginUserOptionRadioButton
   | PluginUserOptionText
   | PluginUserOptionTextarea
   | PluginUserOptionNumber
