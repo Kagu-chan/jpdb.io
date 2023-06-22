@@ -13,9 +13,21 @@ enum ScrollControlOrder {
   TB = 'top-bottom',
 }
 
-const ScrollControlLabels: Record<ScrollControlOrder, string> = {
-  [ScrollControlOrder.BT]: 'Bottom left, Top right',
-  [ScrollControlOrder.TB]: 'Top left, Bottom right',
+const ScrollControlOrderLabels: Record<ScrollControlOrder, string> = {
+  [ScrollControlOrder.BT]: 'Bottom -> Top',
+  [ScrollControlOrder.TB]: 'Top -> Bottom',
+};
+
+enum ScrollControlPosition {
+  L = 'left',
+  R = 'right',
+  B = 'both',
+}
+
+const ScrollControlPositionLabels: Record<ScrollControlPosition, string> = {
+  [ScrollControlPosition.L]: 'Left',
+  [ScrollControlPosition.R]: 'Right',
+  [ScrollControlPosition.B]: 'Left and Right',
 };
 
 const ScrollParameters: Record<
@@ -34,15 +46,17 @@ const ScrollParameters: Record<
 
 const ScrollStyles: Record<
   'left' | 'right',
-  [string[], Pick<CSSStyleDeclaration, 'marginLeft' | 'marginRight'>]
+  ['prependElement' | 'appendElement', '_containerLeft' | '_containerRight']
 > = {
-  left: [[], { marginLeft: '1.2rem', marginRight: 'auto' }],
-  right: [['scroll', 'right'], { marginLeft: 'auto', marginRight: '1.2rem' }],
+  left: ['prependElement', '_containerLeft'],
+  right: ['appendElement', '_containerRight'],
 };
 
 export class ScrollControlsPlugin extends JPDBPlugin {
   protected _hasRan: boolean = false;
   protected _footer: HTMLDivElement;
+  protected _containerLeft: HTMLDivElement;
+  protected _containerRight: HTMLDivElement;
 
   protected _pluginOptions: PluginOptions = {
     activeAt: [/.*/],
@@ -54,12 +68,20 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
   protected _userSettings: PluginUserOptions = [
     {
-      key: 'button-position',
+      key: 'button-order',
       type: PluginUserOptionFieldType.RADIOBUTTON,
       options: ScrollControlOrder,
-      labels: ScrollControlLabels,
+      labels: ScrollControlOrderLabels,
       default: ScrollControlOrder.BT,
-      text: 'Control order',
+      text: 'Scroll control order',
+    },
+    {
+      key: 'button-position',
+      type: PluginUserOptionFieldType.RADIOBUTTON,
+      options: ScrollControlPosition,
+      labels: ScrollControlPositionLabels,
+      default: ScrollControlPosition.B,
+      text: 'Scroll control position',
     },
     {
       key: 'in-settings',
@@ -134,8 +156,9 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
     const container = this._dom.findOne('#save-all-settings-box');
 
-    this._dom.prependElement(container, this.getScrollElement('left'));
-    this._dom.appendElement(container, this.getScrollElement('right'));
+    this.addContainers(container);
+    this.addScrollElement('left');
+    this.addScrollElement('right');
   }
 
   protected handleMedia(): void {
@@ -175,8 +198,10 @@ export class ScrollControlsPlugin extends JPDBPlugin {
       },
     });
 
+    this.addContainers(this._footer);
+
     Globals.pluginManager.get(CSSPlugin).register(
-      ScrollControlsPlugin.name,
+      `${ScrollControlsPlugin.name}-footer`,
       `#deck-list-scroll-controls {
     position: fixed;
     left: 0;
@@ -191,26 +216,73 @@ export class ScrollControlsPlugin extends JPDBPlugin {
     );
   }
 
+  protected addContainers(target: HTMLElement): void {
+    this._containerLeft = this._dom.prependNewElement(target, 'div', {
+      class: ['sc-left', 'sc-any'],
+    });
+
+    this._containerRight = this._dom.appendNewElement(target, 'div', {
+      class: ['sc-right', 'sc-any'],
+    });
+
+    Globals.pluginManager.get(CSSPlugin).register(
+      ScrollControlsPlugin.name,
+      `
+.sc-any {
+  width:300px;
+}
+
+.sc-any input:not(:last-of-type) {
+  margin-right: .5rem;
+}
+
+.sc-left {
+  margin-right: auto;
+  padding-left: 1.2rem;
+}
+
+.sc-right {
+  margin-left: auto;
+  padding-right: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+`,
+    );
+  }
+
   protected addScrollControls(): void {
     this.shiftFooter();
 
-    this._dom.prependElement(this._footer, this.getScrollElement('left'));
-    this._dom.appendElement(this._footer, this.getScrollElement('right'));
+    this.addScrollElement('left');
+    this.addScrollElement('right');
   }
 
-  protected getScrollElement(lr: 'left' | 'right'): HTMLInputElement {
-    const direction = this.getUsersSetting<ScrollControlOrder>('button-position');
-    const [extraClasses, style] = ScrollStyles[lr];
+  protected addScrollElement(lr: 'left' | 'right'): void {
+    const direction = this.getUsersSetting<ScrollControlOrder>('button-order');
     const [target, text] = ScrollParameters[direction][lr];
+    const [method] = ScrollStyles[lr];
+    let [, containerName] = ScrollStyles[lr];
 
-    return this._dom.createElement('input', {
+    switch (this.getUsersSetting<ScrollControlPosition>('button-position')) {
+      case ScrollControlPosition.L:
+        [, containerName] = ScrollStyles['left'];
+
+        break;
+      case ScrollControlPosition.R:
+        [, containerName] = ScrollStyles['right'];
+
+        break;
+    }
+
+    const newEl = this._dom.createElement('input', {
       id: `scroll-${direction}`,
-      class: ['outline', 'v2', ...extraClasses],
+      class: ['outline', 'v2'],
       attributes: {
         type: 'submit',
         value: `To ${text}`,
       },
-      style,
       handler: (ev) => {
         ev.preventDefault();
 
@@ -220,5 +292,7 @@ export class ScrollControlsPlugin extends JPDBPlugin {
         });
       },
     });
+
+    this._dom[method](this[containerName], newEl);
   }
 }
