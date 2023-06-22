@@ -7,7 +7,7 @@ import { HideDeckNumbersPlugin } from './hide-deck-numbers.plugin';
 import { LearningStatsPlugin } from './learning-stats.plugin';
 import { MoveCardPlugin } from './move-card.plugin';
 import { ScrollInDecksPlugin } from './scroll-in-decks.plugin';
-import { ScrollInSettingsPlugin } from './scroll-in-settings.plugin';
+import { TargetedSentenceCardsPlugin } from './targeted-sentence-cards.plugin';
 import { UserCSSPlugin } from './user-css.plugin';
 import { UserSettingsPlugin } from './user-settings/user-settings.plugin';
 
@@ -23,4 +23,5 @@ export const Plugins: JPDBPlugin[] = [
   new MoveCardPlugin(),
   new LearningStatsPlugin(),
   new CustomLinksPlugin(),
+  new TargetedSentenceCardsPlugin(),
 ];
