@@ -43,9 +43,11 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
     activeAt: ['/learn', '/deck-list'],
     canBeDisabled: true,
     name: 'Automatic deck sorting',
-    description: 'Sort your decks on certain conditions locally or remote',
+    description:
+      'Sort your decks on certain conditions locally or remote (Currently without function!)',
     runAgain: true,
     beta: true,
+    unfinnished: true,
   };
 
   protected _userSettings: PluginUserOptions = [

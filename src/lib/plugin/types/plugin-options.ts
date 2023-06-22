@@ -39,14 +39,20 @@ type RawPluginOptions = {
    * @var {boolean} [beta=false] Marks a plugin as beta, by default disabeling the deck until beta decks are enabled
    */
   beta?: boolean;
+  /**
+   * @var {boolean} [unfinnished=false] Marks a beta plugin as unfinnished
+   */
+  unfinnished?: boolean;
 };
 
 type NonBetaPlugin = RawPluginOptions & {
   beta?: false;
+  unfinnished?: false;
 };
 
 type BetaPlugin = RawPluginOptions & {
   beta: true;
+  unfinnished?: boolean;
   canBeDisabled: true;
 };
 

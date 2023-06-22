@@ -118,8 +118,17 @@ export abstract class JPDBPlugin extends Root {
   }
 
   private unshiftEnableOption(): void {
-    const { canBeDisabled, enableText, name, sourceLink, author, authorLink, description, beta } =
-      this._pluginOptions;
+    const {
+      canBeDisabled,
+      enableText,
+      name,
+      sourceLink,
+      author,
+      authorLink,
+      description,
+      beta,
+      unfinnished,
+    } = this._pluginOptions;
 
     if (!canBeDisabled) return;
 
@@ -145,7 +154,7 @@ export abstract class JPDBPlugin extends Root {
     }
 
     if (beta) {
-      const span = '<span class="beta">beta</span>';
+      const span = `<span class="beta">${unfinnished ? 'unfinnished' : 'beta'}</span>`;
       option.description = option.description ? `${option.description} ${span}` : span;
     }
 
