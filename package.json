@@ -6,7 +6,9 @@
   "scripts": {
     "watch": "webpack --watch",
     "build": "webpack",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "preversion": "npm run lint && npm run build",
+    "version": "node update-version.js && git add userscripts/*"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
     "eslint-plugin-jsdoc": "^39.6.4",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.3",
+    "replace-in-file": "^7.0.1",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
