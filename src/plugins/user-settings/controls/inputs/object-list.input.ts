@@ -7,7 +7,7 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
   }
 
   protected openOnStart(): boolean {
-    return true;
+    return false;
   }
 
   protected getEmptyItem(): Record<string, string | number> {
@@ -36,6 +36,18 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
     return JSON.stringify(val);
   }
 
+  protected renderInputHeaderContent(target: HTMLDivElement): void {
+    const { schema } = this.options as PluginUserOptionObjectList;
+
+    schema.forEach((current: ObjectSchemaItem) => {
+      this._dom.appendNewElement(target, 'label', {
+        innerText: current.label,
+        attributes: { for: `${this.name}-${current.key}-0` },
+        style: { paddingTop: '1rem', paddingLeft: '.5rem' },
+      });
+    });
+  }
+
   protected renderInputItem(
     target: HTMLElement,
     value: Record<string, string | number>,
@@ -54,25 +66,8 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
       class: ['hidden'],
     });
 
-    if (id === 0) {
-      const labelContainer: HTMLDivElement = this._dom.appendNewElement(target, 'div', {
-        class: ['float-container', 'labels'],
-      });
-
-      schema.forEach((current: ObjectSchemaItem) => {
-        this._dom.appendNewElement(labelContainer, 'label', {
-          innerText: current.label,
-          attributes: { for: `${this.name}-${current.key}-${id}` },
-        });
-      });
-    }
-
-    const flexContainer: HTMLDivElement = this._dom.appendNewElement(target, 'div', {
-      class: ['float-container'],
-    });
-
     schema.forEach((current: ObjectSchemaItem, cid: number) => {
-      const i = this._dom.appendNewElement(flexContainer, 'input', {
+      const i = this._dom.appendNewElement(target, 'input', {
         id: `${this.name}-${current.key}-${id}`,
         attributes: {
           name: `${this.name}-${current.key}-${id}`,

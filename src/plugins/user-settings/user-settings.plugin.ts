@@ -24,9 +24,14 @@ const collapsibleCSS = `
   margin: .5rem .5rem 0 0;
 }
 
+.user-settings .input-list .input-item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
 .user-settings .input-list input[type=text],
 .user-settings .input-list input[type=number] {
-  width: calc(100% - 123px);
   margin: 0 1rem .5rem 0;
   padding: 0 1rem;
 }
@@ -35,19 +40,29 @@ const collapsibleCSS = `
   margin-bottom: .5rem;
 }
 
-.user-settings .object-list .float-container {
-  width: calc(100% - 73px);
+.user-settings .deck-sidebar {
   display: inline-flex;
+  padding-left: 0;
 }
 
-.user-settings .object-list .float-container.labels {
-  justify-content: space-around;
+.user-settings .arrow-control {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  height: 22px;
+  padding: 0 1.4rem 0 .5rem;
 }
 
-.user-settings .object-list .float-container input[type=text],
-.user-settings .object-list .float-container input[type=number] {
-  width: 100%;
+.user-settings .arrow-control:hover {
+  border: 0;
+  transform: none;
+  box-shadow: none;
+  color: var(--button-hover-border-color);
 }
+
+.user-settings .input-list .input-item:first-of-type .arrow-control.up { opacity: 0; }
+.user-settings .input-list .input-item:last-of-type .arrow-control.down { opacity: 0; }
 `;
 
 export class UserSettingsPlugin extends JPDBPlugin {
