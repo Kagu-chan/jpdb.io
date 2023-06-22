@@ -116,8 +116,8 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
   }
 
   private addCSS(): void {
-    // Globals.pluginManager
-    //   .get(CSSPlugin)
-    //   .register(AutoSortDecksPlugin.name, '.deck-sidebar { display: none }');
+    Globals.pluginManager
+      .get(CSSPlugin)
+      .register(AutoSortDecksPlugin.name, '.deck-sidebar { display: none }');
   }
 }
