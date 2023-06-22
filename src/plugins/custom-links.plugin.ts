@@ -33,6 +33,7 @@ export class CustomLinksPlugin extends JPDBPlugin {
     activeAt: /.*/,
     canBeDisabled: true,
     name: 'Custom Links',
+    description: 'Add or remove links from header and footer',
     runAgain: true,
   };
 

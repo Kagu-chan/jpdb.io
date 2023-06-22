@@ -18,6 +18,7 @@ export class MoveCardPlugin extends JPDBPlugin {
     name: 'Move Cards',
     runAgain: true,
     enableText: 'Allow moving cards between decks',
+    description: 'Adds a `Move card` option to the menu of single vocab cards',
   };
 
   protected _userSettings: PluginUserOptions = [

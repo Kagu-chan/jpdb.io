@@ -118,7 +118,8 @@ export abstract class JPDBPlugin extends Root {
   }
 
   private unshiftEnableOption(): void {
-    const { canBeDisabled, enableText, name, sourceLink, author, authorLink } = this._pluginOptions;
+    const { canBeDisabled, enableText, name, sourceLink, author, authorLink, description } =
+      this._pluginOptions;
 
     if (!canBeDisabled) return;
 
@@ -127,6 +128,7 @@ export abstract class JPDBPlugin extends Root {
       type: PluginUserOptionFieldType.CHECKBOX,
       default: false,
       text: enableText ?? `Enable ${name.charAt(0).toLowerCase()}${name.slice(1)}`,
+      description,
     };
 
     if (sourceLink?.length || author?.length) {

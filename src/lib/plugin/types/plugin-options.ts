@@ -4,6 +4,10 @@ export type PluginOptions = {
    */
   name: string;
   /**
+   * @var {string} [description] Optional plugin description
+   */
+  description?: string;
+  /**
    * @var {string | RegExp | Array<string | RegExp>} activeAt Regular Expression or literal stating on which pathname this plugin should interact
    */
   activeAt: string | RegExp | Array<string | RegExp>;

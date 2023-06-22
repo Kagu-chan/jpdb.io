@@ -6,6 +6,8 @@ export class TargetedSentenceCardsPlugin extends JPDBPlugin {
     activeAt: ['/review'],
     canBeDisabled: true,
     name: 'Targeted sentence cards',
+    description:
+      'Remove the target word from reviews, thus turning them into targeted sentence cards',
     runAgain: true,
   };
 

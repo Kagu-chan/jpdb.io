@@ -8,6 +8,7 @@ export class UserCSSPlugin extends JPDBPlugin {
     name: 'Custom CSS',
     activeAt: /.*/,
     canBeDisabled: true,
+    description: 'If enabled, you can add own styles to the entire page',
     runAgain: true,
   };
   protected _userSettings: PluginUserOptions = [
