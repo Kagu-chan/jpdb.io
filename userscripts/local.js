@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JPDB.io UserScript Runner
 // @namespace    http://tampermonkey.net/
-// @version      0.0.2
+// @version      0.0.3
 // @description  Runs scripts for JPDB.io
 // @author       Kagu-chan
 // @license      GLP-3.0
