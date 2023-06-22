@@ -3,9 +3,14 @@ import { Input } from './input.class';
 
 export class RadioButtonInput extends Input<string, HTMLInputElement> {
   protected render(): HTMLInputElement {
-    this.append('outer', this.container, 'div', {
+    this.append('outer', this.container, 'div');
+    this.renderLabel('outer');
+
+    this.append('inner', 'outer', 'div', {
       style: {
         marginLeft: '1rem',
+        marginTop: '.5rem',
+        marginBottom: '.5rem',
       },
     });
 
@@ -23,7 +28,7 @@ export class RadioButtonInput extends Input<string, HTMLInputElement> {
     });
 
     Object.values(options.options).forEach((value: string) => {
-      this.append(`cb-${value}`, 'outer', 'div', { class: ['checkbox'] });
+      this.append(`cb-${value}`, 'inner', 'div', { class: ['checkbox'] });
 
       const currentInput = this.append(`ip-${value}`, `cb-${value}`, 'input', {
         id: `${this.name}-${value}`,
@@ -50,6 +55,8 @@ export class RadioButtonInput extends Input<string, HTMLInputElement> {
         this._mainElement.dispatchEvent(new Event('change'));
       });
     });
+
+    this.renderDescription('inner', '2rem');
 
     return input;
   }
