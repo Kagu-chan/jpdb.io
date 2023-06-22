@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Kagu-chan/jpdb.io/releases",
   "devDependencies": {
-    "@types/node": "^16.18.31",
+    "@types/node": "^20.3.1",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.48.2",
     "copy-webpack-plugin": "^11.0.0",
