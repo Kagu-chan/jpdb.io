@@ -1,6 +1,7 @@
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../../lib/types';
 import { FixFn } from './css.types';
+import { betaPlugin } from './fixes/beta.plugin';
 import { customDefinitionFix } from './fixes/custom-definition.fix';
 
 export class CSSPlugin extends JPDBPlugin {
@@ -14,7 +15,7 @@ export class CSSPlugin extends JPDBPlugin {
   private _style: HTMLStyleElement;
   private _styles = new Map<string, string>();
 
-  private _fixes: FixFn[] = [customDefinitionFix];
+  private _fixes: FixFn[] = [customDefinitionFix, betaPlugin];
 
   public register(key: string, styles: string): void {
     this._styles.set(key, styles);

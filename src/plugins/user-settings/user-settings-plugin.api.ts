@@ -14,8 +14,22 @@ export class UserSettingsPluginAPI {
     this._plugins = this._manager.plugins;
   }
 
-  public buildMaps(): void {
-    Array.from(this._plugins.values())
+  public buildMaps(includeBeta: boolean): void {
+    const plugins = Array.from(this._plugins.values());
+    const activePlugins = plugins.filter((pl) => includeBeta || !pl.pluginOptions.beta);
+    const invalidActivePlugins = plugins.filter(
+      (pl) => !includeBeta && pl.pluginOptions.beta && pl.usersSettings['enabled'],
+    );
+
+    invalidActivePlugins.forEach((pl) => {
+      // eslint-disable-next-line no-console
+      console.log('Disable beta plugin [%s]', pl.pluginOptions.name);
+
+      pl.setUsersSetting('enabled', false);
+    });
+    this.saveSettings(true);
+
+    activePlugins
       .sort((l, r) =>
         l.pluginOptions.canBeDisabled !== r.pluginOptions.canBeDisabled
           ? l.pluginOptions.canBeDisabled
@@ -28,7 +42,7 @@ export class UserSettingsPluginAPI {
       .forEach((p: JPDBPlugin) => {
         const newSection: PluginSettingsSection = {
           plugin: p,
-          header: p.pluginOptions.name,
+          header: p.pluginOptions.enableText ?? p.pluginOptions.name,
           options: p.userSettings,
         };
 
@@ -44,7 +58,7 @@ export class UserSettingsPluginAPI {
     window.location.reload();
   }
 
-  public saveSettings(): void {
+  public saveSettings(skipReload?: boolean): void {
     const pluginSettings: ReturnType<typeof Globals.persistence.get<'plugins'>> = {};
 
     this._plugins.forEach((p: JPDBPlugin) => {
@@ -59,6 +73,7 @@ export class UserSettingsPluginAPI {
 
     Globals.persistence.set('plugins', pluginSettings);
 
+    if (skipReload) return;
     window.location.reload();
   }
 }

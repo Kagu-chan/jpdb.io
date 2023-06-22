@@ -118,7 +118,7 @@ export abstract class JPDBPlugin extends Root {
   }
 
   private unshiftEnableOption(): void {
-    const { canBeDisabled, enableText, name, sourceLink, author, authorLink, description } =
+    const { canBeDisabled, enableText, name, sourceLink, author, authorLink, description, beta } =
       this._pluginOptions;
 
     if (!canBeDisabled) return;
@@ -142,6 +142,11 @@ export abstract class JPDBPlugin extends Root {
         : undefined;
 
       option.description = [authorText, linkText].filter((t) => !!t).join(' - ');
+    }
+
+    if (beta) {
+      const span = '<span class="beta">beta</span>';
+      option.description = option.description ? `${option.description} ${span}` : span;
     }
 
     this._userSettings.unshift(option);

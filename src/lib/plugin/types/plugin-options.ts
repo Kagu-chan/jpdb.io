@@ -1,4 +1,4 @@
-export type PluginOptions = {
+type RawPluginOptions = {
   /**
    * @var {string} name Human Readable Plugin Name
    */
@@ -35,4 +35,19 @@ export type PluginOptions = {
    * @var {string} [authorLink] If set and author is given, converts the author name into a link
    */
   authorLink?: string;
+  /**
+   * @var {boolean} [beta=false] Marks a plugin as beta, by default disabeling the deck until beta decks are enabled
+   */
+  beta?: boolean;
 };
+
+type NonBetaPlugin = RawPluginOptions & {
+  beta?: false;
+};
+
+type BetaPlugin = RawPluginOptions & {
+  beta: true;
+  canBeDisabled: true;
+};
+
+export type PluginOptions = NonBetaPlugin | BetaPlugin;

@@ -1,7 +1,7 @@
 import { DOMContainer } from '../../lib/browser/dom-container';
 import { Globals } from '../../lib/globals';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../../lib/types';
+import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../../lib/types';
 import { CSSPlugin } from '../css/css.plugin';
 import { UserSettingsPluginAPI } from './user-settings-plugin.api';
 import { UserSettingsContainer } from './user-settings.container';
@@ -74,16 +74,28 @@ export class UserSettingsPlugin extends JPDBPlugin {
 
   protected _pluginOptions: PluginOptions = {
     name: 'User-Settings',
+    enableText: 'Additional Settings',
     activeAt: '/settings',
     canBeDisabled: false,
     runAgain: false,
   };
 
+  protected _userSettings: PluginUserOptions = [
+    {
+      key: 'enable-beta',
+      type: PluginUserOptionFieldType.CHECKBOX,
+      default: false,
+      text: 'Enable beta plugins',
+      description: 'Enable beta plugins and unfinnished plugins',
+    },
+  ];
+
   protected run(): void {
+    const enableBeta = this.getUsersSetting<boolean>('enable-beta');
     this.api = new UserSettingsPluginAPI();
     this.dom = new UserSettingsContainer(this.api);
 
-    this.api.buildMaps();
+    this.api.buildMaps(enableBeta);
     this.dom.render();
 
     Globals.pluginManager.get(CSSPlugin).register(UserSettingsPlugin.name, collapsibleCSS);
