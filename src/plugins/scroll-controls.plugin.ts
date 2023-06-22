@@ -18,11 +18,34 @@ const ScrollControlLabels: Record<ScrollControlOrder, string> = {
   [ScrollControlOrder.TB]: 'Top left, Bottom right',
 };
 
+const ScrollParameters: Record<
+  ScrollControlOrder,
+  Record<'left' | 'right', [() => number, string]>
+> = {
+  [ScrollControlOrder.BT]: {
+    left: [(): number => document.body.scrollHeight, 'bottom'],
+    right: [(): number => 0, 'top'],
+  },
+  [ScrollControlOrder.TB]: {
+    left: [(): number => 0, 'top'],
+    right: [(): number => document.body.scrollHeight, 'bottom'],
+  },
+};
+
+const ScrollStyles: Record<
+  'left' | 'right',
+  [string[], Pick<CSSStyleDeclaration, 'marginLeft' | 'marginRight'>]
+> = {
+  left: [[], { marginLeft: '1.2rem', marginRight: 'auto' }],
+  right: [['scroll', 'right'], { marginLeft: 'auto', marginRight: '1.2rem' }],
+};
+
 export class ScrollControlsPlugin extends JPDBPlugin {
   protected _hasRan: boolean = false;
+  protected _footer: HTMLDivElement;
 
   protected _pluginOptions: PluginOptions = {
-    activeAt: ['/settings', '/deck-list', '/prebuilt_decks'],
+    activeAt: [/.*/],
     canBeDisabled: true,
     name: 'Scroll controls',
     enableText: 'Enable scrolling controls on longer pages',
@@ -31,7 +54,7 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
   protected _userSettings: PluginUserOptions = [
     {
-      key: 'buttom-position',
+      key: 'button-position',
       type: PluginUserOptionFieldType.RADIOBUTTON,
       options: ScrollControlOrder,
       labels: ScrollControlLabels,
@@ -72,6 +95,15 @@ export class ScrollControlsPlugin extends JPDBPlugin {
       description:
         'If you have less decks (or equal), the scroll controls wont be shown in the deck list',
     },
+    {
+      key: 'always-rerender',
+      text: 'Always re-render footer',
+      type: PluginUserOptionFieldType.CHECKBOX,
+      default: false,
+      description:
+        // eslint-disable-next-line max-len
+        'Re-renders the footer navigation to be always visible except when reviewing or in settings',
+    },
   ];
 
   protected run(): void {
@@ -88,6 +120,9 @@ export class ScrollControlsPlugin extends JPDBPlugin {
         this.handleDecks();
 
         break;
+
+      default:
+        if (this.getUsersSetting<boolean>('always-rerender')) this.shiftFooter();
     }
 
     this._hasRan = true;
@@ -99,41 +134,8 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
     const container = this._dom.findOne('#save-all-settings-box');
 
-    this._dom.prependNewElement(container, 'input', {
-      id: 'scroll-down',
-      class: ['outline', 'v2'],
-      attributes: {
-        type: 'submit',
-        value: 'To Bottom',
-      },
-      style: {
-        marginLeft: '1.2rem',
-        marginRight: 'auto',
-      },
-      handler: (ev) => {
-        ev.preventDefault();
-
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      },
-    });
-
-    this._dom.appendNewElement(container, 'input', {
-      id: 'scroll-up',
-      class: ['outline', 'v2', 'scroll', 'right'],
-      attributes: {
-        type: 'submit',
-        value: 'To Top',
-      },
-      style: {
-        marginLeft: 'auto',
-        marginRight: '1.2rem',
-      },
-      handler: (ev) => {
-        ev.preventDefault();
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      },
-    });
+    this._dom.prependElement(container, this.getScrollElement('left'));
+    this._dom.appendElement(container, this.getScrollElement('right'));
   }
 
   protected handleMedia(): void {
@@ -158,10 +160,10 @@ export class ScrollControlsPlugin extends JPDBPlugin {
     return this._dom.find("[id|='deck']:not([id*='l']):not([id*='n'])").length;
   }
 
-  protected addScrollControls(): void {
+  protected shiftFooter(): void {
     const container = this._dom.findOne('.container');
     const footer = this._dom.findOne('footer');
-    const div = this._dom.appendNewElement(this._body, 'div', {
+    this._footer = this._dom.appendNewElement(this._body, 'div', {
       id: 'deck-list-scroll-controls',
       innerHTML: footer.outerHTML,
     });
@@ -170,42 +172,6 @@ export class ScrollControlsPlugin extends JPDBPlugin {
     this._dom.adjacentNewElement('afterend', container, 'div', {
       style: {
         paddingBottom: '6rem',
-      },
-    });
-
-    this._dom.prependNewElement(div, 'input', {
-      id: 'scroll-down',
-      class: ['outline', 'v2'],
-      attributes: {
-        type: 'submit',
-        value: 'To bottom',
-      },
-      style: {
-        marginLeft: '1.2rem',
-        marginRight: 'auto',
-      },
-      handler: (ev) => {
-        ev.preventDefault();
-
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      },
-    });
-
-    this._dom.appendNewElement(div, 'input', {
-      id: 'scroll-up',
-      class: ['outline', 'v2', 'scroll', 'right'],
-      attributes: {
-        type: 'submit',
-        value: 'To top',
-      },
-      style: {
-        marginLeft: 'auto',
-        marginRight: '1.2rem',
-      },
-      handler: (ev) => {
-        ev.preventDefault();
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       },
     });
 
@@ -223,5 +189,36 @@ export class ScrollControlsPlugin extends JPDBPlugin {
     padding-top: 1.2rem;
 }`,
     );
+  }
+
+  protected addScrollControls(): void {
+    this.shiftFooter();
+
+    this._dom.prependElement(this._footer, this.getScrollElement('left'));
+    this._dom.appendElement(this._footer, this.getScrollElement('right'));
+  }
+
+  protected getScrollElement(lr: 'left' | 'right'): HTMLInputElement {
+    const direction = this.getUsersSetting<ScrollControlOrder>('button-position');
+    const [extraClasses, style] = ScrollStyles[lr];
+    const [target, text] = ScrollParameters[direction][lr];
+
+    return this._dom.createElement('input', {
+      id: `scroll-${direction}`,
+      class: ['outline', 'v2', ...extraClasses],
+      attributes: {
+        type: 'submit',
+        value: `To ${text}`,
+      },
+      style,
+      handler: (ev) => {
+        ev.preventDefault();
+
+        window.scrollTo({
+          top: target(),
+          behavior: 'smooth',
+        });
+      },
+    });
   }
 }
