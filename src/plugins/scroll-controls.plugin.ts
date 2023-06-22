@@ -142,7 +142,9 @@ export class ScrollControlsPlugin extends JPDBPlugin {
         this.handleDecks();
 
         break;
-
+      case '/review':
+        /* NOP */
+        break;
       default:
         if (this.getUsersSetting<boolean>('always-rerender')) this.shiftFooter();
     }
