@@ -44,7 +44,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'bundle.js',
+    filename: isRelease ? 'JPDB.io.user.js' : 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
