@@ -6,8 +6,7 @@ import { GreetingsPlugin } from './greetings.plugin';
 import { HideDeckNumbersPlugin } from './hide-deck-numbers.plugin';
 import { LearningStatsPlugin } from './learning-stats.plugin';
 import { MoveCardPlugin } from './move-card.plugin';
-import { ScrollInDecksPlugin } from './scroll-in-decks.plugin';
-import { ScrollInSettingsPlugin } from './scroll-in-settings.plugin';
+import { ScrollControlsPlugin } from './scroll-controls.plugin';
 import { UserCSSPlugin } from './user-css.plugin';
 import { UserSettingsPlugin } from './user-settings/user-settings.plugin';
 
@@ -16,11 +15,10 @@ export const Plugins: JPDBPlugin[] = [
   new GreetingsPlugin(),
   new UserSettingsPlugin(),
   new UserCSSPlugin(),
-  new ScrollInSettingsPlugin(),
-  new ScrollInDecksPlugin(),
   new AutoSortDecksPlugin(),
   new HideDeckNumbersPlugin(),
   new MoveCardPlugin(),
   new LearningStatsPlugin(),
   new CustomLinksPlugin(),
+  new ScrollControlsPlugin(),
 ];
