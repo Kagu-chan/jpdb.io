@@ -1,4 +1,4 @@
-import { findOneElement, hideElement } from '../lib/dom';
+import { findElement, hideElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
@@ -13,7 +13,7 @@ export class TargetedSentenceCardsPlugin extends JPDBPlugin {
   };
 
   public run(): void {
-    if (findOneElement('.kind')?.innerText === 'Vocabulary') {
+    if (findElement('.kind')?.innerText === 'Vocabulary') {
       hideElement('.answer-box .plain');
     }
   }

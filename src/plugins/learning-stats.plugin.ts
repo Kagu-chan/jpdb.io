@@ -1,4 +1,4 @@
-import { adjacentElement, appendElement, findElements, findOneElement } from '../lib/dom';
+import { adjacentElement, appendElement, findElements, findElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -45,7 +45,7 @@ export class LearningStatsPlugin extends JPDBPlugin {
   private _lNode: HTMLTableCellElement;
 
   protected run(): void {
-    const table: HTMLTableElement = findOneElement<'table'>(
+    const table: HTMLTableElement = findElement<'table'>(
       '.cross-table.label-right-align.data-right-align.label-big-padding.small-header tbody',
     );
     const rows: HTMLTableRowElement[] = findElements<'tr'>(table, 'tr:not(:first-of-type)');
@@ -124,8 +124,8 @@ export class LearningStatsPlugin extends JPDBPlugin {
   }
 
   private addLearningNote(learning: number, max: number, state: LearningState): void {
-    const fulfilledNode = findOneElement<'p'>('.container.bugfix > p');
-    const adjacentTarget = findOneElement<'div'>('.container.bugfix > div');
+    const fulfilledNode = findElement<'p'>('.container.bugfix > p');
+    const adjacentTarget = findElement<'div'>('.container.bugfix > div');
 
     if (fulfilledNode.innerText.startsWith("You've already")) {
       return this.modifyExistingNode(fulfilledNode, learning, max, state);
