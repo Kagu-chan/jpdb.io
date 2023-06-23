@@ -101,8 +101,6 @@ export class CustomLinksPlugin extends JPDBPlugin {
   }
 
   private updateLinkList(target: string, settingKey: string, hideLinks: CustomLink[]): void {
-    if (!target) return;
-
     this.getUsersSetting<CustomLink[]>(settingKey, []).forEach(({ url, label }) => {
       adjacentElement(target, 'afterbegin', {
         tag: 'a',
