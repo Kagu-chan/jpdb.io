@@ -25,7 +25,7 @@ export function appendElement(
 ): HTMLElement {
   const e = child instanceof HTMLElement ? child : createElement(child);
 
-  resolveElement(parent).append(e);
+  resolveElement(parent)?.append(e);
 
   return e;
 }

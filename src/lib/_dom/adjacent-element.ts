@@ -34,7 +34,7 @@ export function adjacentElement(
 ): HTMLElement {
   const e = child instanceof HTMLElement ? child : createElement(child);
 
-  resolveElement(parent).insertAdjacentElement(position, e);
+  resolveElement(parent)?.insertAdjacentElement(position, e);
 
   return e;
 }
