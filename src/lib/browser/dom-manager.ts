@@ -11,6 +11,9 @@ export type DOMElementOptions = {
 };
 export type DOMFilterFn = (e: HTMLElement, index: number) => boolean;
 
+/**
+ * @deprecated
+ */
 export class DOMManager extends Root {
   //#region Selectors
   public find(selector: string): HTMLElement[];

@@ -1,5 +1,8 @@
 import { DOMManager } from './dom-manager';
 
+/**
+ * @deprecated
+ */
 export abstract class DOMContainer extends DOMManager {
   public dom: HTMLDivElement;
   public headingElement?: HTMLElement;
