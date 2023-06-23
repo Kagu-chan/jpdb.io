@@ -14,7 +14,6 @@ export class UserCSSPlugin extends JPDBPlugin {
   protected _userSettings: PluginUserOptions = [
     {
       key: 'styles',
-      // text: 'Custom CSS',
       type: PluginUserOptionFieldType.TEXTAREA,
       default: '',
     },
