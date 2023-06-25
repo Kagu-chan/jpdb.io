@@ -1,10 +1,14 @@
 import { DOMContainer } from '../../lib/browser/dom-container';
+import { appendElement } from '../../lib/dom';
 import { Globals } from '../../lib/globals';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../../lib/types';
 import { CSSPlugin } from '../css/css.plugin';
+import { getResetControl } from './controls/get-reset-control.function';
+import { getUpdateControl } from './controls/get-update-control.function';
+import { renderSaveControl } from './controls/render-save-control.function';
+import { UserSettingsSection } from './controls/user-settings.section';
 import { UserSettingsPluginAPI } from './user-settings-plugin.api';
-import { UserSettingsContainer } from './user-settings.container';
 import { PluginSettingsSection } from './user-settings.types';
 
 const collapsibleCSS = `
@@ -92,12 +96,42 @@ export class UserSettingsPlugin extends JPDBPlugin {
 
   protected run(): void {
     const enableBeta = this.getUsersSetting<boolean>('enable-beta');
+
     this.api = new UserSettingsPluginAPI();
-    this.dom = new UserSettingsContainer(this.api);
-
     this.api.buildMaps(enableBeta);
-    this.dom.render();
 
+    const sections = this.getSections();
+
+    this.addStyles();
+    this.addContainer(sections);
+    renderSaveControl(this.api);
+  }
+
+  protected getSections(): UserSettingsSection[] {
+    const sections: UserSettingsSection[] = [];
+
+    this.api.sections.forEach((section: PluginSettingsSection, key: string) => {
+      sections.push(new UserSettingsSection(key, section));
+    });
+
+    return sections;
+  }
+
+  protected addStyles(): void {
     Globals.pluginManager.get(CSSPlugin).register(UserSettingsPlugin.name, collapsibleCSS);
+  }
+
+  protected addContainer(sections: UserSettingsSection[]): void {
+    appendElement('.container.bugfix', {
+      tag: 'div',
+      id: 'user-settings',
+      children: [
+        { tag: 'h6', innerText: 'Extension settings' },
+        ...sections.map((s) => s.getControl()),
+        { tag: 'h5', innerText: 'Other' },
+        getResetControl(this.api),
+        getUpdateControl(),
+      ],
+    });
   }
 }

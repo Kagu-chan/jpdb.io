@@ -1,40 +1,38 @@
-import { DOMContainer } from '../../../lib/browser/dom-container';
+// import { DOMContainer } from '../../../lib/browser/dom-container';
+import { DOMElementTagOptions } from '../../../lib/dom';
 import { PluginUserOption, PluginUserOptionDep, PluginUserOptions } from '../../../lib/types';
-import { UserSettingsContainer } from '../user-settings.container';
 import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.types';
 import { Input } from './inputs/input.class';
-import { SectionInputMap } from './section-input-map';
+// import { SectionInputMap } from './section-input-map';
 
-export class UserSettingsSection extends DOMContainer {
+export class UserSettingsSection {
   private _container: HTMLDivElement;
   private _inputs: Input<unknown, HTMLElement>[] = [];
 
-  constructor(
-    private _root: UserSettingsContainer,
-    private _name: string,
-    private _data: PluginSettingsSection,
-  ) {
-    super(
-      `user-settings-${_name}`,
-      _data.plugin.pluginOptions.canBeDisabled ? undefined : _data.header,
-    );
+  constructor(private _name: string, private _data: PluginSettingsSection) {}
+
+  public getControl(): DOMElementTagOptions<'div'> {
+    const control: DOMElementTagOptions<'div'> = {
+      tag: 'div',
+      id: `user-settings-${this._name}`,
+      children: [],
+      afterrender: console.log,
+    };
+
+    if (!this._data.plugin.pluginOptions.canBeDisabled) {
+      control.children.push({
+        tag: 'div',
+        innerText: this._data.header,
+        class: ['subsection-header'],
+        style: { marginTop: '1rem' },
+      });
+    }
+
+    return control;
   }
 
   public render(): void {
-    super.render();
-
-    if (this.headingElement) {
-      this.headingElement.classList.add('subsection-header');
-      this.headingElement.style.marginTop = '1rem';
-    }
-
     this.renderOptions();
-  }
-
-  protected attachToDom(element: HTMLDivElement): void {
-    this.appendElement(this._root.dom, element);
-
-    this._container = element;
   }
 
   protected renderOptions(): void {
@@ -86,30 +84,31 @@ export class UserSettingsSection extends DOMContainer {
     if (container.childs.length) {
       activator.setInteractable(interactionKey, firstChild.hideOrDisable);
 
-      const childsContainer = this.appendNewElement(domContainer, 'div', {
-        attributes: {
-          'data-interacted-by': interactionKey,
-        },
-        style: {
-          marginLeft: firstChild.indent ? firstChild.indentWith ?? '2rem' : undefined,
-        },
-      });
+      // const childsContainer = this.appendNewElement(domContainer, 'div', {
+      //   attributes: {
+      //     'data-interacted-by': interactionKey,
+      //   },
+      //   style: {
+      //     marginLeft: firstChild.indent ? firstChild.indentWith ?? '2rem' : undefined,
+      //   },
+      // });
 
-      container.childs.forEach((child) => this.renderContainer(child, childsContainer));
+      // container.childs.forEach((child) => this.renderContainer(child, childsContainer));
     }
 
     this._inputs.push(activator);
   }
 
   protected renderOption(
-    option: PluginUserOption,
-    targetContainer: HTMLDivElement,
+    _option: PluginUserOption,
+    _targetContainer: HTMLDivElement,
   ): Input<unknown, HTMLElement> {
-    const name = [this._id, option.key].join('-');
-    const value = this._data.plugin.getUsersSetting(option.key);
-    const ctor = SectionInputMap[option.type];
+    return;
+    // const name = [this._id, option.key].join('-');
+    // const value = this._data.plugin.getUsersSetting(option.key);
+    // const ctor = SectionInputMap[option.type];
 
-    return ctor ? new ctor(targetContainer, name, option, value) : undefined;
+    // return ctor ? new ctor(targetContainer, name, option, value) : undefined;
   }
 
   protected applyChangeEvents(): void {
@@ -123,22 +122,20 @@ export class UserSettingsSection extends DOMContainer {
   }
 
   protected applyInteractionEvents(): void {
-    this.find<'input'>(this._container, '[data-interaction-key]').forEach((e) => {
-      const { interactionKey, interactionAction } = e.dataset;
-      const isHide = interactionAction === 'hide';
-      const searchKey: string = `[data-interacted-by="${interactionKey}"]${isHide ? '' : ' input'}`;
-
-      const childs = this.find<'div' | 'input'>(this._container, searchKey);
-      const callback: () => void = isHide
-        ? (): void => childs.forEach((c) => this.hidden(c, !e.checked))
-        : (): void => {
-            if (e.checked) {
-              return childs.forEach((c) => c.removeAttribute('disabled'));
-            }
-            childs.forEach((c) => c.setAttribute('disabled', ''));
-          };
-
-      this.addAndRunEventListener(e, 'change', callback);
-    });
+    // this.find<'input'>(this._container, '[data-interaction-key]').forEach((e) => {
+    //   const { interactionKey, interactionAction } = e.dataset;
+    //   const isHide = interactionAction === 'hide';
+    //   const searchKey: string = `[data-interacted-by="${interactionKey}"]${isHide ? '' : ' input'}`;
+    //   const childs = this.find<'div' | 'input'>(this._container, searchKey);
+    //   const callback: () => void = isHide
+    //     ? (): void => childs.forEach((c) => this.hidden(c, !e.checked))
+    //     : (): void => {
+    //         if (e.checked) {
+    //           return childs.forEach((c) => c.removeAttribute('disabled'));
+    //         }
+    //         childs.forEach((c) => c.setAttribute('disabled', ''));
+    //       };
+    //   this.addAndRunEventListener(e, 'change', callback);
+    // });
   }
 }

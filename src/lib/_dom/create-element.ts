@@ -36,7 +36,9 @@ export function createElement(
 
   e.classList.add(...(options.class ?? []));
 
+  options.afterrender?.(e);
   (options.children ?? []).forEach((ch) => appendElement(e, createElement(ch)));
+  options.afterchildrenrender?.(e);
 
   return e;
 }

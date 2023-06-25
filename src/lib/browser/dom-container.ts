@@ -15,11 +15,17 @@ export abstract class DOMContainer extends DOMManager {
     super();
   }
 
+  /**
+   * @deprecated
+   */
   public destroy(): void {
     this.dom.remove();
     this.dom = undefined;
   }
 
+  /**
+   * @deprecated
+   */
   public render(): void {
     this.dom = this.createElement('div', {
       id: this._id,
@@ -34,6 +40,9 @@ export abstract class DOMContainer extends DOMManager {
     this.attachToDom(this.dom);
   }
 
+  /**
+   * @deprecated
+   */
   protected addRemDiv(): void {
     this.appendNewElement(this.dom, 'div', {
       style: {
@@ -42,5 +51,8 @@ export abstract class DOMContainer extends DOMManager {
     });
   }
 
+  /**
+   * @deprecated
+   */
   protected abstract attachToDom(element: HTMLDivElement): void;
 }
