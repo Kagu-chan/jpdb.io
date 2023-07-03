@@ -1,27 +1,34 @@
+import { DOMElementTagOptions } from '../../../../lib/dom';
 import { Input } from './input.class';
 
-export class CheckBoxInput extends Input<boolean, HTMLInputElement> {
-  protected render(): HTMLInputElement {
-    this.append('outer', this.container, 'div', { class: ['checkbox'] });
+export class CheckBoxInput extends Input<boolean> {
+  public getControls(): DOMElementTagOptions<any>[] {
+    return [
+      {
+        tag: 'div',
+        class: ['checkbox'],
+        children: [this.retrieveInput(), this.getLabel()],
+      },
+      this.getDescription('2rem'),
+    ];
+  }
 
-    const input = this.append('input', 'outer', 'input', {
+  public getInputElement(): DOMElementTagOptions<'input'> {
+    return {
+      tag: 'input',
       id: this.name,
       attributes: {
         name: this.name,
         type: 'checkbox',
         'data-key': this.options.key,
       },
-    });
-
-    this.renderLabel('outer');
-    this.renderDescription(this.container, '2rem');
-
-    input.checked = this.value;
-
-    return input;
+      afterrender: (input: HTMLInputElement): void => {
+        input.checked = this._value;
+      },
+    };
   }
 
-  protected readValue(): boolean {
-    return this._mainElement.checked;
+  public getValue(): boolean {
+    return this.retrieveInput().element.checked;
   }
 }

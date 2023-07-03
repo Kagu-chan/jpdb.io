@@ -1,63 +1,87 @@
+import { DOMElementTagOptions } from '../../../../lib/dom';
 import { PluginUserOptionRadioButton } from '../../../../lib/types';
 import { Input } from './input.class';
 
-export class RadioButtonInput extends Input<string, HTMLInputElement> {
-  protected render(): HTMLInputElement {
-    this.append('outer', this.container, 'div');
-    this.renderLabel('outer');
-
-    this.append('inner', 'outer', 'div', {
-      style: {
-        marginLeft: '1rem',
-        marginTop: '.5rem',
-        marginBottom: '.5rem',
-      },
-    });
-
-    const options = this.options as PluginUserOptionRadioButton;
-    const input = this.append('input', this.container, 'input', {
+export class RadioButtonInput extends Input<string> {
+  public getInputElement(): DOMElementTagOptions<'input'> {
+    return {
+      tag: 'input',
       id: this.name,
       attributes: {
         name: this.name,
         type: 'text',
-        value: this.value,
+        value: this._value,
         'data-key': this.options.key,
         disabled: true,
       },
       class: ['hidden'],
-    });
+    };
+  }
 
-    Object.values(options.options).forEach((value: string) => {
-      this.append(`cb-${value}`, 'inner', 'div', { class: ['checkbox'] });
+  public getControls(): DOMElementTagOptions<any>[] {
+    return [
+      {
+        tag: 'div',
+        children: [
+          this.getLabel(),
+          {
+            tag: 'div',
+            style: {
+              marginLeft: '1rem',
+              marginTop: '.5rem',
+              marginBottom: '.5rem',
+            },
+            children: this.getChildren(),
+          },
+          this.retrieveInput(),
+        ],
+      },
+    ];
+  }
 
-      const currentInput = this.append(`ip-${value}`, `cb-${value}`, 'input', {
-        id: `${this.name}-${value}`,
-        attributes: {
-          name: this.name,
-          value,
-          type: 'radio',
-        },
-      });
+  public getChildren(): DOMElementTagOptions<any>[] {
+    const { options, labels } = this.options as PluginUserOptionRadioButton;
+    const nestedChilds = Object.values(options).map(
+      (value: string): DOMElementTagOptions<any>[] => {
+        return [
+          {
+            tag: 'div',
+            class: ['checkbox'],
+            children: [
+              {
+                tag: 'input',
+                id: `${this.name}-${value}`,
+                attributes: {
+                  name: this.name,
+                  value,
+                  type: 'radio',
+                },
+                afterrender: (e: HTMLInputElement): void => {
+                  if (value === this._value) {
+                    e.checked = true;
+                  }
 
-      this.append(`lb-${value}`, `cb-${value}`, 'label', {
-        innerText: options.labels[value as keyof typeof options.labels],
-        attributes: {
-          for: `${this.name}-${value}`,
-        },
-      });
+                  e.addEventListener('change', () => {
+                    const { element } = this.retrieveInput();
 
-      if (this.value === value) {
-        currentInput.checked = true;
-      }
+                    element.value = e.value;
+                    element.dispatchEvent(new Event('change'));
+                  });
+                },
+              },
+              {
+                tag: 'label',
+                innerText: labels[value as keyof typeof labels],
+                attributes: {
+                  for: `${this.name}-${value}`,
+                },
+              },
+            ],
+          },
+        ];
+      },
+    );
 
-      currentInput.addEventListener('change', () => {
-        this._mainElement.value = currentInput.value;
-        this._mainElement.dispatchEvent(new Event('change'));
-      });
-    });
-
-    this.renderDescription('inner', '2rem');
-
-    return input;
+    return nestedChilds.flat();
   }
 }

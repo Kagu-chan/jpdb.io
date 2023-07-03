@@ -1,3 +1,4 @@
+import { DOMElementTagOptions } from '../../../../lib/dom';
 import { ObjectSchemaItem, PluginUserOptionObjectList } from '../../../../lib/types';
 import { ListBasedInput } from './list-based-input.class';
 
@@ -36,27 +37,29 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
     return JSON.stringify(val);
   }
 
-  protected renderInputHeaderContent(target: HTMLDivElement): void {
+  protected renderInputHeaderContent(_target: HTMLDivElement): void {
     const { schema } = this.options as PluginUserOptionObjectList;
 
-    schema.forEach((current: ObjectSchemaItem) => {
-      this._dom.appendNewElement(target, 'label', {
-        innerText: current.label,
-        attributes: { for: `${this.name}-${current.key}-0` },
-        style: { paddingTop: '1rem', paddingLeft: '.5rem' },
-      });
+    schema.forEach((_current: ObjectSchemaItem) => {
+      // @TODO: Render Labels!
+      // this._dom.appendNewElement(target, 'label', {
+      //   innerText: current.label,
+      //   attributes: { for: `${this.name}-${current.key}-0` },
+      //   style: { paddingTop: '1rem', paddingLeft: '.5rem' },
+      // });
     });
   }
 
   protected renderInputItem(
-    target: HTMLElement,
     value: Record<string, string | number>,
     id: number,
-  ): HTMLInputElement {
+  ): DOMElementTagOptions<'input'> {
     const { schema } = this.options as PluginUserOptionObjectList;
-    const localInputs: HTMLInputElement[] = [];
+    // @TODO: Render this inputs!
+    const localInputs: DOMElementTagOptions<'input'>[] = [];
 
-    const input = this._dom.appendNewElement(target, 'input', {
+    const input: DOMElementTagOptions<'input'> = {
+      tag: 'input',
       id: `${this.name}-${id}`,
       attributes: {
         name: `${this.name}-${id}`,
@@ -64,10 +67,18 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
         type: 'text',
       },
       class: ['hidden'],
-    });
+      afterrender: (i) => {
+        i.addEventListener('focus', () => {
+          localInputs[0].element.focus();
+        });
+
+        i.focus = (): void => localInputs[0].element.focus();
+      },
+    };
 
     schema.forEach((current: ObjectSchemaItem, cid: number) => {
-      const i = this._dom.appendNewElement(target, 'input', {
+      localInputs.push({
+        tag: 'input',
         id: `${this.name}-${current.key}-${id}`,
         attributes: {
           name: `${this.name}-${current.key}-${id}`,
@@ -76,29 +87,26 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
           min: current.min?.toString(),
           max: current.max?.toString(),
         },
-      });
+        afterrender: (i: HTMLInputElement): void => {
+          i.addEventListener('blur', () => {
+            value[current.key] = current.type === 'number' ? Number(i.value) : i.value;
+            input.element.value = this.itemToString(value);
+          });
 
-      i.addEventListener('blur', () => {
-        value[current.key] = current.type === 'number' ? Number(i.value) : i.value;
-        input.value = this.itemToString(value);
-      });
-      i.addEventListener('keypress', (e) => {
-        if (e.key !== 'Enter') return;
+          i.addEventListener('keypress', (e) => {
+            if (e.key !== 'Enter') return;
 
-        if (cid === schema.length - 1) {
-          input.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter' }));
-        } else {
-          localInputs[cid + 1].focus();
-        }
+            if (cid === schema.length - 1) {
+              input.element.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter' }));
+            } else {
+              localInputs[cid + 1].element.focus();
+            }
+          });
+        },
       });
-
-      localInputs.push(i);
     });
 
-    input.addEventListener('focus', () => {
-      localInputs[0].focus();
-    });
-    input.focus = (): void => localInputs[0].focus();
+    input.children = localInputs;
 
     return input;
   }

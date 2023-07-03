@@ -8,7 +8,7 @@ export class TextBoxInput extends TextBoxBasedInput<string> {
   } {
     return {
       type: 'text',
-      value: this.value ?? '',
+      value: this._value ?? '',
     };
   }
 }

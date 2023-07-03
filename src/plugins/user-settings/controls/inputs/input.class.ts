@@ -1,137 +1,85 @@
-import { DOMElementOptions, DOMManager } from '../../../../lib/browser/dom-manager';
-import { PluginUserOption, PluginUserOptionDependencyAction } from '../../../../lib/types';
+import { DOMElementTagOptions } from '../../../../lib/dom';
+import { PluginUserOption } from '../../../../lib/types';
 
-export abstract class Input<TValue, TElement extends HTMLElement> {
-  public onchange: (newValue: TValue) => void;
+export abstract class Input<TValue> {
+  protected _inputOptions: DOMElementTagOptions<'input'>;
+  // public onchange: (newValue: TValue) => void;
 
-  protected _elements: Map<string, HTMLElement> = new Map();
-  protected _mainElement: TElement;
+  // public readonly container: HTMLElement;
 
-  protected _dom: DOMManager = new DOMManager();
-  protected _virtual: boolean = false;
+  // protected _elements: Map<string, HTMLElement> = new Map();
+  // protected _mainElement: TElement;
 
-  public get value(): TValue {
-    return this._value;
-  }
+  // protected _dom: DOMManager = new DOMManager();
+  // protected _virtual: boolean = false;
 
-  public get key(): string {
-    return this._mainElement.dataset.key;
-  }
+  // public get value(): TValue {
+  //   return this._value;
+  // }
 
-  public get isVirtual(): boolean {
-    return this._virtual;
-  }
+  // public get key(): string {
+  //   return this._mainElement.dataset.key;
+  // }
+
+  // public get isVirtual(): boolean {
+  //   return this._virtual;
+  // }
 
   constructor(
-    public readonly container: HTMLElement,
     public readonly name: string,
     public readonly options: PluginUserOption,
     protected _value: TValue,
   ) {
-    this._mainElement = this.render();
-
-    if (this._virtual) return;
-
-    this._dom.addEventListener(this._mainElement, 'change', (): void => {
-      if (this.onchange) this.onchange(this.readValue());
-    });
+    // this.container = createElement('div');
+    // this._mainElement = this.render();
+    // if (this._virtual) return;
+    // this._dom.addEventListener(this._mainElement, 'change', (): void => {
+    //   if (this.onchange) this.onchange(this.readValue());
+    // });
   }
 
-  public setInteractable(key: string, action: PluginUserOptionDependencyAction): void {
-    this._mainElement.setAttribute('data-interaction-key', key);
-    this._mainElement.setAttribute('data-interaction-action', action);
+  public abstract getControls(): DOMElementTagOptions<any>[];
+
+  // public setInteractable(key: string, action: PluginUserOptionDependencyAction): void {
+  //   this._mainElement.setAttribute('data-interaction-key', key);
+  //   this._mainElement.setAttribute('data-interaction-action', action);
+  // }
+
+  /**
+   * Set this method to retrieve the actual input element. Do not use this method, use `retrieveInput()` instead
+   */
+  public abstract getInputElement(): DOMElementTagOptions<'input'>;
+
+  public retrieveInput(): DOMElementTagOptions<'input'> {
+    if (!this._inputOptions) {
+      this._inputOptions = this.getInputElement();
+    }
+
+    return this._inputOptions;
   }
 
-  public renderLabel(target: string | HTMLElement): HTMLLabelElement {
-    if (this.options.text?.length)
-      return this.append('label', target, 'label', {
-        innerHTML: this.options.text,
-        attributes: { for: this.name },
-      });
+  public getValue(): TValue {
+    return this.retrieveInput().element.value as TValue;
   }
 
-  public renderDescription(
-    target: string | HTMLElement,
-    marginLeft?: string,
-  ): HTMLParagraphElement {
-    if (this.options.description?.length)
-      return this.append('description', target, 'p', {
-        innerHTML: this.options.description,
-        style: {
-          opacity: '.8',
-          marginLeft,
-        },
-      });
+  public getLabel(): DOMElementTagOptions<'label'> {
+    return {
+      tag: 'label',
+      class: this.options.text ? [] : ['hidden'],
+      innerHTML: this.options.text,
+      attributes: { for: this.name },
+    };
   }
 
-  //#region Element Creation
-  public create<K extends keyof HTMLElementTagNameMap>(
-    key: string,
-    tagName: K,
-    options: DOMElementOptions = {},
-  ): HTMLElementTagNameMap[K] {
-    const e = this._dom.createElement(tagName, options);
-    this._elements.set(key, e);
-
-    return e;
+  public getDescription(marginLeft?: string): DOMElementTagOptions<'p'> {
+    return {
+      tag: 'p',
+      class: this.options.description ? [] : ['hidden'],
+      innerHTML: this.options.description,
+      style: {
+        opacity: '.8',
+        marginLeft,
+      },
+    };
   }
-
-  public append<K extends keyof HTMLElementTagNameMap>(
-    key: string,
-    target: HTMLElement | string,
-    tagName: K,
-    options: DOMElementOptions = {},
-  ): HTMLElementTagNameMap[K] {
-    const e = this._dom.appendNewElement(
-      typeof target === 'string' ? this._elements.get(target) : target,
-      tagName,
-      options,
-    );
-    this._elements.set(key, e);
-
-    return e;
-  }
-
-  public prepend<K extends keyof HTMLElementTagNameMap>(
-    key: string,
-    target: HTMLElement | string,
-    tagName: K,
-    options: DOMElementOptions = {},
-  ): HTMLElementTagNameMap[K] {
-    const e = this._dom.prependNewElement(
-      typeof target === 'string' ? this._elements.get(target) : target,
-      tagName,
-      options,
-    );
-    this._elements.set(key, e);
-
-    return e;
-  }
-
-  public adjacent<K extends keyof HTMLElementTagNameMap>(
-    key: string,
-    position: InsertPosition,
-    target: string | HTMLElement,
-    tagName: K,
-    options: DOMElementOptions = {},
-  ): HTMLElementTagNameMap[K] {
-    const e = this._dom.adjacentNewElement(
-      position,
-      typeof target === 'string' ? this._elements.get(target) : target,
-      tagName,
-      options,
-    );
-    this._elements.set(key, e);
-
-    return e;
-  }
-  //#endregion
-
-  protected readValue(): TValue {
-    if (!('value' in this._mainElement)) throw new Error('readValue must be overwritten');
-
-    return this._mainElement.value as TValue;
-  }
-
-  protected abstract render(): TElement;
 }

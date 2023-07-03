@@ -1,40 +1,60 @@
+import { DOMElementTagOptions } from '../../../../lib/dom';
 import { Input } from './input.class';
 
-export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLInputElement> {
+export abstract class ListBasedInput<TListType> extends Input<TListType[]> {
   protected _workingValue: TListType[];
 
-  protected _innerContainer: HTMLDivElement;
-  protected _inputs: HTMLDivElement;
-  protected _inputCollection: HTMLInputElement[];
-  protected _controls: HTMLDivElement;
+  // protected _innerContainer: HTMLDivElement;
+  // protected _inputs: HTMLDivElement;
+  // protected _inputCollection: HTMLInputElement[];
+  // protected _controls: HTMLDivElement;
 
-  protected _add: HTMLInputElement;
+  // protected _add: HTMLInputElement;
 
-  protected render(): HTMLInputElement {
-    this._workingValue = [...this.value];
+  public getControls(): DOMElementTagOptions<any>[] {
+    return [this.retrieveInput(), this.getMainContainer()];
+  }
 
-    const hiddenInput = this.append('input', this.container, 'input', {
+  public getInputElement(): DOMElementTagOptions<'input'> {
+    return {
+      tag: 'input',
       id: this.name,
       attributes: {
         name: this.name,
         type: 'text',
-        value: this.itemsToString(this.value),
+        value: this.itemsToString(this._value),
         'data-key': this.options.key,
         disabled: true,
       },
-      class: ['hidden'],
-    });
-
-    this.renderMainContainer();
-    this.renderInputHeader(this._innerContainer);
-    this.renderInputsContainer();
-    this.renderInputList(false);
-
-    this.renderControls();
-    this.renderDescription(this._innerContainer);
-
-    return hiddenInput;
+      // class: ['hidden'],
+    };
   }
+
+  // protected render(): HTMLInputElement {
+  //   this._workingValue = [...this.value];
+
+  //   const hiddenInput = this.append('input', this.container, 'input', {
+  //     id: this.name,
+  //     attributes: {
+  //       name: this.name,
+  //       type: 'text',
+  //       value: this.itemsToString(this.value),
+  //       'data-key': this.options.key,
+  //       disabled: true,
+  //     },
+  //     class: ['hidden'],
+  //   });
+
+  //   this.renderMainContainer();
+  //   this.renderInputHeader(this._innerContainer);
+  //   this.renderInputsContainer();
+  //   this.renderInputList(false);
+
+  //   this.renderControls();
+  //   this.renderDescription(this._innerContainer);
+
+  //   return hiddenInput;
+  // }
 
   protected abstract getItemListClass(): string;
   protected abstract openOnStart(): boolean;
@@ -47,208 +67,212 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
   protected abstract stringToItems(val: string): TListType[];
   protected abstract itemsToString(val: TListType[]): string;
 
-  protected abstract renderInputItem(
-    target: HTMLElement,
-    value: TListType,
-    id: number,
-  ): HTMLInputElement;
+  protected abstract renderInputItem(value: TListType, id: number): DOMElementTagOptions<'input'>;
 
-  protected readValue(): TListType[] {
-    return this._value;
-  }
+  // protected readValue(): TListType[] {
+  //   return this._value;
+  // }
 
-  protected renderMainContainer(): void {
-    const details = this.append('root', this.container, 'details', {
+  protected getMainContainer(): DOMElementTagOptions<'details'> {
+    return {
+      tag: 'details',
       class: ['accordion', 'user-settings'],
-    });
-
-    if (this.openOnStart()) details.setAttribute('open', '');
-
-    this.append('label', details, 'summary', {
-      innerText: this.options.text,
-    });
-
-    this._innerContainer = this.append('inner', details, 'div', {
-      class: [this.getItemListClass()],
-    });
-  }
-
-  protected renderInputsContainer(): void {
-    this._inputs = this.append('inputs', this._innerContainer, 'div', { class: ['input-list'] });
-  }
-
-  protected renderInputHeader(target: HTMLDivElement): void {
-    const div = this._dom.createElement('div', {
-      class: ['input-list', 'input-header'],
-      style: {
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        placeContent: 'space-between',
-        alignItems: 'flex-start',
+      afterrender: (e): void => {
+        this.openOnStart() && e.setAttribute('open', '');
       },
-    });
-
-    this.renderInputHeaderContent(div);
-
-    if (div.innerHTML === '') return;
-
-    /**
-     * Append some fake items to this container
-     *
-     * This is to realign the flex items inside this container
-     * It is the same HTML as the input controls, so it gains the same box sizing
-     */
-    this._dom.appendNewElement(div, 'div', {
-      innerHTML: [
-        // eslint-disable-next-line max-len
-        '<div class="deck-sidebar"><input type="submit" value="⮝" class="arrow-control up" disabled><input type="submit" value="⮟" class="arrow-control down" disabled></div>',
-        // eslint-disable-next-line max-len
-        '<input id="user-settings-CustomLinksPlugin-top-links-0-rem" type="submit" value="-" class="outline v1" disabled>',
-      ].join(''),
-      style: { opacity: '0' },
-    });
-
-    this._dom.appendElement(target, div);
+      children: [
+        {
+          tag: 'summary',
+          innerText: this.options.text,
+        },
+        {
+          tag: 'div',
+          class: [this.getItemListClass()],
+          children: [
+            // renderInputHeader,
+            { tag: 'div', class: ['input-list'] },
+          ],
+        },
+      ],
+    };
   }
 
-  protected renderInputHeaderContent(_target: HTMLDivElement): void {
-    return;
-  }
+  // protected renderInputsContainer(): void {
+  //   this._inputs = this.append('inputs', this._innerContainer, 'div', { class: ['input-list'] });
+  // }
 
-  protected renderControls(): void {
-    this._controls = this.append('controls', this._innerContainer, 'div', {
-      class: ['controls-list'],
-    });
+  // protected renderInputHeader(target: HTMLDivElement): void {
+  //   const div = this._dom.createElement('div', {
+  //     class: ['input-list', 'input-header'],
+  //     style: {
+  //       display: 'flex',
+  //       flexFlow: 'row nowrap',
+  //       placeContent: 'space-between',
+  //       alignItems: 'flex-start',
+  //     },
+  //   });
 
-    this._add = this.append('add', this._controls, 'input', {
-      attributes: { type: 'submit', value: 'Add' },
-      class: ['outline'],
-      handler: (e) => {
-        e.preventDefault();
+  //   this.renderInputHeaderContent(div);
 
-        this._workingValue.push(this.getEmptyItem());
-        this.refresh();
-      },
-    });
+  //   if (div.innerHTML === '') return;
 
-    this.append('update', this._controls, 'input', {
-      attributes: { type: 'submit', value: 'Update' },
-      class: ['outline', 'v4'],
-      handler: (e) => {
-        e.preventDefault();
+  //   /**
+  //    * Append some fake items to this container
+  //    *
+  //    * This is to realign the flex items inside this container
+  //    * It is the same HTML as the input controls, so it gains the same box sizing
+  //    */
+  //   this._dom.appendNewElement(div, 'div', {
+  //     innerHTML: [
+  //       // eslint-disable-next-line max-len
+  //       '<div class="deck-sidebar"><input type="submit" value="⮝" class="arrow-control up" disabled><input type="submit" value="⮟" class="arrow-control down" disabled></div>',
+  //       // eslint-disable-next-line max-len
+  //       '<input id="user-settings-CustomLinksPlugin-top-links-0-rem" type="submit" value="-" class="outline v1" disabled>',
+  //     ].join(''),
+  //     style: { opacity: '0' },
+  //   });
 
-        this._value = [...this._workingValue];
-        this._mainElement.value = this.itemsToString(this.value);
+  //   this._dom.appendElement(target, div);
+  // }
 
-        this._mainElement.dispatchEvent(new Event('change'));
-      },
-    });
+  // protected renderInputHeaderContent(_target: HTMLDivElement): void {
+  //   return;
+  // }
 
-    this.append('remove', this._controls, 'input', {
-      attributes: { type: 'submit', value: 'Reset' },
-      class: ['outline', 'v3'],
-      handler: (e) => {
-        e.preventDefault();
+  // protected renderControls(): void {
+  //   this._controls = this.append('controls', this._innerContainer, 'div', {
+  //     class: ['controls-list'],
+  //   });
 
-        this._workingValue = [...this.value];
-        this.refresh();
-      },
-    });
-  }
+  //   this._add = this.append('add', this._controls, 'input', {
+  //     attributes: { type: 'submit', value: 'Add' },
+  //     class: ['outline'],
+  //     handler: (e) => {
+  //       e.preventDefault();
 
-  protected renderInputList(focusLatest: boolean): void {
-    this._inputCollection = [];
+  //       this._workingValue.push(this.getEmptyItem());
+  //       this.refresh();
+  //     },
+  //   });
 
-    this._workingValue.forEach((v: TListType, id: number) => {
-      const last = id === this._workingValue.length - 1;
+  //   this.append('update', this._controls, 'input', {
+  //     attributes: { type: 'submit', value: 'Update' },
+  //     class: ['outline', 'v4'],
+  //     handler: (e) => {
+  //       e.preventDefault();
 
-      const c = this._dom.appendNewElement(this._inputs, 'div', { class: ['input-item'] });
-      const i = this.renderInputItem(c, v, id);
+  //       this._value = [...this._workingValue];
+  //       this._mainElement.value = this.itemsToString(this.value);
 
-      this.addItemControls(c, id);
-      this._inputCollection.push(i);
+  //       this._mainElement.dispatchEvent(new Event('change'));
+  //     },
+  //   });
 
-      if (focusLatest && last) i.focus();
+  //   this.append('remove', this._controls, 'input', {
+  //     attributes: { type: 'submit', value: 'Reset' },
+  //     class: ['outline', 'v3'],
+  //     handler: (e) => {
+  //       e.preventDefault();
 
-      i.addEventListener('change', () => (this._workingValue[id] = this.stringToItem(i.value)));
-      i.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
+  //       this._workingValue = [...this.value];
+  //       this.refresh();
+  //     },
+  //   });
+  // }
 
-          if (last) {
-            return this._add.click();
-          }
+  // protected renderInputList(focusLatest: boolean): void {
+  //   this._inputCollection = [];
 
-          this._inputCollection[id + 1].focus();
-        }
-      });
+  //   this._workingValue.forEach((v: TListType, id: number) => {
+  //     const last = id === this._workingValue.length - 1;
 
-      i.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && i.value === '') {
-          e.preventDefault();
+  //     const c = this._dom.appendNewElement(this._inputs, 'div', { class: ['input-item'] });
+  //     const i = this.renderInputItem(c, v, id);
 
-          this._workingValue.splice(id, 1);
+  //     this.addItemControls(c, id);
+  //     this._inputCollection.push(i);
 
-          this.refresh();
-        }
-      });
-    });
-  }
+  //     if (focusLatest && last) i.focus();
 
-  protected refresh(): void {
-    this._inputs.replaceChildren();
+  //     i.addEventListener('change', () => (this._workingValue[id] = this.stringToItem(i.value)));
+  //     i.addEventListener('keypress', (e) => {
+  //       if (e.key === 'Enter') {
+  //         e.preventDefault();
 
-    this.renderInputList(true);
-  }
+  //         if (last) {
+  //           return this._add.click();
+  //         }
 
-  protected swapPositions(index1: number, index2: number): void {
-    const tmp = this._workingValue[index1];
-    this._workingValue[index1] = this._workingValue[index2];
-    this._workingValue[index2] = tmp;
-  }
+  //         this._inputCollection[id + 1].focus();
+  //       }
+  //     });
 
-  protected addItemControls(container: HTMLDivElement, id: number): void {
-    const sideBar = this._dom.appendNewElement(container, 'div', {
-      class: ['deck-sidebar'],
-    });
+  //     i.addEventListener('keydown', (e) => {
+  //       if (e.key === 'Escape' && i.value === '') {
+  //         e.preventDefault();
 
-    const up = this._dom.appendNewElement(sideBar, 'input', {
-      class: ['arrow-control', 'up'],
-      attributes: { type: 'submit', value: '⮝' },
-      handler: (ev) => {
-        ev.preventDefault();
+  //         this._workingValue.splice(id, 1);
 
-        this.swapPositions(id, id - 1);
-        this.refresh();
-      },
-    });
-    const down = this._dom.appendNewElement(sideBar, 'input', {
-      class: ['arrow-control', 'down'],
-      attributes: { type: 'submit', value: '⮟' },
-      handler: (ev) => {
-        ev.preventDefault();
+  //         this.refresh();
+  //       }
+  //     });
+  //   });
+  // }
 
-        this.swapPositions(id, id + 1);
-        this.refresh();
-      },
-    });
+  // protected refresh(): void {
+  //   this._inputs.replaceChildren();
 
-    if (id === 0) up.setAttribute('disabled', '');
-    if (id === this._workingValue.length - 1) down.setAttribute('disabled', '');
+  //   this.renderInputList(true);
+  // }
 
-    this._dom.appendNewElement(container, 'input', {
-      id: `${this.name}-${id}-rem`,
-      attributes: {
-        type: 'submit',
-        value: '-',
-      },
-      class: ['outline', 'v1'],
-      handler: (e) => {
-        e.preventDefault();
+  // protected swapPositions(index1: number, index2: number): void {
+  //   const tmp = this._workingValue[index1];
+  //   this._workingValue[index1] = this._workingValue[index2];
+  //   this._workingValue[index2] = tmp;
+  // }
 
-        this._workingValue.splice(id, 1);
-        this.refresh();
-      },
-    });
-  }
+  // protected addItemControls(container: HTMLDivElement, id: number): void {
+  //   const sideBar = this._dom.appendNewElement(container, 'div', {
+  //     class: ['deck-sidebar'],
+  //   });
+
+  //   const up = this._dom.appendNewElement(sideBar, 'input', {
+  //     class: ['arrow-control', 'up'],
+  //     attributes: { type: 'submit', value: '⮝' },
+  //     handler: (ev) => {
+  //       ev.preventDefault();
+
+  //       this.swapPositions(id, id - 1);
+  //       this.refresh();
+  //     },
+  //   });
+  //   const down = this._dom.appendNewElement(sideBar, 'input', {
+  //     class: ['arrow-control', 'down'],
+  //     attributes: { type: 'submit', value: '⮟' },
+  //     handler: (ev) => {
+  //       ev.preventDefault();
+
+  //       this.swapPositions(id, id + 1);
+  //       this.refresh();
+  //     },
+  //   });
+
+  //   if (id === 0) up.setAttribute('disabled', '');
+  //   if (id === this._workingValue.length - 1) down.setAttribute('disabled', '');
+
+  //   this._dom.appendNewElement(container, 'input', {
+  //     id: `${this.name}-${id}-rem`,
+  //     attributes: {
+  //       type: 'submit',
+  //       value: '-',
+  //     },
+  //     class: ['outline', 'v1'],
+  //     handler: (e) => {
+  //       e.preventDefault();
+
+  //       this._workingValue.splice(id, 1);
+  //       this.refresh();
+  //     },
+  //   });
+  // }
 }

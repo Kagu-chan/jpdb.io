@@ -8,6 +8,7 @@ type DOMElementBaseOptions = {
   handler?: (ev?: MouseEvent) => void;
   afterrender?: (element: HTMLElement) => void;
   afterchildrenrender?: (element: HTMLElement) => void;
+  element?: HTMLElement;
 };
 
 export type DOMElementOptions = DOMElementBaseOptions & {
@@ -20,4 +21,5 @@ export type DOMElementTagOptions<
   tag: K;
   afterrender?: (element: HTMLElementTagNameMap[K]) => void;
   afterchildrenrender?: (element: HTMLElementTagNameMap[K]) => void;
+  element?: HTMLElementTagNameMap[K];
 };

@@ -12,10 +12,7 @@ import { WordListInput } from './inputs/word-list.input';
 
 export const SectionInputMap: Record<
   PluginUserOptionFieldType,
-  new (container: HTMLElement, name: string, options: PluginUserOption, _value: unknown) => Input<
-    unknown,
-    HTMLElement
-  >
+  new (name: string, options: PluginUserOption, value: unknown) => Input<unknown>
 > = {
   [PluginUserOptionFieldType.HEADER]: HeaderInput,
   [PluginUserOptionFieldType.DIVIDER]: DividerInput,

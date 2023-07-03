@@ -1,3 +1,4 @@
+import { DOMElementTagOptions } from '../../../../lib/dom';
 import { ListBasedInput } from './list-based-input.class';
 
 export class WordListInput extends ListBasedInput<string> {
@@ -29,14 +30,15 @@ export class WordListInput extends ListBasedInput<string> {
     return JSON.stringify(val);
   }
 
-  protected renderInputItem(target: HTMLElement, value: string, id: number): HTMLInputElement {
-    return this._dom.appendNewElement(target, 'input', {
+  protected renderInputItem(value: string, id: number): DOMElementTagOptions<'input'> {
+    return {
+      tag: 'input',
       id: `${this.name}-${id}`,
       attributes: {
         name: `${this.name}-${id}`,
         value: this.itemToString(value),
         type: 'text',
       },
-    });
+    };
   }
 }

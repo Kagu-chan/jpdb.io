@@ -11,7 +11,7 @@ export class NumberInput extends TextBoxBasedInput<number> {
 
     return {
       type: 'number',
-      value: this.value?.toString() ?? '',
+      value: this._value?.toString() ?? '',
       min: min?.toString(),
       max: max?.toString(),
     };

@@ -40,5 +40,7 @@ export function createElement(
   (options.children ?? []).forEach((ch) => appendElement(e, createElement(ch)));
   options.afterchildrenrender?.(e);
 
+  options.element = e;
+
   return e;
 }
