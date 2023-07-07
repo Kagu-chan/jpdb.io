@@ -1,8 +1,11 @@
 import { NAME, VERSION } from './constants';
 import { CSSManager } from './css/css-manager';
+import { UserSettings } from './user-settings/user-settings';
 
 export class ScriptRunner {
   public readonly css = new CSSManager();
+
+  private readonly settings = new UserSettings();
 
   constructor() {
     // eslint-disable-next-line no-console

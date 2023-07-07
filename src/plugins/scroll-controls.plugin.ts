@@ -6,7 +6,7 @@ import {
   prependElement,
   withElement,
 } from '../lib/dom';
-import { Globals } from '../lib/globals';
+// import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -14,7 +14,7 @@ import {
   PluginUserOptionFieldType,
   PluginUserOptions,
 } from '../lib/types';
-import { CSSPlugin } from './css/css.plugin';
+// import { CSSPlugin } from './css/css.plugin';
 
 enum ScrollControlOrder {
   BT = 'bottom-top',
@@ -211,51 +211,51 @@ export class ScrollControlsPlugin extends JPDBPlugin {
       }),
     );
 
-    Globals.pluginManager.get(CSSPlugin).register(
-      `${ScrollControlsPlugin.name}-footer`,
-      `#deck-list-scroll-controls {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: var(--background-color);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    padding-top: 1.2rem;
-}`,
-    );
+    //     Globals.pluginManager.get(CSSPlugin).register(
+    //       `${ScrollControlsPlugin.name}-footer`,
+    //       `#deck-list-scroll-controls {
+    //     position: fixed;
+    //     left: 0;
+    //     bottom: 0;
+    //     width: 100%;
+    //     background-color: var(--background-color);
+    //     z-index: 999;
+    //     display: flex;
+    //     justify-content: center;
+    //     padding-top: 1.2rem;
+    // }`,
+    //     );
   }
 
   protected addContainers(target: HTMLElement): void {
     this._containerLeft = prependElement(target, { tag: 'div', class: ['sc-left', 'sc-any'] });
     this._containerRight = appendElement(target, { tag: 'div', class: ['sc-right', 'sc-any'] });
 
-    Globals.pluginManager.get(CSSPlugin).register(
-      ScrollControlsPlugin.name,
-      `
-.sc-any {
-  width:300px;
-}
+    //     Globals.pluginManager.get(CSSPlugin).register(
+    //       ScrollControlsPlugin.name,
+    //       `
+    // .sc-any {
+    //   width:300px;
+    // }
 
-.sc-any input:not(:last-of-type) {
-  margin-right: .5rem;
-}
+    // .sc-any input:not(:last-of-type) {
+    //   margin-right: .5rem;
+    // }
 
-.sc-left {
-  margin-right: auto;
-  padding-left: 1.2rem;
-}
+    // .sc-left {
+    //   margin-right: auto;
+    //   padding-left: 1.2rem;
+    // }
 
-.sc-right {
-  margin-left: auto;
-  padding-right: 1.2rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-`,
-    );
+    // .sc-right {
+    //   margin-left: auto;
+    //   padding-right: 1.2rem;
+    //   display: flex;
+    //   flex-direction: row;
+    //   justify-content: flex-end;
+    // }
+    // `,
+    //     );
   }
 
   protected addScrollControls(): void {

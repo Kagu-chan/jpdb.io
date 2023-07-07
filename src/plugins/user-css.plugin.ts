@@ -1,7 +1,7 @@
-import { Globals } from '../lib/globals';
+// import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
-import { CSSPlugin } from './css/css.plugin';
+// import { CSSPlugin } from './css/css.plugin';
 
 export class UserCSSPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {
@@ -20,8 +20,8 @@ export class UserCSSPlugin extends JPDBPlugin {
   ];
 
   protected run(): void {
-    Globals.pluginManager
-      .get(CSSPlugin)
-      .register(UserCSSPlugin.name, this.getUsersSetting('styles'));
+    // Globals.pluginManager
+    //   .get(CSSPlugin)
+    //   .register(UserCSSPlugin.name, this.getUsersSetting('styles'));
   }
 }

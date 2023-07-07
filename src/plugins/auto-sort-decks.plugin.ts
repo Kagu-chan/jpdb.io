@@ -1,4 +1,4 @@
-import { Globals } from '../lib/globals';
+// import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -6,7 +6,7 @@ import {
   PluginUserOptionFieldType,
   PluginUserOptions,
 } from '../lib/types';
-import { CSSPlugin } from './css/css.plugin';
+// import { CSSPlugin } from './css/css.plugin';
 
 const deckListDescription = `A value can either be a simple string or a regular expression.<br />
 <br />
@@ -120,8 +120,8 @@ export class AutoSortDecksPlugin extends JPDBPlugin {
   }
 
   private addCSS(): void {
-    Globals.pluginManager
-      .get(CSSPlugin)
-      .register(AutoSortDecksPlugin.name, '.deck-sidebar { display: none }');
+    // Globals.pluginManager
+    //   .get(CSSPlugin)
+    //   .register(AutoSortDecksPlugin.name, '.deck-sidebar { display: none }');
   }
 }
