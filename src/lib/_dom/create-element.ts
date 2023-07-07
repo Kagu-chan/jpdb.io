@@ -18,7 +18,9 @@ export function createElement(
 
   const e = document.createElement(tag);
 
-  if (options.id) e.setAttribute('id', options.id);
+  document._id++;
+  e.setAttribute('id', options.id ?? `${tag}-${document._id}`);
+
   if (options.innerText) e.innerText = options.innerText;
   if (options.innerHTML) e.innerHTML = options.innerHTML;
   if (options.handler) e.onclick = options.handler;

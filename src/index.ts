@@ -1,5 +1,4 @@
-import { Globals } from './lib/globals';
-import { UserPlugins } from './user-plugins/index';
+import { ScriptRunner } from './lib/script-runner';
 
 declare global {
   const virtual_refresh: () => void;
@@ -10,13 +9,24 @@ declare global {
     payload: object,
     callback: (data: null | XMLHttpRequest) => void,
   ) => void;
+
+  interface Window {
+    jpdbScriptRunner: ScriptRunner;
+  }
+
+  interface Document {
+    _id: number;
+  }
+
+  const jpdbScriptRunner: ScriptRunner;
 }
 
-Globals.makePublic('jpdb');
+document._id = 0;
+window.jpdbScriptRunner = new ScriptRunner();
 
-Globals.scriptRunner.registerDefaults();
-Globals.pluginManager.registerPlugins(...UserPlugins);
-Globals.pluginManager.loadAll();
-Globals.pluginManager.abandonDeadData();
+// Globals.scriptRunner.registerDefaults();
+// Globals.pluginManager.registerPlugins(...UserPlugins);
+// Globals.pluginManager.loadAll();
+// Globals.pluginManager.abandonDeadData();
 
-Globals.scriptRunner.run();
+// Globals.scriptRunner.run();

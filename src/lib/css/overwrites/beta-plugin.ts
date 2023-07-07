@@ -1,9 +1,8 @@
-import { FixCallback, FixFn } from '../css.types';
+import { CSSOverwrite } from '../css-overwrite.type';
 
-export const betaPlugin: FixFn = (fn: FixCallback): void =>
-  fn(
-    'beta-plugin',
-    `
+export const betaPlugin: CSSOverwrite = {
+  key: 'beta-plugin',
+  css: `
 .beta {
   color: var(--outline-v1-color);
   font-weight: bold;
@@ -16,4 +15,4 @@ export const betaPlugin: FixFn = (fn: FixCallback): void =>
   text-decoration: none;
   white-space: nowrap;
 }`,
-  );
+};
