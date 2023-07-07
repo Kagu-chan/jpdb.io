@@ -1,3 +1,4 @@
+import { adjacentElement, appendElement, findElements, findElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -44,14 +45,14 @@ export class LearningStatsPlugin extends JPDBPlugin {
   private _lNode: HTMLTableCellElement;
 
   protected run(): void {
-    const table = this._dom.findOne<'table'>(
+    const table: HTMLTableElement = findElement<'table'>(
       '.cross-table.label-right-align.data-right-align.label-big-padding.small-header tbody',
     );
-    const rows = this._dom.find<'tr'>(table, 'tr:not(:first-of-type)');
+    const rows: HTMLTableRowElement[] = findElements<'tr'>(table, 'tr:not(:first-of-type)');
     const meta: LearningMeta = { total: 0, learning: 0, known: 0 };
 
     rows.forEach((row) => {
-      const [, total, learning, known] = this._dom.find(row, 'td');
+      const [, total, learning, known] = findElements<'td'>(row, 'td');
 
       meta.total += Number(total.innerText);
       meta.learning += Number(learning.innerText);
@@ -71,30 +72,35 @@ export class LearningStatsPlugin extends JPDBPlugin {
 
   private addTotalRow(tab: HTMLTableElement, meta: LearningMeta): void {
     const pct = Math.round(meta.known / meta.total);
-    const tr = this._dom.appendNewElement(tab, 'tr');
+    const row = appendElement(tab, {
+      tag: 'tr',
+      children: [
+        { tag: 'td', innerText: 'Total' },
+        { tag: 'td', innerText: String(meta.total) },
+        { tag: 'td', innerText: String(meta.learning) },
+        { tag: 'td', innerText: `${meta.known} (${pct}%)` },
+      ],
+    });
 
-    this._dom.appendNewElement(tr, 'td', { innerText: 'Total' });
-    this._dom.appendNewElement(tr, 'td', { innerText: String(meta.total) });
-
-    this._lNode = this._dom.appendNewElement(tr, 'td', { innerText: String(meta.learning) });
-
-    this._dom.appendNewElement(tr, 'td', { innerText: `${meta.known} (${pct}%)` });
-
-    tab.append(tr);
+    this._lNode = row.children.item(2) as HTMLTableCellElement;
   }
 
   private addFinalRow(tab: HTMLTableElement, meta: LearningMeta): void {
     const thisTotal = meta.learning + meta.known;
-    const tr = this._dom.appendNewElement(tab, 'tr');
 
-    this._dom.appendNewElement(tr, 'td', { innerText: 'Seen' });
-    this._dom.appendNewElement(tr, 'td', {
-      innerText: String(thisTotal),
-      style: { color: 'var(--table-header-color)' },
+    appendElement(tab, {
+      tag: 'tr',
+      children: [
+        { tag: 'td', innerText: 'Seen' },
+        {
+          tag: 'td',
+          innerText: String(thisTotal),
+          style: { color: 'var(--table-header-color)' },
+        },
+        { tag: 'td' },
+        { tag: 'td' },
+      ],
     });
-
-    this._dom.appendNewElement(tr, 'td');
-    this._dom.appendNewElement(tr, 'td');
   }
 
   private showLearningLimit({ learning }: LearningMeta): void {
@@ -118,14 +124,15 @@ export class LearningStatsPlugin extends JPDBPlugin {
   }
 
   private addLearningNote(learning: number, max: number, state: LearningState): void {
-    const fulfilledNode = this._dom.findOne<'p'>('.container.bugfix > p');
-    const adjacentTarget = this._dom.findOne<'div'>('.container.bugfix > div');
+    const fulfilledNode = findElement<'p'>('.container.bugfix > p');
+    const adjacentTarget = findElement<'div'>('.container.bugfix > div');
 
     if (fulfilledNode.innerText.startsWith("You've already")) {
       return this.modifyExistingNode(fulfilledNode, learning, max, state);
     }
 
-    const newP = this._dom.adjacentNewElement('afterend', adjacentTarget, 'p', {
+    const newP = adjacentElement(adjacentTarget, 'afterend', {
+      tag: 'p',
       style: { opacity: '.6', fontStyle: 'italic' },
     });
     let text: string;

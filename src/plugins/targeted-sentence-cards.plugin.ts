@@ -1,3 +1,4 @@
+import { findElement, hideElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
@@ -12,11 +13,8 @@ export class TargetedSentenceCardsPlugin extends JPDBPlugin {
   };
 
   public run(): void {
-    const kindContainer = this._dom.findOne('.kind');
-    const plainContainer = this._dom.findOne('.answer-box .plain');
-
-    if (!kindContainer || kindContainer.innerText !== 'Vocabulary') return;
-
-    plainContainer.style.display = 'none';
+    if (findElement('.kind')?.innerText === 'Vocabulary') {
+      hideElement('.answer-box .plain');
+    }
   }
 }

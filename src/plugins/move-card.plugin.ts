@@ -1,3 +1,4 @@
+import { adjacentElement, findElement, findElements } from '../lib/dom';
 import { JPDBRequest } from '../lib/jpdb.io/request';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
@@ -50,7 +51,7 @@ export class MoveCardPlugin extends JPDBPlugin {
 
     this._currentDeckId = Number(this.QUERY['id']);
 
-    const targets = this.getUsersSetting<DeckTarget[]>('objects', []).filter(
+    const targets = this.getUsersSetting<DeckTarget[]>('objects').filter(
       ({ deckId }) => deckId !== this._currentDeckId,
     );
 
@@ -58,37 +59,31 @@ export class MoveCardPlugin extends JPDBPlugin {
   }
 
   protected isPremadeDeck(): boolean {
-    return this._dom
-      .findOne<'p'>('.container p')
-      ?.innerText.startsWith('This deck was created from');
+    return findElement('.container p')?.innerText.startsWith('This deck was created from');
   }
 
   protected renderTargets(targets: DeckTarget[]): void {
-    const selector = document.evaluate(
-      // eslint-disable-next-line max-len
-      './/*[contains(concat(" ",normalize-space(@class)," ")," dropdown-content ")]/ul/li[contains(.,"Edit meanings")]',
-      this._dom.findOne('.vocabulary-list'),
-      null,
-      XPathResult.ANY_TYPE,
+    const domTargets: HTMLLIElement[] = findElements<'li'>('.vocabulary-list ul li').filter(
+      ({ innerHTML }) => innerHTML.match(/Edit meanings/),
     );
-    const domTargets: HTMLLIElement[] = [];
-    let c: HTMLLIElement;
-
-    while ((c = selector.iterateNext() as HTMLLIElement)) domTargets.push(c);
 
     domTargets.forEach((e) => {
       targets.forEach((target) => {
-        const li = this._dom.adjacentNewElement('beforebegin', e, 'li');
+        adjacentElement(e, 'beforebegin', {
+          tag: 'li',
+          children: [
+            {
+              tag: 'a',
+              innerText: `Move to: ${target.label}`,
+              handler: (): void => {
+                const vocabData = this.queryToObject<VocabData>(
+                  findElement(e, 'a').getAttribute('href').split('?')[1],
+                );
 
-        this._dom.appendNewElement(li, 'a', {
-          innerText: `Move to: ${target.label}`,
-          handler: () => {
-            const vocabData = this.queryToObject<VocabData>(
-              this._dom.findOne(e, 'a').getAttribute('href').split('?')[1],
-            );
-
-            this.moveDeck(vocabData, target);
-          },
+                this.moveDeck(vocabData, target);
+              },
+            },
+          ],
         });
       });
     });

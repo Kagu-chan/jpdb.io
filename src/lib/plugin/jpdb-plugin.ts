@@ -10,7 +10,13 @@ export abstract class JPDBPlugin extends Root {
   protected _usersSettings: Record<string, unknown> = {};
   protected _sleeps: boolean = false;
 
+  /**
+   * @deprecated
+   */
   protected _dom: DOMManager;
+  /**
+   * @deprecated
+   */
   protected _body: HTMLBodyElement;
 
   constructor() {
