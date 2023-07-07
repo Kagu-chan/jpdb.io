@@ -1,3 +1,4 @@
+import { appendElement, createElement } from '../../lib/dom';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../../lib/types';
 import { FixFn } from './css.types';
@@ -24,11 +25,7 @@ export class CSSPlugin extends JPDBPlugin {
   }
 
   protected run(): void {
-    const head = this._dom.findOne('head');
-
-    this._style = this._dom.appendNewElement(head, 'style', {
-      id: 'jpdb-script-runner-css',
-    });
+    this._style = appendElement('head', createElement('style', { id: 'jpdb-script-runner-css' }));
 
     this._fixes.forEach((fn) =>
       fn((key: string, css: string) => this._styles.set(`fix:${key}`, css)),

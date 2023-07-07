@@ -1,3 +1,4 @@
+import { adjacentElement, hideElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -95,18 +96,14 @@ export class CustomLinksPlugin extends JPDBPlugin {
   ];
 
   protected run(): void {
-    const menu = this._dom.findOne('.menu');
-    const footer = this._dom.findOne('footer');
-
-    this.updateLinkList(menu, 'top-links', TOP_LINKS);
-    this.updateLinkList(footer, 'bottom-links', BOTTOM_LINKS);
+    this.updateLinkList('.menu', 'top-links', TOP_LINKS);
+    this.updateLinkList('footer', 'bottom-links', BOTTOM_LINKS);
   }
 
-  private updateLinkList(target: HTMLElement, settingKey: string, hideLinks: CustomLink[]): void {
-    if (!target) return;
-
+  private updateLinkList(target: string, settingKey: string, hideLinks: CustomLink[]): void {
     this.getUsersSetting<CustomLink[]>(settingKey, []).forEach(({ url, label }) => {
-      this._dom.adjacentNewElement('afterbegin', target, 'a', {
+      adjacentElement(target, 'afterbegin', {
+        tag: 'a',
         class: ['nav-item'],
         innerText: label,
         attributes: {
@@ -117,6 +114,6 @@ export class CustomLinksPlugin extends JPDBPlugin {
 
     hideLinks
       .filter(({ url }) => this.getUsersSetting<boolean>(`hide-${url}`, false))
-      .forEach(({ url }) => this._dom.findOne(target, `a[href="${url}"]`, 'a')?.remove());
+      .forEach(({ url }) => hideElement(`${target} a[href="${url}"]`));
   }
 }
