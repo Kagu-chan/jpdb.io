@@ -10,3 +10,5 @@ const loadTarget = 'file://' + join(__dirname, '..', 'dist', 'bundle.js').replac
 const content = readFileSync(source, 'utf-8').replace('@@file', loadTarget);
 
 writeFileSync(target, content);
+
+require('./runtime');

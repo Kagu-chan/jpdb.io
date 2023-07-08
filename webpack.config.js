@@ -23,7 +23,7 @@ const copyPlugin =
   });
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './runtime/index.ts',
   mode: 'production',
   module: {
     rules: [
