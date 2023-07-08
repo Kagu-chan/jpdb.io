@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JPDB.io UserScript Runner
-// @namespace    http://tampermonkey.net/
+// @namespace    https://jpdb.io/
 // @version      0.1.2
 // @description  Runs scripts for JPDB.io
 // @author       Kagu-chan
@@ -9,6 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=jpdb.io
 // @homepageURL  https://github.com/Kagu-chan/jpdb.io
 // @supportURL   https://github.com/Kagu-chan/jpdb.io/issues/new
+// @downloadURL  https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js
+// @updateURL    https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js
 // @grant        none
-// @require      file://C:/Projects/jpdb.io/dist/bundle.js
 // ==/UserScript==

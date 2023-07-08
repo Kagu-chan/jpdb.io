@@ -1,8 +1,8 @@
-const { version } = require('./package.json');
+const { version } = require('../package.json');
 const replace = require('replace-in-file');
 
 replace.sync({
-  files: './userscripts/*',
+  files: './banners/*',
   from: /\/\/ @version.*/,
   to: `// @version      ${version}`,
 });
