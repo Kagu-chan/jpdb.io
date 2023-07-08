@@ -10,7 +10,9 @@ const isRelease = process.env.npm_lifecycle_event === 'build';
 
 const definePlugin = new DefinePlugin({
   'process.env.VERSION': JSON.stringify('v' + version),
-  'process.env.NAME': JSON.stringify('JPDBScriptRunner'),
+  'process.env.NAME': JSON.stringify(
+    isRelease ? 'JPDBScriptRunner' : 'JPDBScriptRunner (Development)',
+  ),
   'process.env.LINK': JSON.stringify(gitUrl),
   'process.env.BUGS': JSON.stringify(bugUrl),
 });
