@@ -18,8 +18,8 @@ export function createElement(
 
   const e = document.createElement(tag);
 
-  document._id++;
-  e.setAttribute('id', options.id ?? `${tag}-${document._id}`);
+  document.jpdb.id++;
+  e.setAttribute('id', options.id ?? `${tag}-${document.jpdb.id}`);
 
   if (options.innerText) e.innerText = options.innerText;
   if (options.innerHTML) e.innerHTML = options.innerHTML;
@@ -38,7 +38,9 @@ export function createElement(
 
   e.classList.add(...(options.class ?? []));
 
-  (options.children ?? []).forEach((ch) => appendElement(e, createElement(ch)));
+  (options.children ?? []).forEach((ch) =>
+    appendElement(e, ch instanceof HTMLElement ? ch : createElement(ch)),
+  );
 
   return e;
 }

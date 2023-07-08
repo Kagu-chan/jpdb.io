@@ -1,3 +1,4 @@
+import './bubble';
 import './document';
 import './jpdb';
 import './location';

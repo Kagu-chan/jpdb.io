@@ -2,8 +2,10 @@ export {};
 
 declare global {
   interface Document {
-    _id: number;
+    jpdb: {
+      id: number;
+    };
   }
 }
 
-document._id = 0;
+document.jpdb = { id: 0 };

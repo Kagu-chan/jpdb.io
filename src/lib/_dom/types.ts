@@ -9,7 +9,7 @@ type DOMElementBaseOptions = {
 };
 
 export type DOMElementOptions = DOMElementBaseOptions & {
-  children?: DOMElementTagOptions[];
+  children?: (DOMElementTagOptions | HTMLElement)[];
 };
 
 export type DOMElementTagOptions<
