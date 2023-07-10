@@ -4,26 +4,20 @@
   "description": "JPDB.io Script Runner",
   "main": "src/index.ts",
   "scripts": {
-    "prewatch": "rimraf dist && rimraf runtime && node scripts/pre-watch.js",
-    "prebuild": "rimraf dist && rimraf runtime",
-    "preversion": "npm run lint && npm run build",
-    "postbuild": "node scripts/post-build.js",
-    "postversion": "npm run build",
     "watch": "webpack --watch",
     "build": "webpack",
-    "lint": "eslint src --ext .ts",
-    "version": "node scripts/version.js && git add scripts/banners/*"
+    "lint": "eslint src --ext .ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kagu-chan/jpdb.io.git"
   },
   "author": "Kagu-chan",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Kagu-chan/jpdb.io/issues"
   },
-  "homepage": "https://github.com/Kagu-chan/jpdb.io/releases",
+  "homepage": "https://github.com/Kagu-chan/jpdb.io",
   "devDependencies": {
     "@types/node": "^20.4.0",
     "@typescript-eslint/eslint-plugin": "^5.60.1",

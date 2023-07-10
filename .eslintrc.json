@@ -23,7 +23,7 @@
       }
     }
   },
-  "ignorePatterns": ["webpack.config.js", "scripts/**/*.js"],
+  "ignorePatterns": ["webpack.config.js", "plugin/**/*", "scripts/**/*.js", "runtime/**/*", "dist/**/*.js"],
   "plugins": ["@typescript-eslint", "eslint-plugin-jsdoc", "import"],
   "rules": {
     "arrow-parens": ["error", "always"],

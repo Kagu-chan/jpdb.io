@@ -1,7 +1,9 @@
 node_modules/
-dist/
-src/user-plugins/*
 
-runtime/
-plugins/**
-!plugins/.gitkeep
+.dist/
+.artifacts/
+
+modules/*
+!modules/.gitkeep
+
+manifest.overwrite.json
