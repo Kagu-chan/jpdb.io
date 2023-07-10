@@ -1,7 +1,7 @@
-import { DOMElementTagOptions, createElement } from '../dom';
+import { DOMElementTagOptions } from '../_dom/types';
 
 export const container = (children: DOMElementTagOptions['children']): HTMLDivElement =>
-  createElement({
+  document.jpdb.createElement({
     tag: 'div',
     children,
   });

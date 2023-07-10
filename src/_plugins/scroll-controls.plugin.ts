@@ -1,12 +1,3 @@
-import {
-  adjacentElement,
-  appendElement,
-  countElements,
-  findElement,
-  prependElement,
-  withElement,
-} from '../lib/dom';
-// import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -54,10 +45,13 @@ const ScrollParameters: Record<
 
 const ScrollStyles: Record<
   'left' | 'right',
-  [typeof prependElement | typeof appendElement, '_containerLeft' | '_containerRight']
+  [
+    typeof document.jpdb.prependElement | typeof document.jpdb.appendElement,
+    '_containerLeft' | '_containerRight',
+  ]
 > = {
-  left: [prependElement, '_containerLeft'],
-  right: [appendElement, '_containerRight'],
+  left: [document.jpdb.prependElement, '_containerLeft'],
+  right: [document.jpdb.appendElement, '_containerRight'],
 };
 
 export class ScrollControlsPlugin extends JPDBPlugin {
@@ -164,7 +158,7 @@ export class ScrollControlsPlugin extends JPDBPlugin {
     if (this._hasRan) return;
     if (!this.getUsersSetting<boolean>('in-settings')) return;
 
-    this.addContainers(findElement('#save-all-settings-box'));
+    this.addContainers(document.jpdb.findElement('#save-all-settings-box'));
     this.addScrollElement('left');
     this.addScrollElement('right');
   }
@@ -188,18 +182,18 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
   protected countDecks(): number {
     // Find id's containing 'deck', but not 'l' (g"l"obal, b"l"acklisted) or 'n' ("n"ever-forgot)
-    return countElements("[id|='deck']:not([id*='l']):not([id*='n'])");
+    return document.jpdb.countElements("[id|='deck']:not([id*='l']):not([id*='n'])");
   }
 
   protected shiftFooter(): void {
-    adjacentElement('.container', 'afterend', {
+    document.jpdb.adjacentElement('.container', 'afterend', {
       tag: 'div',
       style: { paddingBottom: '6rem' },
     });
 
     this.addContainers(
-      withElement('footer', (footer) => {
-        const newFooter = appendElement('body', {
+      document.jpdb.withElement('footer', (footer) => {
+        const newFooter = document.jpdb.appendElement('body', {
           tag: 'div',
           id: 'deck-list-scroll-controls',
           innerHTML: footer.outerHTML,
@@ -228,8 +222,14 @@ export class ScrollControlsPlugin extends JPDBPlugin {
   }
 
   protected addContainers(target: HTMLElement): void {
-    this._containerLeft = prependElement(target, { tag: 'div', class: ['sc-left', 'sc-any'] });
-    this._containerRight = appendElement(target, { tag: 'div', class: ['sc-right', 'sc-any'] });
+    this._containerLeft = document.jpdb.prependElement(target, {
+      tag: 'div',
+      class: ['sc-left', 'sc-any'],
+    });
+    this._containerRight = document.jpdb.appendElement(target, {
+      tag: 'div',
+      class: ['sc-right', 'sc-any'],
+    });
 
     //     Globals.pluginManager.get(CSSPlugin).register(
     //       ScrollControlsPlugin.name,

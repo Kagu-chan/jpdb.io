@@ -1,4 +1,3 @@
-import { findElements } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
@@ -12,8 +11,8 @@ export class HideDeckNumbersPlugin extends JPDBPlugin {
   };
 
   protected run(): void {
-    return findElements("[id|='deck']:not([id*='l']):not([id*='n']) .deck-title").forEach(
-      (e) => (e.innerHTML = e.innerHTML.replace(/\d+\. /, '')),
-    );
+    return document.jpdb
+      .findElements("[id|='deck']:not([id*='l']):not([id*='n']) .deck-title")
+      .forEach((e) => (e.innerHTML = e.innerHTML.replace(/\d+\. /, '')));
   }
 }

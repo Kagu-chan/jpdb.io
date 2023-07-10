@@ -1,5 +1,3 @@
-import { createElement } from '../dom';
-
 type ButtonOptions = {
   type?: 'default' | 'error' | 'gray' | 'warning' | 'success';
   handler?: () => void;
@@ -16,7 +14,7 @@ const typeMap: Record<ButtonOptions['type'], string> = {
 export const button = (text: string, options?: ButtonOptions): HTMLInputElement => {
   const v = typeMap[options?.type ?? 'default'];
 
-  return createElement('input', {
+  return document.jpdb.createElement('input', {
     class: ['outline', v],
     attributes: {
       type: 'submit',

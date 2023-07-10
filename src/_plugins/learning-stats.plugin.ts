@@ -1,4 +1,3 @@
-import { adjacentElement, appendElement, findElements, findElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -45,14 +44,17 @@ export class LearningStatsPlugin extends JPDBPlugin {
   private _lNode: HTMLTableCellElement;
 
   protected run(): void {
-    const table: HTMLTableElement = findElement<'table'>(
+    const table: HTMLTableElement = document.jpdb.findElement<'table'>(
       '.cross-table.label-right-align.data-right-align.label-big-padding.small-header tbody',
     );
-    const rows: HTMLTableRowElement[] = findElements<'tr'>(table, 'tr:not(:first-of-type)');
+    const rows: HTMLTableRowElement[] = document.jpdb.findElements<'tr'>(
+      table,
+      'tr:not(:first-of-type)',
+    );
     const meta: LearningMeta = { total: 0, learning: 0, known: 0 };
 
     rows.forEach((row) => {
-      const [, total, learning, known] = findElements<'td'>(row, 'td');
+      const [, total, learning, known] = document.jpdb.findElements<'td'>(row, 'td');
 
       meta.total += Number(total.innerText);
       meta.learning += Number(learning.innerText);
@@ -72,7 +74,7 @@ export class LearningStatsPlugin extends JPDBPlugin {
 
   private addTotalRow(tab: HTMLTableElement, meta: LearningMeta): void {
     const pct = Math.round(meta.known / meta.total);
-    const row = appendElement(tab, {
+    const row = document.jpdb.appendElement(tab, {
       tag: 'tr',
       children: [
         { tag: 'td', innerText: 'Total' },
@@ -88,7 +90,7 @@ export class LearningStatsPlugin extends JPDBPlugin {
   private addFinalRow(tab: HTMLTableElement, meta: LearningMeta): void {
     const thisTotal = meta.learning + meta.known;
 
-    appendElement(tab, {
+    document.jpdb.appendElement(tab, {
       tag: 'tr',
       children: [
         { tag: 'td', innerText: 'Seen' },
@@ -124,14 +126,14 @@ export class LearningStatsPlugin extends JPDBPlugin {
   }
 
   private addLearningNote(learning: number, max: number, state: LearningState): void {
-    const fulfilledNode = findElement<'p'>('.container.bugfix > p');
-    const adjacentTarget = findElement<'div'>('.container.bugfix > div');
+    const fulfilledNode = document.jpdb.findElement<'p'>('.container.bugfix > p');
+    const adjacentTarget = document.jpdb.findElement<'div'>('.container.bugfix > div');
 
     if (fulfilledNode.innerText.startsWith("You've already")) {
       return this.modifyExistingNode(fulfilledNode, learning, max, state);
     }
 
-    const newP = adjacentElement(adjacentTarget, 'afterend', {
+    const newP = document.jpdb.adjacentElement(adjacentTarget, 'afterend', {
       tag: 'p',
       style: { opacity: '.6', fontStyle: 'italic' },
     });

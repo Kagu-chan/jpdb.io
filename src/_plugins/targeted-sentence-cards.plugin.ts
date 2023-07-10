@@ -1,4 +1,3 @@
-import { findElement, hideElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions } from '../lib/types';
 
@@ -13,8 +12,8 @@ export class TargetedSentenceCardsPlugin extends JPDBPlugin {
   };
 
   public run(): void {
-    if (findElement('.kind')?.innerText === 'Vocabulary') {
-      hideElement('.answer-box .plain');
+    if (document.jpdb.findElement('.kind')?.innerText === 'Vocabulary') {
+      document.jpdb.hideElement('.answer-box .plain');
     }
   }
 }

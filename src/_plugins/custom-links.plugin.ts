@@ -1,4 +1,3 @@
-import { adjacentElement, hideElement } from '../lib/dom';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import {
   PluginOptions,
@@ -102,7 +101,7 @@ export class CustomLinksPlugin extends JPDBPlugin {
 
   private updateLinkList(target: string, settingKey: string, hideLinks: CustomLink[]): void {
     this.getUsersSetting<CustomLink[]>(settingKey, []).forEach(({ url, label }) => {
-      adjacentElement(target, 'afterbegin', {
+      document.jpdb.adjacentElement(target, 'afterbegin', {
         tag: 'a',
         class: ['nav-item'],
         innerText: label,
@@ -114,6 +113,6 @@ export class CustomLinksPlugin extends JPDBPlugin {
 
     hideLinks
       .filter(({ url }) => this.getUsersSetting<boolean>(`hide-${url}`, false))
-      .forEach(({ url }) => hideElement(`${target} a[href="${url}"]`));
+      .forEach(({ url }) => document.jpdb.hideElement(`${target} a[href="${url}"]`));
   }
 }

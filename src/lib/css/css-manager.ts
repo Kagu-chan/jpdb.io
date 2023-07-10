@@ -1,13 +1,12 @@
-import { appendElement, createElement } from '../dom';
 import { CSSOverwrite } from './css-overwrite.type';
 import { betaPlugin } from './overwrites/beta-plugin';
 import { customDefinition } from './overwrites/custom-definition';
 
 export class CSSManager {
-  private _style: HTMLStyleElement = createElement('style');
+  private _style: HTMLStyleElement = document.jpdb.createElement('style');
 
   constructor() {
-    appendElement('head', this._style);
+    document.jpdb.appendElement('head', this._style);
 
     this.add(betaPlugin);
     this.add(customDefinition);

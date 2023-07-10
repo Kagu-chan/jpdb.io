@@ -1,5 +1,4 @@
 import EventEmitter from 'events';
-import { appendElement, findElement } from '../../../dom';
 import { container } from '../../../elements/container';
 import { redButton } from './red-button';
 import { resetDataParagraph } from './reset-data.paragraph';
@@ -7,7 +6,7 @@ import { resetSettingsParagraph } from './reset-settings.paragraph';
 import { versionParagraph } from './version.paragraph';
 
 export class InfoSection extends EventEmitter {
-  private _container = findElement('.container.bugfix');
+  private _container = document.jpdb.findElement('.container.bugfix');
 
   constructor() {
     super();
@@ -15,11 +14,11 @@ export class InfoSection extends EventEmitter {
     this.appendResetSettings();
     this.appendResetData();
 
-    appendElement(this._container, versionParagraph());
+    document.jpdb.appendElement(this._container, versionParagraph());
   }
 
   private appendResetSettings(): void {
-    appendElement(
+    document.jpdb.appendElement(
       this._container,
       container([
         redButton('Reset Extension settings', () => this.emit('reset')),
@@ -29,7 +28,7 @@ export class InfoSection extends EventEmitter {
   }
 
   private appendResetData(): void {
-    appendElement(
+    document.jpdb.appendElement(
       this._container,
       container([
         redButton('Reset Extension data', () => this.emit('reset-all')),

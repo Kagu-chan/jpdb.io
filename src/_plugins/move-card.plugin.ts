@@ -1,4 +1,3 @@
-import { adjacentElement, findElement, findElements } from '../lib/dom';
 import { JPDBRequest } from '../lib/jpdb.io/request';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
 import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
@@ -59,17 +58,19 @@ export class MoveCardPlugin extends JPDBPlugin {
   }
 
   protected isPremadeDeck(): boolean {
-    return findElement('.container p')?.innerText.startsWith('This deck was created from');
+    return document.jpdb
+      .findElement('.container p')
+      ?.innerText.startsWith('This deck was created from');
   }
 
   protected renderTargets(targets: DeckTarget[]): void {
-    const domTargets: HTMLLIElement[] = findElements<'li'>('.vocabulary-list ul li').filter(
-      ({ innerHTML }) => innerHTML.match(/Edit meanings/),
-    );
+    const domTargets: HTMLLIElement[] = document.jpdb
+      .findElements<'li'>('.vocabulary-list ul li')
+      .filter(({ innerHTML }) => innerHTML.match(/Edit meanings/));
 
     domTargets.forEach((e) => {
       targets.forEach((target) => {
-        adjacentElement(e, 'beforebegin', {
+        document.jpdb.adjacentElement(e, 'beforebegin', {
           tag: 'li',
           children: [
             {
@@ -77,7 +78,7 @@ export class MoveCardPlugin extends JPDBPlugin {
               innerText: `Move to: ${target.label}`,
               handler: (): void => {
                 const vocabData = this.queryToObject<VocabData>(
-                  findElement(e, 'a').getAttribute('href').split('?')[1],
+                  document.jpdb.findElement(e, 'a').getAttribute('href').split('?')[1],
                 );
 
                 this.moveDeck(vocabData, target);

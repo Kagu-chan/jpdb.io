@@ -10,7 +10,7 @@
   "updateURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "entrypoint": "src/lib/_bootstrap",
   "grant": ["none"],
-  "build": ["source", "plugin-a", "plugin-b", "plugin-d"],
+  "build": ["source", "tsc", "plugin-a", "plugin-b", "plugin-c", "plugin-d"],
   "output": {
     "build": {
       "script": "JPDB.io.user.js",
