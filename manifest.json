@@ -9,7 +9,7 @@
   "downloadURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "updateURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "grant": [],
-  "build": ["browser", "tsc", "plugin-a", "plugin-b", "plugin-c", "plugin-d"],
+  "build": ["browser", "lib", "unsuspend", "tsc"],
   "output": {
     "build": {
       "script": "JPDB.io.user.js",

@@ -130,10 +130,6 @@ class JPDBioWebpackPlugin {
 
     result.grant = grants;
 
-    if (this.isWatch) {
-      result.name = result.name && `${result.name} (Development)`;
-    }
-
     return result;
   }
 
@@ -245,10 +241,10 @@ class JPDBioWebpackPlugin {
       'grant',
       'require',
     ];
-    return this.getMonkeyScript(pick);
+    return this.getMonkeyScript(pick, 'Development');
   }
 
-  getMonkeyScript(picks) {
+  getMonkeyScript(picks, nameOverwrite = undefined) {
     const script = ['// ==UserScript=='];
     let lKey = 0;
 
@@ -257,7 +253,13 @@ class JPDBioWebpackPlugin {
     });
 
     picks.forEach((pick) => {
-      const val = this.manifest[pick];
+      let val = this.manifest[pick];
+
+      // special case "name"
+      if (pick === 'name' && nameOverwrite) {
+        val = `${val} (${nameOverwrite})`;
+      }
+
       const arVal = Array.isArray(val) ? val : [val];
 
       // special case "grant"
@@ -280,7 +282,6 @@ class JPDBioWebpackPlugin {
   runMergePlugin(compiler) {
     compiler.hooks.afterEmit.tap(this.pluginName, () => {
       if (this.buildCfg.merge?.length) {
-        console.log('hello', readdirSync(this.options.output.path));
         const source = resolve(this.options.output.path, this.options.output.filename);
         const content = this.buildCfg.merge
           .map((f) => (f === 'script' ? source : resolve(this.root, f)))

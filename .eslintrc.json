@@ -101,7 +101,8 @@
       {
         "types": {
           "object": false,
-          "Record": false
+          "Record": false,
+          "Function": false
         },
         "extendDefaults": true
       }

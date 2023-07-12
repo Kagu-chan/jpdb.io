@@ -1,5 +1,13 @@
 /**
  * Contains the actual user script running modules and allowing settings etc
  */
-// eslint-disable-next-line no-console
-console.log('lib');
+
+import { ScriptRunner } from './script-runner';
+
+declare global {
+  interface Window {
+    jpdb: ScriptRunner;
+  }
+}
+
+window.jpdb = new ScriptRunner();
