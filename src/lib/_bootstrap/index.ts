@@ -1,5 +1,5 @@
 import './bubble';
-import './document';
+import '../../browser/document';
 import './jpdb';
 import './location';
 import './script-runner';
