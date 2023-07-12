@@ -1,4 +1,4 @@
-import { adjacentElement } from './adjacent-element';
+import { adjacentElement } from './fn/adjacent-element';
 import { appendElement } from './append-element';
 import { countElements } from './count-elements';
 import { createElement } from './create-element';
