@@ -8,9 +8,8 @@
   "supportURL": "https://github.com/Kagu-chan/jpdb.io/issues",
   "downloadURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "updateURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
-  "entrypoint": "src/lib/_bootstrap",
-  "grant": ["none"],
-  "build": ["source", "tsc", "plugin-a", "plugin-b", "plugin-c", "plugin-d"],
+  "grant": [],
+  "build": ["browser", "tsc", "plugin-a", "plugin-b", "plugin-c", "plugin-d"],
   "output": {
     "build": {
       "script": "JPDB.io.user.js",

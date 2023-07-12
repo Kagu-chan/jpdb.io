@@ -31,12 +31,24 @@ function mergeDeep(target, ...sources) {
   return mergeDeep(target, ...sources);
 }
 
+function unique(arr) {
+  const newArr = [];
+
+  for (const a of arr) {
+    if (!newArr.includes(a)) {
+      newArr.push(a);
+    }
+  }
+
+  return newArr;
+}
+
 class JPDBioWebpackPlugin {
   packageJson = require('./package.json');
   manifestJson = 'manifest.json';
   overwriteJson = 'manifest.overwrite.json';
-  sourceModules = 'src/modules';
-  userModules = 'modules';
+  src = 'src';
+  modules = 'src/modules';
   artifacts = './.artifacts';
   manifestKeys = [
     'name',
@@ -53,7 +65,6 @@ class JPDBioWebpackPlugin {
     'updateURL',
     'grant',
     'build',
-    'entrypoint',
     'output',
   ];
 
@@ -107,12 +118,17 @@ class JPDBioWebpackPlugin {
       return obj;
     };
 
-    const manifest = getContent(resolve(path, this.manifestJson));
-    const overwrite = getContent(resolve(path, this.overwriteJson));
-
     const result = pickManifestData(source);
-    mergeDeep(result, pickManifestData(manifest));
-    mergeDeep(result, pickManifestData(overwrite));
+    const manifest = pickManifestData(getContent(resolve(path, this.manifestJson)));
+    const overwrite = pickManifestData(getContent(resolve(path, this.overwriteJson)));
+
+    // Pick grant data from source and either the overwrite or manifests new grant and merge them
+    const grants = unique([result.grant ?? [], overwrite.grant ?? manifest.grant ?? []].flat());
+
+    mergeDeep(result, manifest);
+    mergeDeep(result, overwrite);
+
+    result.grant = grants;
 
     if (this.isWatch) {
       result.name = result.name && `${result.name} (Development)`;
@@ -143,17 +159,15 @@ class JPDBioWebpackPlugin {
   }
 
   resolveBuild(build) {
-    if (build === 'source') {
-      if (!this.manifest.entrypoint) die('No entrypoint defined');
+    const sources = [this.src, this.modules];
 
-      return resolve(this.root, this.manifest.entrypoint);
+    for (const source of sources) {
+      const lookupPath = resolve(this.root, source, build);
+      const indexJs = resolve(lookupPath, 'index.js');
+      const indexTs = resolve(lookupPath, 'index.ts');
+
+      if (existsSync(indexJs) || existsSync(indexTs)) return lookupPath;
     }
-
-    const userModule = resolve(this.root, this.userModules, build);
-    const sourceModule = resolve(this.root, this.sourceModules, build);
-
-    if (existsSync(userModule)) return userModule;
-    if (existsSync(sourceModule)) return sourceModule;
 
     die('Module %O not found', build);
   }
@@ -245,6 +259,13 @@ class JPDBioWebpackPlugin {
     picks.forEach((pick) => {
       const val = this.manifest[pick];
       const arVal = Array.isArray(val) ? val : [val];
+
+      // special case "grant"
+      if (pick === 'grant') {
+        if (arVal.length === 0) {
+          arVal.push('none');
+        }
+      }
 
       arVal
         .filter((v) => !!v?.length)
