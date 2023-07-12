@@ -1,16 +1,16 @@
 import { adjacentElement } from './fn/adjacent-element';
-import { appendElement } from './append-element';
-import { countElements } from './count-elements';
-import { createElement } from './create-element';
-import { destroyElement } from './destroy-element';
-import { findElement } from './find-element';
-import { findElements } from './find-elements';
-import { hideElement } from './hide-element';
-import { prependElement } from './prepend-element';
-import { resolveElement } from './resolve-element';
-import { showElement } from './show-element';
-import { withElement } from './with-element';
-import { withElements } from './with-elements';
+import { appendElement } from './fn/append-element';
+import { countElements } from './fn/count-elements';
+import { createElement } from './fn/create-element';
+import { destroyElement } from './fn/destroy-element';
+import { findElement } from './fn/find-element';
+import { findElements } from './fn/find-elements';
+import { hideElement } from './fn/hide-element';
+import { prependElement } from './fn/prepend-element';
+import { resolveElement } from './fn/resolve-element';
+import { showElement } from './fn/show-element';
+import { withElement } from './fn/with-element';
+import { withElements } from './fn/with-elements';
 
 type DOMElementBaseOptions = {
   id?: string;

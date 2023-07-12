@@ -9,6 +9,6 @@ export class SettingsUI extends EventEmitter {
   constructor() {
     super();
 
-    bubble(this._infos, this, 'reset', 'reset-all');
+    window.bubble(this._infos, this, 'reset', 'reset-all');
   }
 }

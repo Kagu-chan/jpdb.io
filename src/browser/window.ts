@@ -1,7 +1,9 @@
-export {};
+import { bubble } from './fn/bubble';
 
 declare global {
   interface Window {
+    bubble: typeof bubble;
+
     virtual_refresh: () => void;
     xhr: (
       method: Parameters<XMLHttpRequest['open']>[0],
@@ -14,3 +16,5 @@ declare global {
   const virtual_refresh: typeof window.virtual_refresh;
   const xhr: typeof window.xhr;
 }
+
+window.bubble = bubble;
