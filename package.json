@@ -28,6 +28,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^46.4.3",
     "eslint-plugin-prettier": "^4.2.1",
+    "fast-xml-parser": "^4.2.5",
     "prettier": "^2.8.3",
     "replace-in-file": "^7.0.1",
     "rimraf": "^5.0.1",
