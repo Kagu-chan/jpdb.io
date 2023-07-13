@@ -63,7 +63,7 @@ export class ScriptRunner {
    * @param {string} enableKey Key which needs to be enabled
    * @param {Function} action Function to execute
    */
-  public runAlwaysWhenActive(match: Path, enableKey: string, action: Function): void {
+  public runAlwaysWhenActive(match: Path | Path[], enableKey: string, action: Function): void {
     if (this.settings.getActiveState(enableKey)) {
       this.runAlways(match, action);
     }

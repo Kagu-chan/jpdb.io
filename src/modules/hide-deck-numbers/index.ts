@@ -5,7 +5,7 @@ window.jpdb.settings.registerActivatable(
   'Hide deck numbers',
   'Hide deck numbers on learn page and deck list',
 );
-window.jpdb.runOnceWhenActive(['/learn', '/deck-list'], HIDE_DECK_NUMBERS, () => {
+window.jpdb.runAlwaysWhenActive(['/learn', '/deck-list'], HIDE_DECK_NUMBERS, () => {
   document.jpdb.withElements(
     "[id|='deck']:not([id*='l']):not([id*='n']) .deck-title",
     (e) => (e.innerHTML = e.innerHTML.replace(/\d+\. /, '')),
