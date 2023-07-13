@@ -21,7 +21,7 @@ export class SettingsUI extends EventEmitter {
   constructor() {
     super();
 
-    window.bubble(this._infos, this, 'reset', 'reset-all');
+    window.bubble(this._infos, this, 'reset');
   }
 
   public addEnableDisable(options: EnableDisableOptions): void {

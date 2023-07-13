@@ -1,6 +1,6 @@
-const { adjacentElement, findElement, withElement, withElements } = document.jpdb;
-
 const withNode = (node: HTMLDivElement): void => {
+  const { adjacentElement, findElement } = document.jpdb;
+
   const form = findElement(node, 'form[action="/blacklist"]');
   const v = findElement<'input'>(form, 'input[name=v]').value;
   const s = findElement<'input'>(form, 'input[name=s]').value;
@@ -29,11 +29,11 @@ const withNode = (node: HTMLDivElement): void => {
     ],
   });
 };
-window.jpdb.runAlways('/deck', () => {
-  withElements('.entry.suspended', withNode);
+jpdb.runAlways('/deck', () => {
+  document.jpdb.withElements('.entry.suspended', withNode);
 });
-window.jpdb.runAlways(/\/vocabulary/, () => {
-  if (!findElement('.tag.suspended')) return;
+jpdb.runAlways(/\/vocabulary/, () => {
+  if (!document.jpdb.findElement('.tag.suspended')) return;
 
-  withElement('.dropdown-content', withNode);
+  document.jpdb.withElement('.dropdown-content', withNode);
 });

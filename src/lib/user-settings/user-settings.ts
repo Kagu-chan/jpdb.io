@@ -14,8 +14,7 @@ export class UserSettings {
       this._ui = new SettingsUI();
 
       // eslint-disable-next-line no-console
-      this._ui.on('reset', () => console.log('reset was clicked'));
-      this._ui.on('reset-all', () => {
+      this._ui.on('reset', () => {
         localStorage.clear();
 
         location.reload();
@@ -34,15 +33,52 @@ export class UserSettings {
       value: this.getActiveState(name),
       description,
       change: (val: boolean) => {
-        if (val && !this.getActiveState(name)) {
-          this._activeModules.push(name);
-        } else if (!val && this.getActiveState(name)) {
-          this._activeModules = this._activeModules.filter((n) => n !== name);
-        }
-
-        this.write(this.ACTIVE_MODULES, this._activeModules);
+        val ? this.enableModule(name) : this.disableModule(name);
       },
     });
+  }
+
+  public enableModule(name: string): void {
+    if (!this.getActiveState(name)) {
+      document.dispatchEvent(new CustomEvent('module-enabled', { detail: { name } }));
+      this._activeModules.push(name);
+
+      this.write(this.ACTIVE_MODULES, this._activeModules);
+    }
+  }
+
+  public disableModule(name: string): void {
+    if (this.getActiveState(name)) {
+      document.dispatchEvent(new CustomEvent('module-disabled', { detail: { name } }));
+      this._activeModules = this._activeModules.filter((n) => n !== name);
+
+      this.write(this.ACTIVE_MODULES, this._activeModules);
+    }
+  }
+
+  public hasPatreonPerks(): boolean {
+    return !!document.jpdb.findElement('input[value="Unlink your account from Patreon"]');
+  }
+
+  public getJpdbSetting<T>(id: string): T {
+    const e = document.jpdb.findElement<'input'>(`#${id}`);
+
+    if (e.type === 'checkbox') {
+      return e.checked as T;
+    }
+
+    return e.value as T;
+  }
+
+  public getModuleOption<T>(module: string, key: string, defaultValue: T): T {
+    return this.read<Record<string, T>>(module, { [key]: defaultValue })[key];
+  }
+
+  public setModuleOption<T>(module: string, key: string, value: T): void {
+    const data = this.read<Record<string, T>>(module, {});
+
+    data[key] = value;
+    this.write(module, data);
   }
 
   private onSettings(fn: Function): void {
