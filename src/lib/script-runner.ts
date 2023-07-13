@@ -19,11 +19,11 @@ export class ScriptRunner {
   /**
    * Runs a given Function when matching given Path object
    *
-   * @param {Path} match Path match to fulfill
+   * @param {Path | Path[]} match Path match to fulfill
    * @param {Function} action Function to execute
    */
-  public runOnce(match: Path, action: Function): void {
-    if (location.match(match)) {
+  public runOnce(match: Path | Path[], action: Function): void {
+    if (Array.isArray(match) ? match.find((m) => location.match(m)) : location.match(match)) {
       action();
     }
   }
@@ -31,11 +31,11 @@ export class ScriptRunner {
   /**
    * Runs a given Function when matching given Path object and when enabled in /settings
    *
-   * @param {Path} match  Patch match to fulfill
+   * @param {Path | Path[]} match Path match to fulfill
    * @param {string} enableKey Key which needs to be enabled
    * @param {Function} action Function to execute
    */
-  public runOnceWhenActive(match: Path, enableKey: string, action: Function): void {
+  public runOnceWhenActive(match: Path | Path[], enableKey: string, action: Function): void {
     if (this.settings.getActiveState(enableKey)) {
       this.runOnce(match, action);
     }
@@ -45,10 +45,10 @@ export class ScriptRunner {
    * Runs a given Function when matching given Path object
    * Function will be executed on call and when virtual_refresh is called
    *
-   * @param {Path} match Path match to fulfill
+   * @param {Path | Path[]} match Path match to fulfill
    * @param {Function} action Function to execute
    */
-  public runAlways(match: Path, action: Function): void {
+  public runAlways(match: Path | Path[], action: Function): void {
     const c = (): void => this.runOnce(match, action);
 
     this.reloadActions.push(c);
@@ -59,7 +59,7 @@ export class ScriptRunner {
    * Runs a given Function when matching given Path object and when enabled in /settings
    * Function will be executed on call and when virtual_refresh is called
    *
-   * @param {Path} match  Patch match to fulfill
+   * @param {Path | Path[]} match Path match to fulfill
    * @param {string} enableKey Key which needs to be enabled
    * @param {Function} action Function to execute
    */

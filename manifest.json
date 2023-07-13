@@ -9,7 +9,7 @@
   "downloadURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "updateURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
   "grant": [],
-  "build": ["browser", "lib", "unsuspend", "tsc"],
+  "build": ["browser", "lib", "unsuspend", "tsc", "hide-deck-numbers"],
   "output": {
     "build": {
       "script": "JPDB.io.user.js",
