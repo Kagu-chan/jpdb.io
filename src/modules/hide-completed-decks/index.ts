@@ -16,21 +16,21 @@ function getRecognition(e: HTMLDivElement): number {
   return Number(e.innerText.split('(')[1]?.replace(/[^\d]/g, '') ?? 0);
 }
 
-jpdb.settings.registerActivatable(
-  HIDE_COMPLETED_DECKS,
-  'Hide completed decks',
-  'Hides decks which are completed',
-);
+jpdb.settings.registerActivatable({
+  name: HIDE_COMPLETED_DECKS,
+  displayText: 'Hide completed decks',
+  description: 'Hides decks which do not contain new cards',
+});
 
 jpdb.runOnce('/settings', () => {
   if (jpdb.settings.hasPatreonPerks()) {
     const tc = getTargetCoverage();
 
-    jpdb.settings.registerActivatable(
-      HIDE_THRESHOLD_DECKS,
-      'Hide decks at Target coverage',
-      `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}% (Does not work on per deck basis)`,
-    );
+    jpdb.settings.registerActivatable({
+      name: HIDE_THRESHOLD_DECKS,
+      displayText: 'Hide decks at Target coverage',
+      description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}% (Does not work on per deck basis)`,
+    });
 
     // Set the target coverage - this happens on every settings load, which includes after changing the jpdb original value
     setTargetCoverage();
