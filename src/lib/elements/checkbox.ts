@@ -5,7 +5,7 @@ export type CheckboxOptions = {
   name: string;
   label: string;
   value: boolean;
-  helpText?: string;
+  helpText?: string | HTMLElement;
 };
 
 export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
@@ -37,7 +37,8 @@ export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
       c,
       {
         tag: 'p',
-        innerHTML: options.helpText,
+        innerHTML: typeof options.helpText === 'string' ? options.helpText : undefined,
+        children: typeof options.helpText !== 'string' ? [options.helpText] : [],
         style: {
           opacity: '.8',
           marginLeft: '2rem',
