@@ -84,7 +84,7 @@ export class UserSettingsPlugin extends JPDBPlugin {
       type: PluginUserOptionFieldType.CHECKBOX,
       default: false,
       text: 'Enable beta plugins',
-      description: 'Enable beta plugins and unfinnished plugins',
+      description: 'Enable beta plugins and unfinished plugins',
     },
   ];
 

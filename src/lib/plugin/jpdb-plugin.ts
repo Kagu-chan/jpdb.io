@@ -133,7 +133,7 @@ export abstract class JPDBPlugin extends Root {
       authorLink,
       description,
       beta,
-      unfinnished,
+      unfinished,
     } = this._pluginOptions;
 
     if (!canBeDisabled) return;
@@ -160,7 +160,7 @@ export abstract class JPDBPlugin extends Root {
     }
 
     if (beta) {
-      const span = `<span class="beta">${unfinnished ? 'unfinnished' : 'beta'}</span>`;
+      const span = `<span class="beta">${unfinished ? 'unfinished' : 'beta'}</span>`;
       option.description = option.description ? `${option.description} ${span}` : span;
     }
 

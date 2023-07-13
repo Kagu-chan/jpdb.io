@@ -40,19 +40,19 @@ type RawPluginOptions = {
    */
   beta?: boolean;
   /**
-   * @var {boolean} [unfinnished=false] Marks a beta plugin as unfinnished
+   * @var {boolean} [unfinished=false] Marks a beta plugin as unfinished
    */
-  unfinnished?: boolean;
+  unfinished?: boolean;
 };
 
 type NonBetaPlugin = RawPluginOptions & {
   beta?: false;
-  unfinnished?: false;
+  unfinished?: false;
 };
 
 type BetaPlugin = RawPluginOptions & {
   beta: true;
-  unfinnished?: boolean;
+  unfinished?: boolean;
   canBeDisabled: true;
 };
 
