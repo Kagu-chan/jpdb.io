@@ -28,22 +28,20 @@ export class UserSettings {
   }
 
   public registerActivatable(name: string, displayText: string = name, description?: string): void {
-    this.onSettings(() => {
-      this._ui.addEnableDisable({
-        name,
-        displayText,
-        value: this.getActiveState(name),
-        description,
-        change: (val: boolean) => {
-          if (val && !this.getActiveState(name)) {
-            this._activeModules.push(name);
-          } else if (!val && this.getActiveState(name)) {
-            this._activeModules = this._activeModules.filter((n) => n !== name);
-          }
+    this._ui?.addEnableDisable({
+      name,
+      displayText,
+      value: this.getActiveState(name),
+      description,
+      change: (val: boolean) => {
+        if (val && !this.getActiveState(name)) {
+          this._activeModules.push(name);
+        } else if (!val && this.getActiveState(name)) {
+          this._activeModules = this._activeModules.filter((n) => n !== name);
+        }
 
-          this.write(this.ACTIVE_MODULES, this._activeModules);
-        },
-      });
+        this.write(this.ACTIVE_MODULES, this._activeModules);
+      },
     });
   }
 

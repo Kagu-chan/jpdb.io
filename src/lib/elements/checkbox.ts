@@ -33,14 +33,17 @@ export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
   c.classList.add('checkbox');
 
   if (options.helpText) {
-    document.jpdb.appendElement(c, {
-      tag: 'p',
-      innerHTML: options.helpText,
-      style: {
-        opacity: '.8',
-        marginLeft: '2rem',
+    return container([
+      c,
+      {
+        tag: 'p',
+        innerHTML: options.helpText,
+        style: {
+          opacity: '.8',
+          marginLeft: '2rem',
+        },
       },
-    });
+    ]);
   }
 
   return c;
