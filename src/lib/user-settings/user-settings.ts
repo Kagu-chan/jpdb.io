@@ -1,3 +1,4 @@
+import { IActivatable } from './activatable.interface';
 import { SettingsUI } from './ui/settings.ui';
 
 export class UserSettings {
@@ -26,12 +27,12 @@ export class UserSettings {
     return this._activeModules.includes(name);
   }
 
-  public registerActivatable(name: string, displayText: string = name, description?: string): void {
+  public registerActivatable(options: IActivatable): void {
+    const { name, displayText } = options;
     this._ui?.addEnableDisable({
-      name,
-      displayText,
+      ...options,
+      displayText: displayText ?? name,
       value: this.getActiveState(name),
-      description,
       change: (val: boolean) => {
         val ? this.enableModule(name) : this.disableModule(name);
       },
