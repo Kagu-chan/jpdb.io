@@ -24,7 +24,6 @@ export class ScriptRunner {
       this.refreshUiElements();
 
       [...this.reloadActions, ...this.singleActions].forEach((c): void => {
-        // debugger;
         (c as () => void)();
       });
 
@@ -33,7 +32,6 @@ export class ScriptRunner {
   }
 
   public onNextRefresh(fn: Function): void {
-    console.log('on next refresh!');
     this.singleActions.push(fn);
   }
 
