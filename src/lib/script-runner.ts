@@ -1,19 +1,40 @@
 import { NAME, VERSION } from './constants';
 import { CSSManager } from './css/css-manager';
+import { Toaster } from './toaster/toaster';
 import { UserSettings } from './user-settings/user-settings';
 
 export class ScriptRunner {
   public readonly css = new CSSManager();
   public readonly settings = new UserSettings();
+
+  public get toaster(): Toaster {
+    return this._toaster;
+  }
+
   private reloadActions: Function[] = [];
+  private singleActions: Function[] = [];
+
+  private _toaster = new Toaster(this.css);
 
   constructor() {
     // eslint-disable-next-line no-console
     console.log('%s %s running', NAME, VERSION);
 
-    document.addEventListener('virtual-refresh', () =>
-      this.reloadActions.forEach((c): void => (c as () => void)()),
-    );
+    document.addEventListener('virtual-refresh', () => {
+      this.refreshUiElements();
+
+      [...this.reloadActions, ...this.singleActions].forEach((c): void => {
+        // debugger;
+        (c as () => void)();
+      });
+
+      this.singleActions = [];
+    });
+  }
+
+  public onNextRefresh(fn: Function): void {
+    console.log('on next refresh!');
+    this.singleActions.push(fn);
   }
 
   /**
@@ -67,5 +88,9 @@ export class ScriptRunner {
     if (this.settings.getActiveState(enableKey)) {
       this.runAlways(match, action);
     }
+  }
+
+  private refreshUiElements(): void {
+    this._toaster = new Toaster(this.css);
   }
 }

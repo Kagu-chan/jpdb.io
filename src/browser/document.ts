@@ -9,6 +9,7 @@ import { hideElement } from './fn/hide-element';
 import { prependElement } from './fn/prepend-element';
 import { resolveElement } from './fn/resolve-element';
 import { showElement } from './fn/show-element';
+import { textFromNode } from './fn/text-from-node';
 import { withElement } from './fn/with-element';
 import { withElements } from './fn/with-elements';
 
@@ -37,6 +38,7 @@ declare global {
       prependElement: typeof prependElement;
       resolveElement: typeof resolveElement;
       showElement: typeof showElement;
+      textFromNode: typeof textFromNode;
       withElement: typeof withElement;
       withElements: typeof withElements;
     };
@@ -65,6 +67,7 @@ document.jpdb = {
   prependElement,
   resolveElement,
   showElement,
+  textFromNode,
   withElement,
   withElements,
 };

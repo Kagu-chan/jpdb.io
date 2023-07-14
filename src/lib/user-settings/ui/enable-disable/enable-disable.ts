@@ -23,7 +23,14 @@ export class EnableDisable extends EventEmitter {
         label: options.displayText,
         name: options.name,
         value: options.value,
-        change: options.change,
+        change: (value: boolean) => {
+          options.change(value);
+
+          jpdb.toaster.toast(
+            `${value ? 'Enabled' : 'Disabled'}: ${options.displayText} `,
+            'success',
+          );
+        },
         helpText,
       }),
     );
