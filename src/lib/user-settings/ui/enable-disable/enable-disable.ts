@@ -69,7 +69,16 @@ export class EnableDisable extends EventEmitter {
 
     if (author?.length) {
       const s = createElement('span', {
-        innerText: formatString(description, '.', 'Created by', author),
+        innerText: formatString(description, '.', 'Created by'),
+        children: [
+          {
+            tag: 'span',
+            style: {
+              color: 'green',
+            },
+            innerText: author,
+          },
+        ],
       });
 
       return s;
