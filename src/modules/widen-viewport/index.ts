@@ -1,7 +1,7 @@
 jpdb.onDesktop(() => {
   const WIDEN_VIEWPORT = 'widen-viewport';
 
-  jpdb.settings.registerActivatable({
+  jpdb.settings.registerConfigurable({
     name: WIDEN_VIEWPORT,
     category: 'Misc',
     displayText: 'Widen viewport',

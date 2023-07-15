@@ -2,7 +2,7 @@ import { JP_GRAMMAR } from './jp-grammar';
 
 const TAG_GRAMMAR = 'tag-grammar';
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: TAG_GRAMMAR,
   category: 'Experimental',
   displayText: 'Highlight grammar in reviews',

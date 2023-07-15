@@ -16,7 +16,7 @@ function getDeckTargetCoverage(e: HTMLElement): number {
   );
 }
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: HIDE_COMPLETED_DECKS,
   category: 'Decks',
   displayText: 'Hide completed decks',
@@ -27,7 +27,7 @@ jpdb.runOnce('/settings', () => {
   if (jpdb.settings.hasPatreonPerks()) {
     const tc = getTargetCoverage();
 
-    jpdb.settings.registerActivatable({
+    jpdb.settings.registerConfigurable({
       name: HIDE_THRESHOLD_DECKS,
       category: 'Decks',
       displayText: 'Hide decks at Target coverage',

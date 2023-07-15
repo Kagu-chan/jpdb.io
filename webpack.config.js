@@ -317,4 +317,5 @@ module.exports = {
   optimization: {
     usedExports: true,
   },
+  cache: false,
 };

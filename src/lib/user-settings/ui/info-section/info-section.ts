@@ -16,6 +16,9 @@ export class InfoSection {
     document.jpdb.appendElement(
       this._container,
       container([
+        { tag: 'div', style: { paddingBottom: '1.5rem' } },
+        { tag: 'h4', innerText: 'Reset extension settings' },
+        { tag: 'div', style: { paddingBottom: '1rem' } },
         redButton('Reset Extension settings', () => {
           localStorage.clear();
 

@@ -14,7 +14,7 @@ function getList(): HTMLDivElement {
 
   let lastMainSection: HTMLUListElement;
 
-  document.jpdb.findElements<'h4' | 'h6'>('h4, h6').forEach((e) => {
+  document.jpdb.findElements<'h4' | 'h6'>('h4:not(.hidden), h6:not(.hidden)').forEach((e) => {
     elements.push({ text: e.innerText, e });
   });
 
@@ -248,7 +248,7 @@ function addMobileCss(): void {
   });
 }
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: SETTINGS_NAV,
   category: 'Misc',
   displayText: 'Add table of contents to settings',

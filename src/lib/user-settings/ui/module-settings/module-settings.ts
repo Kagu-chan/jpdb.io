@@ -1,8 +1,9 @@
 import { checkbox, CheckboxOptions } from '../../../elements/checkbox';
 
-export type EnableDisableOptions = {
+export type ModuleSettingsOptions = {
   name: string;
   displayText: string;
+  category: string;
   value: boolean;
   change: CheckboxOptions['change'];
   author?: string;
@@ -10,13 +11,20 @@ export type EnableDisableOptions = {
   description?: string;
 };
 
-export class EnableDisable {
-  constructor(private _container: HTMLDivElement, options: EnableDisableOptions) {
+export class ModuleSettingsContainer {
+  private _rendered: HTMLElement;
+
+  public get rendered(): HTMLElement {
+    return this._rendered;
+  }
+
+  constructor(private _container: HTMLElement, options: ModuleSettingsOptions) {
     const { description, author, source } = options;
     const helpText = this.getHelpText(description, author, source);
 
-    document.jpdb.appendElement(
+    this._rendered = document.jpdb.adjacentElement(
       this._container,
+      'afterend',
       checkbox({
         label: options.displayText,
         name: options.name,

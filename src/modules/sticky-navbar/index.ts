@@ -1,14 +1,14 @@
 const STICKY_NAVBAR: string = 'sticky-navbar';
 const STICKY_FOOTER: string = 'sticky-footer';
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: STICKY_NAVBAR,
   category: 'Navigation',
   displayText: 'Fix header navigation',
   description: 'Sticks the header navigation to the top of the page, thus making it always visible',
   author: 'JawGBoi',
 });
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: STICKY_FOOTER,
   category: 'Navigation',
   displayText: 'Fix footer navigation',

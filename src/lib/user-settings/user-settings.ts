@@ -1,4 +1,4 @@
-import { IActivatable } from './activatable.interface';
+import { IActivatable } from './ui/module-settings/activatable.interface';
 import { SettingsUI } from './ui/settings.ui';
 
 export class UserSettings {
@@ -20,10 +20,10 @@ export class UserSettings {
     return this._activeModules.includes(name);
   }
 
-  public registerActivatable(options: IActivatable): void {
+  public registerConfigurable(options: IActivatable): void {
     const { name, displayText } = options;
 
-    this._ui?.addEnableDisable({
+    this._ui?.registerConfigurable({
       ...options,
       displayText: displayText ?? name,
       value: this.getActiveState(name),

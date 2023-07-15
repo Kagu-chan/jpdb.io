@@ -1,6 +1,6 @@
 const HIDE_DECK_NUMBERS = 'hide-deck-numbers';
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: HIDE_DECK_NUMBERS,
   category: 'Decks',
   displayText: 'Hide deck numbers',

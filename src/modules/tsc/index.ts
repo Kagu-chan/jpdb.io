@@ -1,6 +1,6 @@
 const TSC = 'TSC';
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: TSC,
   category: 'Reviews',
   displayText: 'Targeted sentence cards',

@@ -37,9 +37,9 @@ export function createElement(
 
   e.classList.add(...(options.class ?? []));
 
-  (options.children ?? []).forEach((ch) =>
-    appendElement(e, ch instanceof HTMLElement ? ch : createElement(ch)),
-  );
+  (options.children ?? [])
+    .filter((ch) => ch)
+    .forEach((ch) => appendElement(e, ch instanceof HTMLElement ? ch : createElement(ch)));
 
   return e;
 }

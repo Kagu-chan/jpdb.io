@@ -1,6 +1,6 @@
 const DEBLOAT_REVIEWS: string = 'debloat-reviews';
 
-jpdb.settings.registerActivatable({
+jpdb.settings.registerConfigurable({
   name: DEBLOAT_REVIEWS,
   category: 'Reviews',
   displayText: 'Remove unneccessary labels from review, vocabulary and search results',
