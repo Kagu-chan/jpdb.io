@@ -1,7 +1,6 @@
 import EventEmitter from 'events';
 import { EnableDisable, EnableDisableOptions } from './enable-disable/enable-disable';
 import { InfoSection } from './info-section/info-section';
-import { ScrollDown } from './scroll-down/scroll-down';
 
 export class SettingsUI extends EventEmitter {
   public get id(): string {
@@ -23,14 +22,12 @@ export class SettingsUI extends EventEmitter {
       },
     ],
   });
-  private _scrollDown: ScrollDown = new ScrollDown();
   private _infos: InfoSection = new InfoSection();
 
   constructor() {
     super();
 
     bubble(this._infos, this, 'reset');
-    bubble(this._scrollDown, this, 'scroll-down');
   }
 
   public addEnableDisable(options: EnableDisableOptions): void {

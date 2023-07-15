@@ -19,9 +19,6 @@ export class UserSettings {
 
         location.reload();
       });
-      this._ui.on('scroll-down', () => {
-        document.jpdb.findElement(`#${this._ui.id}`)?.scrollIntoView({ behavior: 'smooth' });
-      });
     });
   }
 
