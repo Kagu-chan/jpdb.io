@@ -15,6 +15,11 @@ jpdb.settings.registerActivatable({
 });
 
 jpdb.runOnceWhenActive(/^(?!\/review)/, STICKY_NAVBAR, () => {
+  document.jpdb.adjacentElement('body', 'afterbegin', {
+    tag: 'div',
+    style: { paddingTop: '6rem' },
+  });
+
   jpdb.css.add({
     key: STICKY_NAVBAR,
     css: `
@@ -27,10 +32,6 @@ jpdb.runOnceWhenActive(/^(?!\/review)/, STICKY_NAVBAR, () => {
   background-color: var(--background-color);
   box-shadow: 0 0 10px 2px var(--big-shadow-color);
   -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
-}
-
-body {
-  padding-top: 80px;
 }
 
 .notifications {
@@ -54,6 +55,11 @@ jpdb.runOnceWhenActive(/\/(review|settings)/, STICKY_FOOTER, () => {
   });
 });
 jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
+  document.jpdb.adjacentElement('body', 'beforeend', {
+    tag: 'div',
+    style: { paddingBottom: '6rem' },
+  });
+
   jpdb.css.add({
     key: STICKY_FOOTER,
     css: `
@@ -75,10 +81,6 @@ jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
   justify-content: flex-end;
   align-items: center;
   flex-shrink: 0;
-}
-
-body {
-  padding-bottom: 80px;
 }
     `,
   });
