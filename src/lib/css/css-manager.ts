@@ -1,5 +1,4 @@
 import { CSSOverwrite } from './css-overwrite.type';
-import { betaPlugin } from './overwrites/beta-plugin';
 import { customDefinition } from './overwrites/custom-definition';
 
 export class CSSManager {
@@ -9,7 +8,6 @@ export class CSSManager {
   constructor() {
     document.jpdb.appendElement('head', this._style);
 
-    this.add(betaPlugin);
     this.add(customDefinition);
   }
 
