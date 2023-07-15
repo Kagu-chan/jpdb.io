@@ -14,11 +14,13 @@ export class UserSettings {
     this.onSettings(() => {
       this._ui = new SettingsUI();
 
-      // eslint-disable-next-line no-console
       this._ui.on('reset', () => {
         localStorage.clear();
 
         location.reload();
+      });
+      this._ui.on('scroll-down', () => {
+        document.jpdb.findElement(`#${this._ui.id}`)?.scrollIntoView({ behavior: 'smooth' });
       });
     });
   }
