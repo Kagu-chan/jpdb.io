@@ -253,7 +253,7 @@ jpdb.settings.registerActivatable({
   displayText: 'Add table of contents to settings',
   description:
     // eslint-disable-next-line max-len
-    'Adds an always visible table of contents to the settings page, making it easier to just to specific settings',
+    'Adds an always visible table of contents to the settings page, making it easier to jump to specific settings',
 });
 
 jpdb.runOnceWhenActive('/settings', SETTINGS_NAV, () => {
