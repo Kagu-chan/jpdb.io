@@ -35,6 +35,14 @@ export class ScriptRunner {
     this.singleActions.push(fn);
   }
 
+  public onMobile(fn: Function): void {
+    if (isMobile()) fn();
+  }
+
+  public onDesktop(fn: Function): void {
+    if (!isMobile()) fn();
+  }
+
   /**
    * Runs a given Function when matching given Path object
    *

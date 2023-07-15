@@ -1,9 +1,11 @@
 import { _bubble } from './fn/bubble';
+import { _isMobile } from './fn/is-mobile';
 import { _post_refresh_and_notify } from './fn/post-refresh-and-notify';
 
 declare global {
   interface Window {
     bubble: typeof _bubble;
+    isMobile: typeof _isMobile;
     post_refresh_and_notify: typeof _post_refresh_and_notify;
 
     post_and_refresh: () => void;
@@ -17,6 +19,7 @@ declare global {
   }
 
   const bubble: typeof _bubble;
+  const isMobile: typeof _isMobile;
   const post_refresh_and_notify: typeof window.post_refresh_and_notify;
 
   const post_and_refresh: typeof window.post_and_refresh;
@@ -26,3 +29,4 @@ declare global {
 
 window.post_refresh_and_notify = _post_refresh_and_notify;
 window.bubble = _bubble;
+window.isMobile = _isMobile;
