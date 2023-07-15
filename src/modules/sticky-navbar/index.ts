@@ -24,7 +24,7 @@ jpdb.runOnceWhenActive(/^(?!\/review)/, STICKY_NAVBAR, () => {
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: var(--deeper-background-color);
+  background-color: var(--background-color);
   box-shadow: 0 0 10px 2px var(--big-shadow-color);
   -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
 }
@@ -40,6 +40,19 @@ body {
   });
 });
 
+jpdb.runOnceWhenActive(/\/(review|settings)/, STICKY_FOOTER, () => {
+  jpdb.css.add({
+    key: STICKY_FOOTER,
+    css: `
+#save-all-settings-box,
+.review-button-group {
+  border-top: 0;
+  box-shadow: 0 0 10px 2px var(--big-shadow-color);
+  -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
+}
+    `,
+  });
+});
 jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
   jpdb.css.add({
     key: STICKY_FOOTER,
@@ -50,7 +63,7 @@ jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: var(--deeper-background-color);
+  background-color: var(--background-color);
   box-shadow: 0 0 10px 2px var(--big-shadow-color);
   -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
 
