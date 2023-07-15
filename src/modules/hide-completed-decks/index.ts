@@ -6,14 +6,14 @@ function getTargetCoverage(): string {
   return jpdb.settings.getJpdbSetting('target-coverage');
 }
 
-function setTargetCoverage(): void {
-  const value = getTargetCoverage();
-
-  jpdb.settings.setModuleOption(HIDE_THRESHOLD_DECKS, 'value', value);
-}
-
 function getRecognition(e: HTMLDivElement): number {
   return Number(e.innerText.split('(')[1]?.replace(/[^\d]/g, '') ?? 0);
+}
+
+function getDeckTargetCoverage(e: HTMLElement): number {
+  return Number(
+    (e?.parentElement?.nextSibling?.firstChild as HTMLElement)?.style?.left?.replace(/[^\d]/g, ''),
+  );
 }
 
 jpdb.settings.registerActivatable({
@@ -29,11 +29,8 @@ jpdb.runOnce('/settings', () => {
     jpdb.settings.registerActivatable({
       name: HIDE_THRESHOLD_DECKS,
       displayText: 'Hide decks at Target coverage',
-      description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}% (Does not work on per deck basis)`,
+      description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}%`,
     });
-
-    // Set the target coverage - this happens on every settings load, which includes after changing the jpdb original value
-    setTargetCoverage();
   } else {
     jpdb.settings.disableModule(HIDE_THRESHOLD_DECKS);
   }
@@ -52,13 +49,11 @@ jpdb.runAlwaysWhenActive('/deck-list', HIDE_COMPLETED_DECKS, () => {
 });
 
 jpdb.runAlwaysWhenActive('/deck-list', HIDE_THRESHOLD_DECKS, () => {
-  const t = jpdb.settings.getModuleOption<number>(HIDE_THRESHOLD_DECKS, 'value', 100);
-
   document.jpdb.withElements(
     // eslint-disable-next-line max-len
     `.deck${deckExclusion} .deck-body > div > div:first-of-type > div:nth-child(2) > div:last-of-type > div:nth-child(3) > div`,
     (e: HTMLDivElement) => {
-      if (getRecognition(e) >= t) {
+      if (getRecognition(e) >= getDeckTargetCoverage(e)) {
         document.jpdb.hideElement(e.closest('.deck') as unknown as HTMLElement);
       }
     },
