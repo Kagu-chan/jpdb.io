@@ -3,6 +3,7 @@ jpdb.onDesktop(() => {
 
   jpdb.settings.registerActivatable({
     name: WIDEN_VIEWPORT,
+    category: 'Misc',
     displayText: 'Widen viewport',
     description: 'Widens the viewport of the main frame, making the page wider on bigger screens',
     author: 'JawGBoi',

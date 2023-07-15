@@ -18,6 +18,7 @@ function getDeckTargetCoverage(e: HTMLElement): number {
 
 jpdb.settings.registerActivatable({
   name: HIDE_COMPLETED_DECKS,
+  category: 'Decks',
   displayText: 'Hide completed decks',
   description: 'Hides decks which do not contain new cards',
 });
@@ -28,6 +29,7 @@ jpdb.runOnce('/settings', () => {
 
     jpdb.settings.registerActivatable({
       name: HIDE_THRESHOLD_DECKS,
+      category: 'Decks',
       displayText: 'Hide decks at Target coverage',
       description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}%`,
     });

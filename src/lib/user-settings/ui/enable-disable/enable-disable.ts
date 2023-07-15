@@ -1,4 +1,3 @@
-import EventEmitter from 'events';
 import { checkbox, CheckboxOptions } from '../../../elements/checkbox';
 
 export type EnableDisableOptions = {
@@ -11,12 +10,11 @@ export type EnableDisableOptions = {
   description?: string;
 };
 
-export class EnableDisable extends EventEmitter {
+export class EnableDisable {
   constructor(private _container: HTMLDivElement, options: EnableDisableOptions) {
-    super();
-
     const { description, author, source } = options;
     const helpText = this.getHelpText(description, author, source);
+
     document.jpdb.appendElement(
       this._container,
       checkbox({

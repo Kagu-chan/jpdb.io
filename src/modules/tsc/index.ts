@@ -2,6 +2,7 @@ const TSC = 'TSC';
 
 jpdb.settings.registerActivatable({
   name: TSC,
+  category: 'Reviews',
   displayText: 'Targeted sentence cards',
   description:
     'Remove the target word from reviews, thus turning them into targeted sentence cards',

@@ -1,8 +1,7 @@
-import EventEmitter from 'events';
 import { EnableDisable, EnableDisableOptions } from './enable-disable/enable-disable';
 import { InfoSection } from './info-section/info-section';
 
-export class SettingsUI extends EventEmitter {
+export class SettingsUI {
   public get id(): string {
     return this._modules.id;
   }
@@ -23,12 +22,6 @@ export class SettingsUI extends EventEmitter {
     ],
   });
   private _infos: InfoSection = new InfoSection();
-
-  constructor() {
-    super();
-
-    bubble(this._infos, this, 'reset');
-  }
 
   public addEnableDisable(options: EnableDisableOptions): void {
     document.jpdb.showElement(this._modules);

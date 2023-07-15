@@ -250,6 +250,7 @@ function addMobileCss(): void {
 
 jpdb.settings.registerActivatable({
   name: SETTINGS_NAV,
+  category: 'Misc',
   displayText: 'Add table of contents to settings',
   description:
     // eslint-disable-next-line max-len

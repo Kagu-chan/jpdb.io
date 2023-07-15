@@ -1,15 +1,12 @@
-import EventEmitter from 'events';
 import { container } from '../../../elements/container';
 import { redButton } from './red-button';
 import { resetSettingsParagraph } from './reset-settings.paragraph';
 import { versionParagraph } from './version.paragraph';
 
-export class InfoSection extends EventEmitter {
+export class InfoSection {
   private _container = document.jpdb.findElement('.container.bugfix');
 
   constructor() {
-    super();
-
     this.appendResetSettings();
 
     document.jpdb.appendElement(this._container, versionParagraph());
@@ -19,7 +16,11 @@ export class InfoSection extends EventEmitter {
     document.jpdb.appendElement(
       this._container,
       container([
-        redButton('Reset Extension settings', () => this.emit('reset')),
+        redButton('Reset Extension settings', () => {
+          localStorage.clear();
+
+          location.reload();
+        }),
         resetSettingsParagraph(),
       ]),
     );

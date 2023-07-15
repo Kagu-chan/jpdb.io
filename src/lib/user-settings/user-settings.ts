@@ -13,12 +13,6 @@ export class UserSettings {
 
     this.onSettings(() => {
       this._ui = new SettingsUI();
-
-      this._ui.on('reset', () => {
-        localStorage.clear();
-
-        location.reload();
-      });
     });
   }
 
@@ -28,6 +22,7 @@ export class UserSettings {
 
   public registerActivatable(options: IActivatable): void {
     const { name, displayText } = options;
+
     this._ui?.addEnableDisable({
       ...options,
       displayText: displayText ?? name,

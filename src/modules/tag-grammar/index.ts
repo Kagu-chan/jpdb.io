@@ -4,6 +4,7 @@ const TAG_GRAMMAR = 'tag-grammar';
 
 jpdb.settings.registerActivatable({
   name: TAG_GRAMMAR,
+  category: 'Experimental',
   displayText: 'Highlight grammar in reviews',
 });
 
