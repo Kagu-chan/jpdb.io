@@ -15,9 +15,9 @@ jpdb.settings.registerActivatable({
 });
 
 jpdb.runOnceWhenActive(/^(?!\/review)/, STICKY_NAVBAR, () => {
-  document.jpdb.adjacentElement('body', 'afterbegin', {
+  const navEl = document.jpdb.adjacentElement('body', 'afterbegin', {
     tag: 'div',
-    style: { paddingTop: '6rem' },
+    style: {},
   });
 
   jpdb.css.add({
@@ -39,6 +39,12 @@ jpdb.runOnceWhenActive(/^(?!\/review)/, STICKY_NAVBAR, () => {
 }
     `,
   });
+
+  const updatePadding = (): string =>
+    (navEl.style.paddingTop = `${document.jpdb.findElement('.nav').offsetHeight}px`);
+
+  window.addEventListener('resize', updatePadding);
+  updatePadding();
 });
 
 jpdb.runOnceWhenActive(/\/(review|settings)/, STICKY_FOOTER, () => {
@@ -55,9 +61,9 @@ jpdb.runOnceWhenActive(/\/(review|settings)/, STICKY_FOOTER, () => {
   });
 });
 jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
-  document.jpdb.adjacentElement('body', 'beforeend', {
+  const footerEl = document.jpdb.adjacentElement('body', 'beforeend', {
     tag: 'div',
-    style: { paddingBottom: '6rem' },
+    style: {},
   });
 
   jpdb.css.add({
@@ -84,4 +90,10 @@ jpdb.runOnceWhenActive(/^(?!\/(review|settings))/, STICKY_FOOTER, () => {
 }
     `,
   });
+
+  const updatePadding = (): string =>
+    (footerEl.style.paddingBottom = `${document.jpdb.findElement('.footer').offsetHeight}px`);
+
+  window.addEventListener('resize', updatePadding);
+  updatePadding();
 });
