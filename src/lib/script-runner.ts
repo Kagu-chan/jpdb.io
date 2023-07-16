@@ -31,14 +31,29 @@ export class ScriptRunner {
     });
   }
 
+  /**
+   * Runs a given Function once on the next virtual dom reload
+   *
+   * @param {Function} fn Function to execute
+   */
   public onNextRefresh(fn: Function): void {
     this.singleActions.push(fn);
   }
 
+  /**
+   * Runs a given Function when loaded on a mobile device
+   *
+   * @param {Function} fn Function to execute
+   */
   public onMobile(fn: Function): void {
     if (isMobile()) fn();
   }
 
+  /**
+   * Runs a given Function when loaded on a desktop device
+   *
+   * @param {Function} fn Function to execute
+   */
   public onDesktop(fn: Function): void {
     if (!isMobile()) fn();
   }

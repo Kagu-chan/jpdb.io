@@ -37,10 +37,6 @@ export abstract class Root {
     return Root.PATH;
   }
 
-  public get SEARCH(): string {
-    return Root.SEARCH;
-  }
-
   public get QUERY(): Record<string, string> {
     return Root.QUERY;
   }
