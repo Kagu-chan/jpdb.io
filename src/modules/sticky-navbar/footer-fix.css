@@ -1,0 +1,6 @@
+#save-all-settings-box,
+.review-button-group {
+  border-top: 0;
+  box-shadow: 0 0 10px 2px var(--big-shadow-color);
+  -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
+}

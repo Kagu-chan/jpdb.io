@@ -1,5 +1,4 @@
 import { CSSManager } from '../css/css-manager';
-import { TOASTER_CSS } from './toaster-css';
 
 type ToastTypes = 'default' | 'error' | 'gray' | 'warning' | 'success';
 
@@ -16,7 +15,7 @@ export class Toaster {
   constructor(private _css: CSSManager) {
     this._css.add({
       key: Toaster.name,
-      css: TOASTER_CSS,
+      css: __load_css('./src/lib/toaster/toaster.css'),
     });
     this._notifications = document.jpdb.appendElement('body', {
       tag: 'ul',

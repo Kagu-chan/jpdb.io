@@ -1,5 +1,5 @@
 import { IActivatable } from './ui/module-settings/activatable.interface';
-import { SettingsUI } from './ui/settings.ui';
+import { SettingsUI } from './ui/settings-ui';
 
 export class UserSettings {
   private SETTINGS = '/settings';

@@ -1,0 +1,14 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--background-color);
+  box-shadow: 0 0 10px 2px var(--big-shadow-color);
+  -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
+}
+
+.notifications {
+  top: calc(80px + 2rem);
+}

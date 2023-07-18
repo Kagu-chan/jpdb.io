@@ -25,7 +25,7 @@ export class SettingsUI {
     document.jpdb.showElement(this._modules);
     jpdb.css.add({
       key: 'settings',
-      css: '.s-spacer { padding-bottom: 1.5rem; } .s-spacer-1 { display: none }',
+      css: __load_css('./src/lib/user-settings/ui/settings-ui.css'),
     });
 
     if (!this._categories.has(options.category)) {

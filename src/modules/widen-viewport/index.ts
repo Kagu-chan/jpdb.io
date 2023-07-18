@@ -1,20 +1,34 @@
-jpdb.onDesktop(() => {
-  const WIDEN_VIEWPORT = 'widen-viewport';
+class WidenViewport {
+  private WIDEN_VIEWPORT = 'widen-viewport';
 
-  jpdb.settings.registerConfigurable({
-    name: WIDEN_VIEWPORT,
-    category: 'UI',
-    displayText: 'Widen viewport',
-    description: 'Widens the viewport of the main frame, making the page wider on bigger screens',
-    author: 'JawGBoi',
-  });
+  constructor() {
+    jpdb.onDesktop(() => {
+      this.register();
 
-  jpdb.runAlwaysWhenActive(/.*/, WIDEN_VIEWPORT, () => {
-    jpdb.css.add({
-      key: WIDEN_VIEWPORT,
-      css: `body, .container.bugfix, .review-reveal, .review-hidden, .text-content {
-    max-width: 73rem !important;
-}`,
+      this.addEventListeners();
     });
-  });
-});
+  }
+
+  private register(): void {
+    jpdb.settings.registerConfigurable({
+      name: this.WIDEN_VIEWPORT,
+      category: 'UI',
+      displayText: 'Widen viewport',
+      description: 'Widens the viewport of the main frame, making the page wider on bigger screens',
+      author: 'JawGBoi',
+    });
+  }
+
+  private addEventListeners(): void {
+    jpdb.runOnceOnEnable(/.*/, this.WIDEN_VIEWPORT, () => {
+      jpdb.css.add({
+        key: this.WIDEN_VIEWPORT,
+        css: __load_css('./src/modules/widen-viewport/viewport.css'),
+      });
+    });
+
+    jpdb.runOnceOnDisable(/.*/, this.WIDEN_VIEWPORT, () => jpdb.css.remove(this.WIDEN_VIEWPORT));
+  }
+}
+
+new WidenViewport();

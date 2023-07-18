@@ -1,0 +1,19 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--background-color);
+  box-shadow: 0 0 10px 2px var(--big-shadow-color);
+  -webkit-box-shadow: 0 0 10px 2px var(--big-shadow-color);
+
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.75rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+}
