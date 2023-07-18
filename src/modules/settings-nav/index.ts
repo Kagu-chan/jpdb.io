@@ -166,10 +166,8 @@ function getBurgerMenu(): HTMLElement {
   return div;
 }
 
-function addDesktopCss(): void {
-  jpdb.css.add({
-    key: `${SETTINGS_NAV}-desktop`,
-    css: `
+function getDesktopCss(): string {
+  return `
 @media only screen and (min-width: 1080px) {
   .s-nav-wrapper {
     width: unset;
@@ -212,14 +210,11 @@ function addDesktopCss(): void {
     transition: all ease-in-out .2s;
   }
 }
-    `,
-  });
+  `;
 }
 
-function addMobileCss(): void {
-  jpdb.css.add({
-    key: `${SETTINGS_NAV}-mobile`,
-    css: `
+function getMobileCss(): string {
+  return `
 @media only screen and (max-width: 1080px) {
   .s-nav-menu {
     top: unset;
@@ -244,8 +239,7 @@ function addMobileCss(): void {
     transition: unset;
   }
 }
-    `,
-  });
+  `;
 }
 
 jpdb.settings.registerConfigurable({
@@ -257,10 +251,28 @@ jpdb.settings.registerConfigurable({
     'Adds an always visible table of contents to the settings page, making it easier to jump to specific settings',
 });
 
-jpdb.runOnceWhenActive('/settings', SETTINGS_NAV, () => {
-  document.jpdb.appendElement('.container.bugfix', getList());
-  document.jpdb.appendElement('.container.bugfix', getBurgerMenu());
+jpdb.runOnce('/settings', () => {
+  const enable = (): void => {
+    if (!jpdb.settings.getActiveState(SETTINGS_NAV)) return;
 
-  addDesktopCss();
-  addMobileCss();
+    document.jpdb.appendElement('.container.bugfix', getList());
+    document.jpdb.appendElement('.container.bugfix', getBurgerMenu());
+
+    jpdb.css.add(`${SETTINGS_NAV}-desktop`, getDesktopCss());
+    jpdb.css.add(`${SETTINGS_NAV}-mobile`, getMobileCss());
+  };
+  const disable = (): void => {
+    document.jpdb.destroyElement('.s-nav-wrapper');
+    document.jpdb.destroyElement('.s-nav-menu');
+
+    jpdb.css.remove(
+      `${SETTINGS_NAV}-list`,
+      `${SETTINGS_NAV}-burger`,
+      `${SETTINGS_NAV}-desktop`,
+      `${SETTINGS_NAV}-mobile`,
+    );
+  };
+
+  jpdb.on(`${SETTINGS_NAV}-enabled`, enable, true);
+  jpdb.on(`${SETTINGS_NAV}-disabled`, disable);
 });

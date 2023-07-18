@@ -13,6 +13,8 @@ export class ScriptRunner {
 
   private reloadActions: Function[] = [];
   private singleActions: Function[] = [];
+  private _listen: Record<string, Function[]> = {};
+  private _listenOnce: Record<string, Function[]> = {};
 
   private _toaster = new Toaster(this.css);
 
@@ -109,6 +111,30 @@ export class ScriptRunner {
     if (this.settings.getActiveState(enableKey)) {
       this.runAlways(match, action);
     }
+  }
+
+  public on(eventName: string, cb: Function): void;
+  public on(eventName: string, cb: () => void, run: boolean): void;
+
+  public on(eventName: string, cb: Function, run?: boolean): void {
+    if (!this._listen[eventName]) this._listen[eventName] = [];
+
+    this._listen[eventName].push(cb);
+
+    if (run) cb();
+  }
+
+  public once(eventName: string, cb: Function): void {
+    if (!this._listenOnce[eventName]) this._listenOnce[eventName] = [];
+
+    this._listenOnce[eventName].push(cb);
+  }
+
+  public emit(eventName: string, ...args: unknown[]): void {
+    this._listen[eventName]?.forEach((cb) => cb(...args) as unknown);
+    this._listenOnce[eventName]?.forEach((cb) => cb(...args) as unknown);
+
+    this._listenOnce[eventName] = [];
   }
 
   private refreshUiElements(): void {

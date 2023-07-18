@@ -32,6 +32,8 @@ export class ModuleSettingsContainer {
         change: (value: boolean) => {
           options.change(value);
 
+          jpdb.emit(value ? 'module-enabled' : 'module-disabled', options);
+          jpdb.emit(value ? `${options.name}-enabled` : `${options.name}-disabled`, options);
           jpdb.toaster.toast(
             `${value ? 'Enabled' : 'Disabled'}: ${options.displayText} `,
             'success',
