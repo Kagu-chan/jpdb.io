@@ -4,7 +4,8 @@
   "description": "JPDB.io Script Runner",
   "main": "src/index.ts",
   "scripts": {
-    "watch": "webpack --watch",
+    "watch": "nodemon --watch ./src --watch ./webpack.config.js --watch ./package.json --watch ./manifest.json --watch ./manifest.overwrite.json --ext ts,js,css,json --exec \"npm run build:watch\"",
+    "build:watch": "webpack --watch",
     "build": "webpack",
     "lint": "eslint src --ext .ts"
   },
@@ -23,19 +24,25 @@
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^46.4.3",
     "eslint-plugin-prettier": "^4.2.1",
     "fast-xml-parser": "^4.2.5",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
+    "nodemon": "^3.0.1",
     "prettier": "^2.8.3",
     "replace-in-file": "^7.0.1",
     "rimraf": "^5.0.1",
+    "string-replace-webpack-plugin": "^0.1.3",
+    "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-watch-files-plugin": "^1.2.1"
   }
 }

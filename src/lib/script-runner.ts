@@ -113,6 +113,40 @@ export class ScriptRunner {
     }
   }
 
+  /**
+   * Runs a given Function when matching given Path object and when enabled in /settings
+   * If `once`, Function will called once, otherwise on call and when virtual_refresh is called
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string} enableKey Key which needs to be enabled
+   * @param {Function} action Function to execute
+   * @param {boolean} once Execute only once or always
+   */
+  public runWhenActive(
+    match: Path | Path[],
+    enableKey: string,
+    action: Function,
+    once: boolean,
+  ): void {
+    if (once) {
+      return this.runOnceWhenActive(match, enableKey, action);
+    }
+
+    return this.runAlwaysWhenActive(match, enableKey, action);
+  }
+
+  public runOnceOnEnable(match: Path | Path[], enableKey: string, action: Function): void {
+    this.on(
+      `${enableKey}-enabled`,
+      () => this.runOnce(match, action),
+      this.settings.getActiveState(enableKey),
+    );
+  }
+
+  public runOnceOnDisable(match: Path | Path[], enableKey: string, action: Function): void {
+    this.on(`${enableKey}-disabled`, () => this.runOnce(match, action));
+  }
+
   public on(eventName: string, cb: Function): void;
   public on(eventName: string, cb: () => void, run: boolean): void;
 

@@ -1,7 +1,10 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 const { DefinePlugin } = require('webpack');
-const { existsSync, readdirSync, writeFileSync, mkdirSync, readFileSync } = require('fs');
+const { existsSync, writeFileSync, mkdirSync, readFileSync } = require('fs');
 const { resolve, relative, join } = require('path');
 
 function die(message, ...args) {
@@ -73,7 +76,9 @@ class JPDBioWebpackPlugin {
     this.root = __dirname;
 
     this.isBuild = process.env.npm_lifecycle_event === 'build';
-    this.isWatch = process.env.npm_lifecycle_event === 'watch';
+    this.isWatch = process.env.npm_lifecycle_event === 'build:watch';
+
+    if (this.isWatch) process.env.npm_lifecycle_event = 'watch';
 
     this.manifest = this.loadManifest(this.packageJson, this.root);
     this.options = {};
@@ -95,6 +100,9 @@ class JPDBioWebpackPlugin {
 
     this.runCopyPlugin(compiler);
     this.runDefinePlugin(compiler);
+    this.runReplacePlugin(compiler);
+    this.runForkPlugin(compiler);
+    this.runWatchPlugin(compiler);
     this.runMergePlugin(compiler);
   }
 
@@ -189,6 +197,14 @@ class JPDBioWebpackPlugin {
     }
   }
 
+  runReplacePlugin(compiler) {
+    new StringReplacePlugin().apply(compiler);
+  }
+
+  runForkPlugin(compiler) {
+    new ForkTsCheckerWebpackPlugin().apply(compiler);
+  }
+
   runDefinePlugin(compiler) {
     const obj = {};
 
@@ -197,6 +213,12 @@ class JPDBioWebpackPlugin {
     });
 
     new DefinePlugin(obj).apply(compiler);
+  }
+
+  runWatchPlugin(compiler) {
+    new WatchExternalFilesPlugin({
+      files: ['./src/**/*.css'],
+    }).apply(compiler);
   }
 
   addMonkeys() {
@@ -296,26 +318,62 @@ class JPDBioWebpackPlugin {
 
 module.exports = {
   mode: 'production',
+  experiments: { css: true },
   module: {
     rules: [
       {
         test: /\.ts?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'src'),
+        use: {
+          loader: 'ts-loader',
+          options: { transpileOnly: true, happyPackMode: true },
+        },
+      },
+      {
+        test: /\.ts?$/,
+        include: path.resolve(__dirname, 'src'),
+        use: StringReplacePlugin.replace({
+          replacements: [
+            {
+              pattern: /__load_css\(["'`]([\w-_\/\.]*)["'`]\)/g,
+              replacement: function (match, p1, offset) {
+                if (!p1.endsWith('.css')) p1 = `${p1}.css`;
+                if (!existsSync(p1)) return match;
+
+                const c = readFileSync(p1, 'utf-8');
+
+                return `\`${c}\``;
+              },
+            },
+          ],
+        }),
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
   plugins: [new JPDBioWebpackPlugin()],
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.js'],
+    symlinks: false,
+    cacheWithContext: false,
   },
   output: {
     path: path.resolve(__dirname, '.dist'),
     iife: false,
     clean: true,
+    pathinfo: false,
   },
   optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false,
     usedExports: true,
   },
   cache: false,
+  watchOptions: {
+    ignored: /node_modules/,
+  },
 };

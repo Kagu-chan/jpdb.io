@@ -1,0 +1,151 @@
+/** List */
+.s-nav-wrapper {
+  max-height: 200px;
+  
+  border: 1px solid var(--button-background-color);
+  background-color: var(--outline-input-background-color);
+  
+  box-shadow: none;
+  transform: none;
+  border-radius: .5rem;
+  
+  padding: 1rem;
+
+  overflow-y: auto;
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.s-nav-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.settings-navigation {
+  color: green;
+  margin-bottom: unset;
+
+  font-size: 1.0rem;
+  line-height: 2.0rem;
+
+  list-style: none;
+}
+
+.settings-navigation li {
+  margin-bottom: unset;
+}
+
+.settings-navigation a {
+  cursor: pointer;
+}
+
+.settings-subnavigation {
+  list-style: none;
+}
+
+.settings-subnavigation:empty { display: none; }
+
+/** Burger */
+.s-nav-btn { display: none !important; }
+
+.s-nav-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 1.4rem;
+  padding-top: 1.3rem;
+  padding-bottom: 1.5rem;
+  padding-right: 0.3rem;
+  user-select: none;
+}
+
+.s-nav-icon .navicon {
+  background: var(--burger-color);
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: background .2s ease-out;
+  width: 1rem;
+}
+
+.s-nav-icon .navicon:before { top: 5px; }
+.s-nav-icon .navicon:after { top: -5px; }
+
+.s-nav-icon .navicon:before, .s-nav-icon .navicon:after {
+  background: var(--burger-color);
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+/** Desktop */
+@media only screen and (min-width: 1080px) {
+  .s-nav-wrapper {
+    width: unset;
+    max-height: calc(100% - 11rem);
+    position: fixed;
+    top: 5rem;
+    left: 1rem;
+
+    padding: 1.5rem;
+  }
+
+  .s-nav-wrapper ul {
+    padding-left: unset;
+  }
+
+  .s-nav-menu { display: none; }
+}
+
+@media only screen and (max-width: 1690px) {
+  .s-nav-menu {
+    display: block;
+
+    position: fixed;
+    top: 4rem;
+    left: 0rem;
+  }
+
+  .s-nav-wrapper {
+    top: 7rem;
+    max-height: calc(100% - 13rem);
+
+    transition: all ease-in-out .2s;
+  }
+
+  .s-nav-wrapper.closed {
+    max-height: 0;
+    padding: 0;
+    border-width: 0;
+
+    transition: all ease-in-out .2s;
+  }
+}
+
+/** MOBILE */
+@media only screen and (max-width: 1080px) {
+  .s-nav-menu {
+    top: unset;
+    left: unset;
+
+    bottom: 0;
+    right: 1rem;
+    z-index: 1000;
+  }
+
+  .s-nav-wrapper {
+    position: fixed;
+    width: calc(100% - 2rem);
+    top: 5rem;
+    max-height: 9999px;
+    height: calc(100% - 11rem);
+
+    transition: unset;
+  }
+
+  .s-nav-wrapper.closed {
+    transition: unset;
+  }
+}
