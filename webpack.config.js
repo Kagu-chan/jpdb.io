@@ -76,9 +76,7 @@ class JPDBioWebpackPlugin {
     this.root = __dirname;
 
     this.isBuild = process.env.npm_lifecycle_event === 'build';
-    this.isWatch = process.env.npm_lifecycle_event === 'build:watch';
-
-    if (this.isWatch) process.env.npm_lifecycle_event = 'watch';
+    this.isWatch = process.env.npm_lifecycle_event === 'watch';
 
     this.manifest = this.loadManifest(this.packageJson, this.root);
     this.options = {};
