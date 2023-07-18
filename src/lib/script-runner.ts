@@ -135,6 +135,13 @@ export class ScriptRunner {
     return this.runAlwaysWhenActive(match, enableKey, action);
   }
 
+  /**
+   * Runs a given Function when matching given Path object and when enabled in /settings or when being enabled in settings
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string} enableKey Key which needs to be enabled
+   * @param {Function} action Function to execute
+   */
   public runOnceOnEnable(match: Path | Path[], enableKey: string, action: Function): void {
     this.on(
       `${enableKey}-enabled`,
@@ -143,6 +150,13 @@ export class ScriptRunner {
     );
   }
 
+  /**
+   * Runs a given Function when matching given Path object and when being disabled in /settings
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string} enableKey Key which needs to be enabled
+   * @param {Function} action Function to execute
+   */
   public runOnceOnDisable(match: Path | Path[], enableKey: string, action: Function): void {
     this.on(`${enableKey}-disabled`, () => this.runOnce(match, action));
   }
