@@ -1,0 +1,13 @@
+.show-hide-control {
+  font-size: 1rem;
+  opacity: 0.8;
+  padding: 0 1rem;
+}
+
+.show-hide-control.disabled {
+  opacity: 0.5;
+}
+
+.show-hide-control:not(.disabled) {
+  cursor: pointer;
+}
