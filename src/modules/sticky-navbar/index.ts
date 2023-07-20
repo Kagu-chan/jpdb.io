@@ -98,13 +98,17 @@ class StickyNavbar {
 
   private resizeNavbarSpacer(): void {
     document.jpdb.withElement('.navbar-spacer', (el) => {
-      el.style.paddingTop = `${document.jpdb.findElement('.nav').offsetHeight}px`;
+      el.style.paddingTop = `calc(${
+        document.jpdb.findElement('.nav')?.offsetHeight ?? 0
+      }px + 1rem)`;
     });
   }
 
   private resizeFooterSpacer(): void {
     document.jpdb.withElement('.footer-spacer', (el) => {
-      el.style.paddingBottom = `${document.jpdb.findElement('.footer').offsetHeight}px`;
+      el.style.paddingBottom = `calc(${
+        document.jpdb.findElement('.footer')?.offsetHeight ?? 0
+      }px + 1rem)`;
     });
   }
 }
