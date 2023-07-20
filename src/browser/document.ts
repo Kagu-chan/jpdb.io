@@ -1,5 +1,6 @@
 import { adjacentElement } from './fn/adjacent-element';
 import { appendElement } from './fn/append-element';
+import { closestElement } from './fn/closest-element';
 import { countElements } from './fn/count-elements';
 import { createElement } from './fn/create-element';
 import { destroyElement } from './fn/destroy-element';
@@ -29,6 +30,7 @@ declare global {
       id: number;
       adjacentElement: typeof adjacentElement;
       appendElement: typeof appendElement;
+      closestElement: typeof closestElement;
       countElements: typeof countElements;
       createElement: typeof createElement;
       destroyElement: typeof destroyElement;
@@ -58,6 +60,7 @@ document.jpdb = {
   id: 0,
   adjacentElement,
   appendElement,
+  closestElement,
   countElements,
   createElement,
   destroyElement,
