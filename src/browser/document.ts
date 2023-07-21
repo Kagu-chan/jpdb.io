@@ -19,7 +19,7 @@ type DOMElementBaseOptions = {
   class?: string[];
   attributes?: Record<string, string | boolean>;
   style?: Partial<CSSStyleDeclaration>;
-  innerText?: string;
+  innerText?: string | number;
   innerHTML?: string;
   handler?: (ev?: MouseEvent) => void;
 };

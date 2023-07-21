@@ -20,7 +20,7 @@ export function createElement(
   document.jpdb.id++;
   e.setAttribute('id', options.id ?? `${tag}-${document.jpdb.id}`);
 
-  if (options.innerText) e.innerText = options.innerText;
+  if (options.innerText) e.innerText = String(options.innerText);
   if (options.innerHTML) e.innerHTML = options.innerHTML;
   if (options.handler) e.onclick = options.handler;
 
