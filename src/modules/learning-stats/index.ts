@@ -52,6 +52,10 @@ export class LearningStats {
   private LEARNING_STATS: string = 'learning-stats';
   private SETTING: string = 'max-new-cards-per-day';
 
+  private nodes: LearningStatsDataNodes;
+  private present: LearningStatsPresentData;
+  private additional: LearningStatsAdditionalStats;
+
   constructor() {
     this.register();
 
@@ -85,15 +89,15 @@ export class LearningStats {
   }
 
   private updateTable(): void {
-    const dataNodes = this.getDataNodes();
-    const present = this.getPresentStats(dataNodes);
-    const additional = this.getAdditionalStats(dataNodes, present);
+    this.nodes = this.getDataNodes();
+    this.present = this.getPresentStats();
+    this.additional = this.getAdditionalStats();
 
     jpdb.css.add(this.LEARNING_STATS, __load_css('./src/modules/learning-stats/stats.css'));
 
-    this.renderUpdatedTable(dataNodes, present, additional);
+    this.renderUpdatedTable();
     this.appendNewCardsToday();
-    this.removeObsoleteNodes(dataNodes);
+    this.removeObsoleteNodes();
   }
 
   private getDataNodes(): LearningStatsDataNodes {
@@ -129,7 +133,8 @@ export class LearningStats {
     return dataNodes;
   }
 
-  private getPresentStats({ statsBody }: LearningStatsDataNodes): LearningStatsPresentData {
+  private getPresentStats(): LearningStatsPresentData {
+    const { statsBody } = this.nodes;
     const data: Partial<LearningStatsPresentData> = {};
     const [, ...rows] = document.jpdb.findElements<'tr'>(statsBody, 'tr');
 
@@ -138,10 +143,9 @@ export class LearningStats {
     return this.fillEmptyPresentStats(data);
   }
 
-  private getAdditionalStats(
-    dataNodes: LearningStatsDataNodes,
-    present: LearningStatsPresentData,
-  ): LearningStatsAdditionalStats {
+  private getAdditionalStats(): LearningStatsAdditionalStats {
+    const { present, nodes } = this;
+
     const sumTotal =
       present.wordsTotal +
       present.wordsIndirectTotal +
@@ -165,28 +169,24 @@ export class LearningStats {
       sumKnown,
       sumPercent,
 
-      nonRedundant: Number(dataNodes.nonRedundant.childNodes[1].nodeValue.trim()),
+      nonRedundant: Number(nodes.nonRedundant.childNodes[1].nodeValue.trim()),
     };
 
-    if (dataNodes.lockedBody) {
+    if (nodes.lockedBody) {
       let lastText: string;
 
-      document.jpdb.withElements<'td'>(
-        dataNodes.lockedBody,
-        'td, th',
-        (e: HTMLTableCellElement) => {
-          if (e.innerText.includes('Locked')) {
-            lastText = e.innerText.includes('words') ? 'lockedWords' : 'lockedKanji';
+      document.jpdb.withElements<'td'>(nodes.lockedBody, 'td, th', (e: HTMLTableCellElement) => {
+        if (e.innerText.includes('Locked')) {
+          lastText = e.innerText.includes('words') ? 'lockedWords' : 'lockedKanji';
 
-            return;
-          }
+          return;
+        }
 
-          result[lastText as keyof LearningStatsAdditionalStats] = Number(e.innerText);
-        },
-      );
+        result[lastText as keyof LearningStatsAdditionalStats] = Number(e.innerText);
+      });
     }
 
-    const upcomingNodeContents = dataNodes.upcoming.innerHTML
+    const upcomingNodeContents = nodes.upcoming.innerHTML
       .replace(/<\/?span( class="strong")?>/g, '')
       .replace(/\&nbsp\;/g, ' ');
     const hasParatheses = upcomingNodeContents.includes('(');
@@ -303,8 +303,6 @@ export class LearningStats {
             const [part2] = part1?.split('] }, ] };');
             const [lastNewCardsVal] = part2?.split(',')?.reverse() ?? [];
 
-            // eslint-disable-next-line no-console
-            console.log('read');
             return lastNewCardsVal ?? '?';
           }),
       )
@@ -319,20 +317,18 @@ export class LearningStats {
       });
   }
 
-  private removeObsoleteNodes(dataNodes: LearningStatsDataNodes): void {
-    dataNodes.stats?.remove();
-    dataNodes.locked?.remove();
-    dataNodes.nonRedundant?.remove();
-    dataNodes.fulfilled?.remove();
-    dataNodes.upcoming?.remove();
+  private removeObsoleteNodes(): void {
+    this.nodes.stats?.remove();
+    this.nodes.locked?.remove();
+    this.nodes.nonRedundant?.remove();
+    this.nodes.fulfilled?.remove();
+    this.nodes.upcoming?.remove();
   }
 
-  private renderUpdatedTable(
-    dataNodes: LearningStatsDataNodes,
-    present: LearningStatsPresentData,
-    additional: LearningStatsAdditionalStats,
-  ): void {
-    const showLocked = !!dataNodes.locked;
+  private renderUpdatedTable(): void {
+    const { nodes, present, additional } = this;
+
+    const showLocked = !!nodes.locked;
     const showK = present.kanjiTotal > 0;
     const showWI = present.wordsIndirectTotal > 0;
     const showKI = present.kanjiIndirectTotal > 0;
@@ -342,7 +338,7 @@ export class LearningStats {
 
     const showSum = present.wordsTotal !== additional.sumTotal;
 
-    document.jpdb.adjacentElement(dataNodes.stats, 'beforebegin', {
+    document.jpdb.adjacentElement(nodes.stats, 'beforebegin', {
       tag: 'table',
       class: [
         'cross-table',
