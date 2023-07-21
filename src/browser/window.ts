@@ -1,6 +1,7 @@
 import { _addAndRunEventListener } from './fn/add-and-run-event-listener';
 import { _isMobile } from './fn/is-mobile';
 import { _post_refresh_and_notify } from './fn/post-refresh-and-notify';
+import { _xhrAsync } from './fn/xhr-async';
 
 declare global {
   interface Window {
@@ -17,6 +18,7 @@ declare global {
       payload: object,
       callback: (data: null | XMLHttpRequest) => void,
     ) => void;
+    xhrAsync: typeof _xhrAsync;
   }
 
   const isMobile: typeof _isMobile;
@@ -27,8 +29,10 @@ declare global {
   const post_and_refresh: typeof window.post_and_refresh;
   const virtual_refresh: typeof window.virtual_refresh;
   const xhr: typeof window.xhr;
+  const xhrAsync: typeof window.xhrAsync;
 }
 
 window.add_and_run_event_listener = window.addAndRunEventListener = _addAndRunEventListener;
 window.post_refresh_and_notify = _post_refresh_and_notify;
 window.isMobile = _isMobile;
+window.xhrAsync = _xhrAsync;

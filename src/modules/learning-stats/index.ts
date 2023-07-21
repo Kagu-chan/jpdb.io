@@ -79,6 +79,9 @@ export class LearningStats {
     });
 
     jpdb.runAlwaysWhenActive('/learn', this.LEARNING_STATS, () => this.updateTable());
+    jpdb.runAlwaysWhenActive('/review', this.LEARNING_STATS, () =>
+      jpdb.cache.invalidate(this.LEARNING_STATS, 'new'),
+    );
   }
 
   private updateTable(): void {
@@ -289,28 +292,31 @@ export class LearningStats {
   private appendNewCardsToday(): void {
     const target = jpdb.settings.getModuleOption(this.LEARNING_STATS, this.SETTING, 20);
 
-    xhr('GET', '/stats', {}, (data) => {
-      if (!data) return;
+    void jpdb.cache
+      .fromCacheAsync<string>(
+        this.LEARNING_STATS,
+        'new',
+        1,
+        (): Promise<string> =>
+          xhrAsync('GET', '/stats', {}).then(([, responseText]) => {
+            const [, part1] = responseText.split('New cards');
+            const [part2] = part1?.split('] }, ] };');
+            const [lastNewCardsVal] = part2?.split(',')?.reverse() ?? [];
 
-      try {
-        const { responseText } = data;
-        const [, part1] = responseText.split('New cards');
-        const [part2] = part1?.split('] }, ] };');
-        const [lastNewCardsVal] = part2?.split(',')?.reverse() ?? [];
-
-        const today = lastNewCardsVal ?? '?';
-
-        if (!lastNewCardsVal?.length) return;
+            // eslint-disable-next-line no-console
+            console.log('read');
+            return lastNewCardsVal ?? '?';
+          }),
+      )
+      .then((today: string) => {
+        if (today === '?') return;
 
         document.jpdb.findElement('.new-today').classList.toggle('hidden');
         document.jpdb.findElement('.new-today-stats').innerText = `${today} / ${target}`;
         document.jpdb.findElement('.new-today-percent').innerText = `${Math.ceil(
           (Number(today) / target) * 100,
         )}%`;
-      } catch (e) {
-        /* NOP */
-      }
-    });
+      });
   }
 
   private removeObsoleteNodes(dataNodes: LearningStatsDataNodes): void {

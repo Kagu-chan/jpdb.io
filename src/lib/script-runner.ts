@@ -1,3 +1,4 @@
+import { Cache } from './cache/cache';
 import { NAME, VERSION } from './constants';
 import { CSSManager } from './css/css-manager';
 import { Toaster } from './toaster/toaster';
@@ -6,6 +7,7 @@ import { UserSettings } from './user-settings/user-settings';
 export class ScriptRunner {
   public readonly css = new CSSManager();
   public readonly settings = new UserSettings();
+  public readonly cache = new Cache();
 
   public get toaster(): Toaster {
     return this._toaster;
