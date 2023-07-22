@@ -191,8 +191,8 @@ export class LearningStats {
       .replace(/\&nbsp\;/g, ' ');
     const hasParatheses = upcomingNodeContents.includes('(');
 
-    result.due = Number(upcomingNodeContents.match(/(\d+) due/)[1] ?? 0);
-    result.new = Number(upcomingNodeContents.match(/(\d+) new/)[1] ?? 0);
+    result.due = Number(upcomingNodeContents.match(/(\d+) due/)?.[1] ?? 0);
+    result.new = Number(upcomingNodeContents.match(/(\d+) new/)?.[1] ?? 0);
 
     if (hasParatheses) {
       const nodes = upcomingNodeContents.split('new items');
@@ -200,13 +200,13 @@ export class LearningStats {
       const newC = nodes.length === 2 ? nodes[1] : nodes[0];
 
       if (dueC) {
-        result.dueVocab = Number(dueC.match(/(\d+) voc/)[1] ?? 0);
-        result.dueKanji = Number(dueC.match(/(\d+) kan/)[1] ?? 0);
+        result.dueVocab = Number(dueC.match(/(\d+) voc/)?.[1] ?? 0);
+        result.dueKanji = Number(dueC.match(/(\d+) kan/)?.[1] ?? 0);
       }
 
       if (newC) {
-        result.newVocab = Number(newC.match(/(\d+) voc/)[1] ?? 0);
-        result.newKanji = Number(newC.match(/(\d+) kan/)[1] ?? 0);
+        result.newVocab = Number(newC.match(/(\d+) voc/)?.[1] ?? 0);
+        result.newKanji = Number(newC.match(/(\d+) kan/)?.[1] ?? 0);
       }
     }
 
@@ -326,6 +326,11 @@ export class LearningStats {
   }
 
   private renderUpdatedTable(): void {
+    jpdb.onDesktop(() => this.renderDesktopTable());
+    jpdb.onMobile(() => this.renderMobileTables());
+  }
+
+  private renderDesktopTable(): void {
     const { nodes, present, additional } = this;
 
     const showLocked = !!nodes.locked;
@@ -370,9 +375,9 @@ export class LearningStats {
               children: [
                 { tag: 'th', innerText: 'Words' },
                 { tag: 'td', innerText: present.wordsTotal },
-                showLocked && { tag: 'td', innerText: additional.lockedWords },
-                { tag: 'td', innerText: newVocab },
-                { tag: 'td', innerText: dueVocab },
+                showLocked && { tag: 'td', class: ['opac'], innerText: additional.lockedWords },
+                { tag: 'td', class: ['green'], innerText: newVocab },
+                { tag: 'td', class: [dueVocab > 0 ? 'red' : 'green'], innerText: dueVocab },
                 { tag: 'td', innerText: present.wordsLearning },
                 { tag: 'td', innerText: present.wordsKnown },
                 { tag: 'td', innerText: `${present.wordsPercent}%` },
@@ -396,9 +401,13 @@ export class LearningStats {
               children: [
                 { tag: 'th', innerText: 'Kanji' },
                 { tag: 'td', innerText: present.kanjiTotal },
-                showLocked && { tag: 'td', innerText: additional.lockedKanji },
-                { tag: 'td', innerText: additional.newKanji },
-                { tag: 'td', innerText: additional.dueKanji },
+                showLocked && { tag: 'td', class: ['opac'], innerText: additional.lockedKanji },
+                { tag: 'td', class: ['green'], innerText: additional.newKanji },
+                {
+                  tag: 'td',
+                  class: [additional.dueKanji > 0 ? 'red' : 'green'],
+                  innerText: additional.dueKanji,
+                },
                 { tag: 'td', innerText: present.kanjiLearning },
                 { tag: 'td', innerText: present.kanjiKnown },
                 { tag: 'td', innerText: `${present.kanjiPercent}%` },
@@ -426,10 +435,15 @@ export class LearningStats {
                 { tag: 'td', innerText: additional.sumTotal },
                 showLocked && {
                   tag: 'td',
+                  class: ['opac'],
                   innerText: additional.lockedWords + additional.lockedKanji,
                 },
-                { tag: 'td', innerText: additional.new },
-                { tag: 'td', innerText: additional.due },
+                { tag: 'td', class: ['green'], innerText: additional.new },
+                {
+                  tag: 'td',
+                  class: [additional.due > 0 ? 'red' : 'green'],
+                  innerText: additional.due,
+                },
                 { tag: 'td', innerText: additional.sumLearning },
                 { tag: 'td', innerText: additional.sumKnown },
                 { tag: 'td', innerText: `${additional.sumPercent}%` },
@@ -465,11 +479,202 @@ export class LearningStats {
               tag: 'tr',
               class: ['hidden', 'new-today'],
               children: [
-                { tag: 'th', innerText: 'New Cards' },
+                { tag: 'th', innerText: 'New today' },
                 { tag: 'td', class: ['new-today-stats'], innerText: '${today} / ${target}' },
                 showLocked && { tag: 'td' },
                 { tag: 'td' },
                 { tag: 'td' },
+                { tag: 'td' },
+                { tag: 'td' },
+                { tag: 'td', class: ['new-today-percent'], innerText: '0%' },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  }
+
+  private renderMobileTables(): void {
+    const { nodes, present, additional } = this;
+
+    const showLocked = !!nodes.locked && additional.lockedKanji > 0 && additional.lockedWords > 0;
+    const showK = present.kanjiTotal > 0;
+    const showWI = present.wordsIndirectTotal > 0;
+    const showKI = present.kanjiIndirectTotal > 0;
+
+    const newVocab = additional.newVocab === 0 ? additional.new : additional.newVocab;
+    const dueVocab = additional.dueVocab === 0 ? additional.due : additional.dueVocab;
+
+    const showSum = present.wordsTotal !== additional.sumTotal;
+    const showUpcomingSum = present.kanjiTotal !== 0;
+
+    document.jpdb.adjacentElement(nodes.stats, 'beforebegin', {
+      tag: 'table',
+      class: [
+        'cross-table',
+        'label-right-align',
+        'data-right-align',
+        'label-big-padding',
+        'small-header',
+        'learning-stats',
+      ],
+      children: [
+        {
+          tag: 'tbody',
+          children: [
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th' },
+                { tag: 'th', innerText: 'Total' },
+                { tag: 'th', innerText: 'Learning' },
+                { tag: 'th', innerText: 'Known' },
+                { tag: 'th' },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Words' },
+                { tag: 'td', innerText: present.wordsTotal },
+                { tag: 'td', innerText: present.wordsLearning },
+                { tag: 'td', innerText: present.wordsKnown },
+                { tag: 'td', innerText: `${present.wordsPercent}%` },
+              ],
+            },
+            showWI && {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Words (indirect)' },
+                { tag: 'td', innerText: present.wordsIndirectTotal },
+                { tag: 'td', innerText: present.wordsIndirectLearning },
+                { tag: 'td', innerText: present.wordsIndirectKnown },
+                { tag: 'td', innerText: `${present.wordsIndirectPercent}%` },
+              ],
+            },
+            showK && {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Kanji' },
+                { tag: 'td', innerText: present.kanjiTotal },
+                { tag: 'td', innerText: present.kanjiLearning },
+                { tag: 'td', innerText: present.kanjiKnown },
+                { tag: 'td', innerText: `${present.kanjiPercent}%` },
+              ],
+            },
+            showKI && {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Kanji (indirect)' },
+                { tag: 'td', innerText: present.kanjiIndirectTotal },
+                { tag: 'td', innerText: present.kanjiIndirectLearning },
+                { tag: 'td', innerText: present.kanjiIndirectKnown },
+                { tag: 'td', innerText: `${present.kanjiIndirectPercent}%` },
+              ],
+            },
+            showSum && { tag: 'tr', class: ['sum-divider'], children: [] },
+            showSum && {
+              tag: 'tr',
+              class: ['sum'],
+              children: [
+                { tag: 'th' },
+                { tag: 'td', innerText: additional.sumTotal },
+                { tag: 'td', innerText: additional.sumLearning },
+                { tag: 'td', innerText: additional.sumKnown },
+                { tag: 'td', innerText: `${additional.sumPercent}%` },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th' },
+                { tag: 'th', innerText: 'New' },
+                { tag: 'th', innerText: 'Due' },
+                { tag: 'th' },
+                { tag: 'th', innerText: showLocked ? 'Locked' : '' },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Words' },
+                { tag: 'td', class: ['green'], innerText: newVocab },
+                { tag: 'td', class: [dueVocab > 0 ? 'red' : 'green'], innerText: dueVocab },
+                { tag: 'td' },
+                { tag: 'td', class: ['opac'], innerText: showLocked ? additional.lockedWords : '' },
+              ],
+            },
+            showK && {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Kanji' },
+                { tag: 'td', class: ['green'], innerText: additional.newKanji },
+                {
+                  tag: 'td',
+                  class: [additional.dueKanji > 0 ? 'red' : 'green'],
+                  innerText: additional.dueKanji,
+                },
+                { tag: 'td' },
+                { tag: 'td', class: ['opac'], innerText: showLocked ? additional.lockedKanji : '' },
+              ],
+            },
+            showUpcomingSum && { tag: 'tr', class: ['sum-divider'], children: [] },
+            showUpcomingSum && {
+              tag: 'tr',
+              class: ['sum'],
+              children: [
+                { tag: 'th' },
+                { tag: 'td', class: ['green'], innerText: additional.new },
+                {
+                  tag: 'td',
+                  class: [additional.due > 0 ? 'red' : 'green'],
+                  innerText: additional.due,
+                },
+                { tag: 'td' },
+                {
+                  tag: 'td',
+                  class: ['opac'],
+                  innerText: showLocked ? additional.lockedWords + additional.lockedKanji : '',
+                },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+                { tag: 'td', innerHTML: '&nbsp;' },
+              ],
+            },
+            {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Non-redundant' },
+                { tag: 'td', innerText: additional.nonRedundant },
+                { tag: 'td' },
+                { tag: 'td' },
+                { tag: 'td' },
+              ],
+            },
+            {
+              tag: 'tr',
+              class: ['hidden', 'new-today'],
+              children: [
+                { tag: 'th', innerText: 'New today' },
+                { tag: 'td', class: ['new-today-stats'], innerText: '${today} / ${target}' },
                 { tag: 'td' },
                 { tag: 'td' },
                 { tag: 'td', class: ['new-today-percent'], innerText: '0%' },
