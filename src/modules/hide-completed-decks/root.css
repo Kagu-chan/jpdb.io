@@ -21,6 +21,7 @@
 }
 
 .completed,
-.threshold-reached {
+.threshold-reached,
+.non-new {
   border-color: var(--outline-v4-color) !important;
 }

@@ -65,6 +65,10 @@ export class UserSettings {
     return e.value as T;
   }
 
+  public getJpdbRadioSetting(name: string): string {
+    return document.jpdb.findElements<'input'>(`[name="${name}"]`).find((e) => e.checked)?.value;
+  }
+
   public getModuleOption<T>(module: string, key: string, defaultValue: T): T {
     return this.read<Record<string, T>>(module, { [key]: defaultValue })[key];
   }

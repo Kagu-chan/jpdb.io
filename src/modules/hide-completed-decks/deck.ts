@@ -1,5 +1,6 @@
 export class Deck {
   private _title: string;
+  private _newCards: HTMLDivElement;
   private _body: HTMLDivElement;
   private _vocab: HTMLDivElement;
   private _kanji: HTMLDivElement;
@@ -84,11 +85,16 @@ export class Deck {
   public get coverageReached(): boolean {
     return this._coverage && this._recPercent >= this._targetCov;
   }
+
+  public get hasNewCards(): boolean {
+    return !!this._newCards;
+  }
   //#endregion
 
   constructor(private _deckNode: HTMLDivElement) {
     this._title = document.jpdb.findElement(this._deckNode, '.deck-title a')?.innerText;
     this._body = document.jpdb.findElement<'div'>(this._deckNode, '.deck-body div');
+    this._newCards = document.jpdb.findElement<'div'>(this._deckNode, '.deck-title .tooltip');
 
     [this._vocab, this._kanji] = this.childs(this._body);
     [this._progress, this._coverage] = this.childs(this._vocab);

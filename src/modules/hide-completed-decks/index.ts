@@ -4,6 +4,7 @@ import { Deck } from './deck';
 class HideCompletedDecks {
   private HIDE_COMPLETED_DECKS: string = 'hide-completed-decks';
   private HIDE_THRESHOLD_DECKS: string = 'hide-threshold-decks';
+  private HIDE_NON_NEW_FIRST: string = 'hide-non-new-first';
   private DECK_EXCLUSION: string = "[id|='deck']:not([id*='l']):not([id*='n'])";
 
   private _deckList: Deck[];
@@ -17,6 +18,7 @@ class HideCompletedDecks {
 
     this.hideCompletedDecks();
     this.hideThresholdDecks();
+    this.hideNonNewFirstDecks();
   }
 
   private register(): void {
@@ -25,7 +27,9 @@ class HideCompletedDecks {
       experimental: true,
       category: 'Decks',
       displayText: 'Hide completed decks',
-      description: 'Hides decks which do not contain new cards',
+      description:
+        // eslint-disable-next-line max-len
+        'Hides decks which do not contain new cards. This is evaluated against total amount, ignoring suspended cards',
     });
 
     jpdb.runOnce('/settings', () => {
@@ -43,15 +47,34 @@ class HideCompletedDecks {
         jpdb.settings.disableModule(this.HIDE_THRESHOLD_DECKS);
       }
     });
+
+    jpdb.runOnce('/settings', () => {
+      const rbs = jpdb.settings.getJpdbRadioSetting('learning-order');
+      jpdb.settings.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
+
+      if (rbs.includes('all-decks')) {
+        jpdb.settings.disableModule(this.HIDE_NON_NEW_FIRST);
+      } else {
+        jpdb.settings.registerConfigurable({
+          name: this.HIDE_NON_NEW_FIRST,
+          experimental: true,
+          category: 'Decks',
+          displayText: 'Hide non-new decks from front',
+          description:
+            // eslint-disable-next-line max-len
+            'Hides decks which do not contain new cards. This is evaluated taking suspended cards into account and hides decks until the first deck serving new cards',
+        });
+      }
+    });
   }
 
   private addRootCss(): void {
     jpdb.runOnceWhenEitherIsActive(
       '/deck-list',
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         jpdb.css.add(
-          `${this.HIDE_COMPLETED_DECKS}${this.HIDE_THRESHOLD_DECKS}`,
+          `${this.HIDE_COMPLETED_DECKS}-${this.HIDE_THRESHOLD_DECKS}-${this.HIDE_NON_NEW_FIRST}`,
           __load_css('./src/modules/hide-completed-decks/root.css'),
         );
 
@@ -64,7 +87,7 @@ class HideCompletedDecks {
   private buildDeckList(): void {
     jpdb.runOnceWhenEitherIsActive(
       '/deck-list',
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         this._deckList = document.jpdb
           .findElements<'div'>(`.deck${this.DECK_EXCLUSION}`)
@@ -89,7 +112,12 @@ class HideCompletedDecks {
           d.classList.add('completed');
         });
 
-      this.displayCompletedCounter(hiddenDecks);
+      this.displayShowHideControl(
+        'decks completed',
+        hiddenDecks,
+        () => this.addCompletedDecksCss(),
+        () => this.removeCompletedDecksCss(),
+      );
     });
   }
 
@@ -109,26 +137,42 @@ class HideCompletedDecks {
           d.classList.add('threshold-reached');
         });
 
-      this.displayThresholdReachedCounter(hiddenDecks);
+      this.displayShowHideControl(
+        'reached target coverage',
+        hiddenDecks,
+        () => this.addThresholdReachedCss(),
+        () => this.removeThresholdReachedCss(),
+      );
     });
   }
 
-  private displayCompletedCounter(amount: number): void {
-    this.displayShowHideControl(
-      'decks completed',
-      amount,
-      () => this.addCompletedDecksCss(),
-      () => this.removeCompletedDecksCss(),
-    );
-  }
+  private hideNonNewFirstDecks(): void {
+    jpdb.runOnceWhenActive('/deck-list', this.HIDE_NON_NEW_FIRST, () => {
+      this.addNonNewCss();
+    });
 
-  private displayThresholdReachedCounter(amount: number): void {
-    this.displayShowHideControl(
-      'reached target coverage',
-      amount,
-      () => this.addThresholdReachedCss(),
-      () => this.removeThresholdReachedCss(),
-    );
+    jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_NON_NEW_FIRST, () => {
+      const hide: Deck[] = [];
+      const found = this._deckList.find((d) => {
+        if (!d.hasNewCards) {
+          hide.push(d);
+
+          return false;
+        }
+
+        return true;
+      });
+
+      if (!found) return;
+
+      hide.forEach((d) => d.classList.add('non-new'));
+      this.displayShowHideControl(
+        'found before first learning deck',
+        hide.length,
+        () => this.addNonNewCss(),
+        () => this.removeNonNewCss(),
+      );
+    });
   }
 
   private displayShowHideControl(
@@ -180,6 +224,17 @@ class HideCompletedDecks {
 
   private removeThresholdReachedCss(): void {
     jpdb.css.remove(this.HIDE_THRESHOLD_DECKS);
+  }
+
+  private addNonNewCss(): void {
+    jpdb.css.add(
+      this.HIDE_NON_NEW_FIRST,
+      __load_css('./src/modules/hide-completed-decks/non-new.css'),
+    );
+  }
+
+  private removeNonNewCss(): void {
+    jpdb.css.remove(this.HIDE_NON_NEW_FIRST);
   }
 
   private getTargetCoverage(): string {
