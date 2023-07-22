@@ -70,7 +70,7 @@ class HideCompletedDecks {
 
   private addRootCss(): void {
     jpdb.runOnceWhenEitherIsActive(
-      '/deck-list',
+      /\/deck-list/,
       [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         jpdb.css.add(
@@ -86,7 +86,7 @@ class HideCompletedDecks {
 
   private buildDeckList(): void {
     jpdb.runOnceWhenEitherIsActive(
-      '/deck-list',
+      /\/deck-list/,
       [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         this._deckList = document.jpdb
@@ -99,11 +99,11 @@ class HideCompletedDecks {
   private hideCompletedDecks(): void {
     let hiddenDecks: number = 0;
 
-    jpdb.runOnceWhenActive('/deck-list', this.HIDE_COMPLETED_DECKS, () => {
+    jpdb.runOnceWhenActive(/\/deck-list/, this.HIDE_COMPLETED_DECKS, () => {
       this.addCompletedDecksCss();
     });
 
-    jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_COMPLETED_DECKS, () => {
+    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_COMPLETED_DECKS, () => {
       this._deckList
         .filter((d) => d.completed)
         .forEach((d) => {
@@ -124,11 +124,11 @@ class HideCompletedDecks {
   private hideThresholdDecks(): void {
     let hiddenDecks: number = 0;
 
-    jpdb.runOnceWhenActive('/deck-list', this.HIDE_THRESHOLD_DECKS, () => {
+    jpdb.runOnceWhenActive(/\/deck-list/, this.HIDE_THRESHOLD_DECKS, () => {
       this.addThresholdReachedCss();
     });
 
-    jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_THRESHOLD_DECKS, () => {
+    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_THRESHOLD_DECKS, () => {
       this._deckList
         .filter((d) => d.coverageReached)
         .forEach((d) => {
@@ -147,11 +147,11 @@ class HideCompletedDecks {
   }
 
   private hideNonNewFirstDecks(): void {
-    jpdb.runOnceWhenActive('/deck-list', this.HIDE_NON_NEW_FIRST, () => {
+    jpdb.runOnceWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
       this.addNonNewCss();
     });
 
-    jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_NON_NEW_FIRST, () => {
+    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
       const hide: Deck[] = [];
       const found = this._deckList.find((d) => {
         if (!d.hasNewCards) {
