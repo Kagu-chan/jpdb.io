@@ -1,13 +1,26 @@
+.show-hide-container {
+  margin-bottom: 0.5rem;
+}
+
+.show-hide-container:not(:has(.show-hide-control:not(.disabled))) {
+  display: none;
+}
+
 .show-hide-control {
   font-size: 1rem;
   opacity: 0.8;
-  padding: 0 1rem;
+  display: block;
 }
 
 .show-hide-control.disabled {
-  opacity: 0.5;
+  display: none;
 }
 
 .show-hide-control:not(.disabled) {
   cursor: pointer;
+}
+
+.completed,
+.threshold-reached {
+  border-color: var(--outline-v4-color) !important;
 }

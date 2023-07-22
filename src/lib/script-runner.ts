@@ -88,6 +88,23 @@ export class ScriptRunner {
   }
 
   /**
+   * Runs a given Function when matching given Path object and when enabled in /settings
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string[]} enableKeys Keys of whom at least one needs to be enabled
+   * @param {Function} action Function to execute
+   */
+  public runOnceWhenEitherIsActive(
+    match: Path | Path[],
+    enableKeys: string[],
+    action: Function,
+  ): void {
+    if (enableKeys.some((key) => this.settings.getActiveState(key))) {
+      this.runOnce(match, action);
+    }
+  }
+
+  /**
    * Runs a given Function when matching given Path object
    * Function will be executed on call and when virtual_refresh is called
    *
@@ -111,6 +128,24 @@ export class ScriptRunner {
    */
   public runAlwaysWhenActive(match: Path | Path[], enableKey: string, action: Function): void {
     if (this.settings.getActiveState(enableKey)) {
+      this.runAlways(match, action);
+    }
+  }
+
+  /**
+   * Runs a given Function when matching given Path object and when enabled in /settings
+   * Function will be executed on call and when virtual_refresh is called
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string[]} enableKeys Keys of whom at least one needs to be enabled
+   * @param {Function} action Function to execute
+   */
+  public runAlwaysWhenEitherIsActive(
+    match: Path | Path[],
+    enableKeys: string[],
+    action: Function,
+  ): void {
+    if (enableKeys.some((key) => this.settings.getActiveState(key))) {
       this.runAlways(match, action);
     }
   }

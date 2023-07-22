@@ -1,12 +1,20 @@
+import { container } from '../../lib/elements/container';
+import { Deck } from './deck';
+
 class HideCompletedDecks {
   private HIDE_COMPLETED_DECKS: string = 'hide-completed-decks';
   private HIDE_THRESHOLD_DECKS: string = 'hide-threshold-decks';
   private DECK_EXCLUSION: string = "[id|='deck']:not([id*='l']):not([id*='n'])";
 
+  private _deckList: Deck[];
+  private _labelContainer: HTMLDivElement;
+
   constructor() {
     this.register();
 
     this.addRootCss();
+    this.buildDeckList();
+
     this.hideCompletedDecks();
     this.hideThresholdDecks();
   }
@@ -38,18 +46,31 @@ class HideCompletedDecks {
   }
 
   private addRootCss(): void {
-    jpdb.runOnce('/deck-list', () => {
-      if (
-        !jpdb.settings.getActiveState(this.HIDE_COMPLETED_DECKS) &&
-        !jpdb.settings.getActiveState(this.HIDE_THRESHOLD_DECKS)
-      )
-        return;
+    jpdb.runOnceWhenEitherIsActive(
+      '/deck-list',
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS],
+      () => {
+        jpdb.css.add(
+          `${this.HIDE_COMPLETED_DECKS}${this.HIDE_THRESHOLD_DECKS}`,
+          __load_css('./src/modules/hide-completed-decks/root.css'),
+        );
 
-      jpdb.css.add(
-        `${this.HIDE_COMPLETED_DECKS}${this.HIDE_THRESHOLD_DECKS}`,
-        __load_css('./src/modules/hide-completed-decks/root.css'),
-      );
-    });
+        this._labelContainer = document.jpdb.adjacentElement('h4', 'afterend', container([]));
+        this._labelContainer.classList.add('show-hide-container');
+      },
+    );
+  }
+
+  private buildDeckList(): void {
+    jpdb.runOnceWhenEitherIsActive(
+      '/deck-list',
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS],
+      () => {
+        this._deckList = document.jpdb
+          .findElements<'div'>(`.deck${this.DECK_EXCLUSION}`)
+          .map((d) => new Deck(d));
+      },
+    );
   }
 
   private hideCompletedDecks(): void {
@@ -60,17 +81,13 @@ class HideCompletedDecks {
     });
 
     jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_COMPLETED_DECKS, () => {
-      document.jpdb.withElements<'div'>(
-        // eslint-disable-next-line max-len
-        `.deck${this.DECK_EXCLUSION} .deck-body > div > div:first-of-type > div:first-of-type > div:last-of-type > div:nth-child(3) > div`,
-        (textContainer: HTMLDivElement) => {
-          if (this.getRecognition(textContainer) === 100) {
-            hiddenDecks++;
+      this._deckList
+        .filter((d) => d.completed)
+        .forEach((d) => {
+          hiddenDecks++;
 
-            document.jpdb.closestElement(textContainer, '.deck').classList.add('completed');
-          }
-        },
-      );
+          d.classList.add('completed');
+        });
 
       this.displayCompletedCounter(hiddenDecks);
     });
@@ -84,56 +101,52 @@ class HideCompletedDecks {
     });
 
     jpdb.runAlwaysWhenActive('/deck-list', this.HIDE_THRESHOLD_DECKS, () => {
-      document.jpdb.withElements(
-        // eslint-disable-next-line max-len
-        `.deck${this.DECK_EXCLUSION} .deck-body > div > div:first-of-type > div:nth-child(2) > div:last-of-type > div:nth-child(3) > div`,
-        (e: HTMLDivElement) => {
-          if (this.getRecognition(e) >= this.getDeckTargetCoverage(e)) {
-            hiddenDecks++;
+      this._deckList
+        .filter((d) => d.coverageReached)
+        .forEach((d) => {
+          hiddenDecks++;
 
-            document.jpdb.closestElement(e, '.deck').classList.add('threshold-reached');
-          }
-        },
-      );
+          d.classList.add('threshold-reached');
+        });
 
       this.displayThresholdReachedCounter(hiddenDecks);
     });
   }
 
   private displayCompletedCounter(amount: number): void {
-    let isHidden: boolean = true;
-
-    const text = (): string =>
-      `${amount} decks completed` + (!!amount ? ` (${isHidden ? 'show' : 'hide'})` : '');
-
-    const btn = document.jpdb.createElement('span', {
-      class: ['show-hide-control'],
-      innerText: text(),
-      handler: () => {
-        isHidden ? this.removeCompletedDecksCss() : this.addCompletedDecksCss();
-        isHidden = !isHidden;
-
-        btn.innerText = text();
-      },
-    });
-
-    if (!amount) {
-      btn.classList.add('disabled');
-    }
-    document.jpdb.adjacentElement('h4', 'beforeend', btn);
+    this.displayShowHideControl(
+      'decks completed',
+      amount,
+      () => this.addCompletedDecksCss(),
+      () => this.removeCompletedDecksCss(),
+    );
   }
 
   private displayThresholdReachedCounter(amount: number): void {
+    this.displayShowHideControl(
+      'reached target coverage',
+      amount,
+      () => this.addThresholdReachedCss(),
+      () => this.removeThresholdReachedCss(),
+    );
+  }
+
+  private displayShowHideControl(
+    label: string,
+    amount: number,
+    onAdd: Function,
+    onRemove: Function,
+  ): void {
     let isHidden: boolean = true;
 
     const text = (): string =>
-      `${amount} decks reached threshold` + (!!amount ? ` (${isHidden ? 'show' : 'hide'})` : '');
+      `${amount} decks ${label}` + (!!amount ? ` (${isHidden ? 'show' : 'hide'})` : '');
 
     const btn = document.jpdb.createElement('span', {
       class: ['show-hide-control'],
       innerText: text(),
       handler: () => {
-        isHidden ? this.removeThresholdReachedCss() : this.addThresholdReachedCss();
+        isHidden ? onRemove() : onAdd();
         isHidden = !isHidden;
 
         btn.innerText = text();
@@ -143,7 +156,8 @@ class HideCompletedDecks {
     if (!amount) {
       btn.classList.add('disabled');
     }
-    document.jpdb.adjacentElement('h4', 'beforeend', btn);
+
+    document.jpdb.appendElement(this._labelContainer, btn);
   }
 
   private addCompletedDecksCss(): void {
@@ -170,19 +184,6 @@ class HideCompletedDecks {
 
   private getTargetCoverage(): string {
     return jpdb.settings.getJpdbSetting('target-coverage');
-  }
-
-  private getRecognition(e: HTMLDivElement): number {
-    return Number(e.innerText.split('(')[1]?.replace(/[^\d]/g, '') ?? 0);
-  }
-
-  private getDeckTargetCoverage(e: HTMLElement): number {
-    return Number(
-      (e?.parentElement?.nextSibling?.firstChild as HTMLElement)?.style?.left?.replace(
-        /[^\d]/g,
-        '',
-      ),
-    );
   }
 }
 
