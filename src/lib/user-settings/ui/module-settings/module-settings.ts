@@ -9,6 +9,7 @@ export type ModuleSettingsOptions = {
   author?: string;
   source?: string;
   description?: string;
+  experimental?: boolean;
 };
 
 export class ModuleSettingsContainer {

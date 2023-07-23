@@ -2,54 +2,86 @@ import { container } from '../../elements/container';
 import { InfoSection } from './info-section/info-section';
 import { ModuleSettingsContainer, ModuleSettingsOptions } from './module-settings/module-settings';
 
+type SettingsCategory = {
+  dom: HTMLElement;
+  spacer: HTMLDivElement;
+  map: Map<string, ModuleSettingsContainer>;
+};
+
 export class SettingsUI {
   public get id(): string {
     return this._modules.id;
   }
 
-  private _categories = new Map<
-    string,
-    { dom: HTMLElement; spacer: HTMLDivElement; map: Map<string, ModuleSettingsContainer> }
-  >();
+  private _categories = new Map<string, SettingsCategory>();
+  private _experimentalCategories = new Map<string, SettingsCategory>();
+
   private _modules = document.jpdb.appendElement('.container.bugfix', {
     tag: 'h4',
+    class: ['module-settings'],
     innerText: 'Extension Settings',
     style: {
       textAlign: 'center',
       opacity: '.85',
     },
   });
-  private _infos: InfoSection = new InfoSection();
+  private _experimentalModules = document.jpdb.adjacentElement('.module-settings', 'afterend', {
+    tag: 'h4',
+    class: ['experimental-settings'],
+    innerText: 'Experimental extension Settings',
+    style: {
+      textAlign: 'center',
+      opacity: '.85',
+    },
+  });
+
+  private rootModules = {
+    show: this._modules,
+    cat: this._categories,
+  };
+  private rootExperimental = {
+    show: this._experimentalModules,
+    cat: this._experimentalCategories,
+  };
+
+  // private _infos: InfoSection = new InfoSection();
+
+  constructor() {
+    new InfoSection();
+  }
 
   public registerConfigurable(options: ModuleSettingsOptions): void {
-    document.jpdb.showElement(this._modules);
     jpdb.css.add({
       key: 'settings',
       css: __load_css('./src/lib/user-settings/ui/settings-ui.css'),
     });
 
-    if (!this._categories.has(options.category)) {
-      this._categories.set(options.category, { dom: undefined, spacer: undefined, map: new Map() });
+    const { show, cat } = options.experimental ? this.rootExperimental : this.rootModules;
 
-      this.renderCategories();
+    document.jpdb.showElement(show);
+
+    if (!cat.has(options.category)) {
+      cat.set(options.category, { dom: undefined, spacer: undefined, map: new Map() });
+
+      this.renderCategories(show, cat);
     }
 
-    const { map, dom, spacer } = this._categories.get(options.category);
+    const { map, dom, spacer } = cat.get(options.category);
     const section = new ModuleSettingsContainer(dom, options);
 
     map.set(options.name, section);
 
-    this._categories.set(options.category, { map, spacer, dom: section.rendered });
+    cat.set(options.category, { map, spacer, dom: section.rendered });
   }
 
-  private renderCategories(): void {
-    let previousItem: HTMLElement = this._modules;
+  private renderCategories(prev: HTMLElement, cat: Map<string, SettingsCategory>): void {
+    let previousItem: HTMLElement = prev;
     let id: number = 0;
 
-    Array.from(this._categories.keys())
+    Array.from(cat.keys())
       .sort()
       .forEach((category: string) => {
-        const data = this._categories.get(category);
+        const data = cat.get(category);
 
         if (!data.dom) {
           data.spacer = document.jpdb.createElement({ tag: 'div', class: ['s-spacer'] });
