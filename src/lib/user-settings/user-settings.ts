@@ -1,11 +1,10 @@
 import { ModuleManager } from './module-manager';
-import { IActivatable } from './ui/module-settings/activatable.interface';
 import { SettingsUI } from './ui/settings-ui';
 import { UserSettingsPersistence } from './user-settings-persistence';
 
 export class UserSettings {
-  public readonly persistence = new UserSettingsPersistence();
-  public readonly moduleManager = new ModuleManager();
+  public readonly persistence;
+  public readonly moduleManager;
 
   private SETTINGS = '/settings';
 
@@ -15,19 +14,9 @@ export class UserSettings {
     this.onSettings(() => {
       this._ui = new SettingsUI();
     });
-  }
 
-  public registerConfigurable(options: IActivatable): void {
-    const { name, displayText } = options;
-
-    this._ui?.registerConfigurable({
-      ...options,
-      displayText: displayText ?? name,
-      value: this.moduleManager.getActiveState(name),
-      change: (val: boolean) => {
-        val ? this.moduleManager.enableModule(name) : this.moduleManager.disableModule(name);
-      },
-    });
+    this.persistence = new UserSettingsPersistence();
+    this.moduleManager = new ModuleManager(this._ui);
   }
 
   public hasPatreonPerks(): boolean {

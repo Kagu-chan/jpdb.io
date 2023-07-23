@@ -9,7 +9,7 @@ class StickyNavbar {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.STICKY_NAVBAR,
       category: 'Navigation',
       displayText: 'Fix header navigation',
@@ -17,7 +17,7 @@ class StickyNavbar {
         'Sticks the header navigation to the top of the page, thus making it always visible',
       author: 'JawGBoi',
     });
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.STICKY_FOOTER,
       category: 'Navigation',
       displayText: 'Fix footer navigation',

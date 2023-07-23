@@ -22,7 +22,7 @@ class HideCompletedDecks {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.HIDE_COMPLETED_DECKS,
       experimental: true,
       category: 'Decks',
@@ -36,7 +36,7 @@ class HideCompletedDecks {
       if (jpdb.settings.hasPatreonPerks()) {
         const tc = this.getTargetCoverage();
 
-        jpdb.settings.registerConfigurable({
+        jpdb.settings.moduleManager.register({
           name: this.HIDE_THRESHOLD_DECKS,
           experimental: true,
           category: 'Decks',
@@ -55,7 +55,7 @@ class HideCompletedDecks {
       if (rbs.includes('all-decks')) {
         jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_FIRST);
       } else {
-        jpdb.settings.registerConfigurable({
+        jpdb.settings.moduleManager.register({
           name: this.HIDE_NON_NEW_FIRST,
           experimental: true,
           category: 'Decks',

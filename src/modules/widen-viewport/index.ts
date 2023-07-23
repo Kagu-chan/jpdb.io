@@ -10,7 +10,7 @@ class WidenViewport {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.WIDEN_VIEWPORT,
       category: 'UI',
       displayText: 'Widen viewport',

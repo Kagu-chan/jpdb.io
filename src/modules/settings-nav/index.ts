@@ -7,7 +7,7 @@ class SettingsNav {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.SETTINGS_NAV,
       category: 'Navigation',
       displayText: 'Add table of contents to settings',

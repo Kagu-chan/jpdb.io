@@ -11,7 +11,7 @@ class DebloadReviewsModule {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.DEBLOAT_REVIEWS,
       category: 'Reviews',
       displayText: 'Remove unneccessary labels from review, vocabulary and search results',

@@ -1,7 +1,7 @@
 ((): void => {
   const TSC = 'TSC';
 
-  jpdb.settings.registerConfigurable({
+  jpdb.settings.moduleManager.register({
     name: TSC,
     category: 'Reviews',
     displayText: 'Targeted sentence cards',

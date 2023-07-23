@@ -4,13 +4,13 @@ import { button } from '../../lib/elements/button';
   const HIDE_DECKS: string = 'hide-decks';
   const HIDE_SPECIAL_DECKS: string = 'hide-special-decks';
 
-  jpdb.settings.registerConfigurable({
+  jpdb.settings.moduleManager.register({
     name: HIDE_DECKS,
     category: 'Decks',
     displayText: 'Hide decks',
     description: 'Hide your decks from learn page',
   });
-  jpdb.settings.registerConfigurable({
+  jpdb.settings.moduleManager.register({
     name: HIDE_SPECIAL_DECKS,
     category: 'Decks',
     displayText: 'Hide special decks',

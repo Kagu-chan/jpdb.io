@@ -63,7 +63,7 @@ export class LearningStats {
   }
 
   private register(): void {
-    jpdb.settings.registerConfigurable({
+    jpdb.settings.moduleManager.register({
       name: this.LEARNING_STATS,
       category: 'Decks',
       displayText: 'Display deck statistics in one table',

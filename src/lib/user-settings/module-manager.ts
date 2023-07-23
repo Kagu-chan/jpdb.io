@@ -1,3 +1,5 @@
+import { IActivatable } from './ui/module-settings/activatable.interface';
+import { SettingsUI } from './ui/settings-ui';
 import { UserSettingsPersistence } from './user-settings-persistence';
 
 export class ModuleManager {
@@ -6,8 +8,21 @@ export class ModuleManager {
   private _persistence = new UserSettingsPersistence();
   private _activeModules: string[];
 
-  constructor() {
+  constructor(private _ui: SettingsUI | undefined) {
     this._activeModules = this._persistence.read<string[]>(this.ACTIVE_MODULES, []);
+  }
+
+  public register(options: IActivatable): void {
+    const { name, displayText } = options;
+
+    this._ui?.registerConfigurable({
+      ...options,
+      displayText: displayText ?? name,
+      value: this.getActiveState(name),
+      change: (val: boolean) => {
+        val ? this.enableModule(name) : this.disableModule(name);
+      },
+    });
   }
 
   public getActiveState(name: string): boolean {

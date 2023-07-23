@@ -1,7 +1,7 @@
 ((): void => {
   const HIDE_DECK_NUMBERS = 'hide-deck-numbers';
 
-  jpdb.settings.registerConfigurable({
+  jpdb.settings.moduleManager.register({
     name: HIDE_DECK_NUMBERS,
     category: 'Decks',
     displayText: 'Hide deck numbers',
