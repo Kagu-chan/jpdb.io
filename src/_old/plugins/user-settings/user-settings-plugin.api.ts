@@ -1,4 +1,4 @@
-import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
+import { JPDBPlugin } from '../../plugin/jpdb-plugin';
 import { PluginSettingsSection } from './user-settings.types';
 
 export class UserSettingsPluginAPI {

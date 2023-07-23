@@ -1,10 +1,7 @@
-import { JPDBRequest } from '../lib/jpdb.io/request';
-import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../lib/plugin/types/plugin-options';
-import {
-  PluginUserOptions,
-  PluginUserOptionFieldType,
-} from '../lib/plugin/types/plugin-user-options';
+import { JPDBPlugin } from '../plugin/jpdb-plugin';
+import { PluginOptions } from '../plugin/types/plugin-options';
+import { PluginUserOptions, PluginUserOptionFieldType } from '../plugin/types/plugin-user-options';
+import { JPDBRequest } from '../request';
 
 type DeckTarget = {
   deckId: number;

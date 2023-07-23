@@ -1,8 +1,8 @@
-import { DOMElementOptions, DOMManager } from '../../../../lib/browser/dom-manager';
+import { DOMElementOptions, DOMManager } from '../../../../dom-manager';
 import {
   PluginUserOption,
   PluginUserOptionDependencyAction,
-} from '../../../../lib/plugin/types/plugin-user-options';
+} from '../../../../plugin/types/plugin-user-options';
 
 export abstract class Input<TValue, TElement extends HTMLElement> {
   public onchange: (newValue: TValue) => void;

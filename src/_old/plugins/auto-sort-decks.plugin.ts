@@ -1,10 +1,10 @@
-import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../lib/plugin/types/plugin-options';
+import { JPDBPlugin } from '../plugin/jpdb-plugin';
+import { PluginOptions } from '../plugin/types/plugin-options';
 import {
   PluginUserOptions,
   PluginUserOptionFieldType,
   PluginUserOptionDependencyAction,
-} from '../lib/plugin/types/plugin-user-options';
+} from '../plugin/types/plugin-user-options';
 
 const deckListDescription = `A value can either be a simple string or a regular expression.<br />
 <br />

@@ -1,4 +1,4 @@
-import { DOMManager } from './browser/dom-manager';
+import { DOMManager } from './dom-manager';
 
 export class Globals {
   public static readonly domManager = new DOMManager();

@@ -1,4 +1,4 @@
-import { DOMManager } from '../browser/dom-manager';
+import { DOMManager } from '../dom-manager';
 import { Globals } from '../globals';
 import { PluginOptions } from './types/plugin-options';
 import {

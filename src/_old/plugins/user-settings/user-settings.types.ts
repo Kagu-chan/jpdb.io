@@ -1,5 +1,5 @@
-import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
-import { PluginUserOption } from '../../lib/plugin/types/plugin-user-options';
+import { JPDBPlugin } from '../../plugin/jpdb-plugin';
+import { PluginUserOption } from '../../plugin/types/plugin-user-options';
 
 export type PluginSettingsSection = {
   plugin: JPDBPlugin;

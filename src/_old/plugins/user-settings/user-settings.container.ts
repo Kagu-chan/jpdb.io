@@ -1,4 +1,4 @@
-import { DOMContainer } from '../../lib/browser/dom-container';
+import { DOMContainer } from '../../dom-container';
 import { UserSettingsSection } from './controls/user-settings.section';
 import { UserSettingsPluginAPI } from './user-settings-plugin.api';
 import { PluginSettingsSection } from './user-settings.types';

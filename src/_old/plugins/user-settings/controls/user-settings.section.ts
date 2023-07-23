@@ -1,9 +1,9 @@
-import { DOMContainer } from '../../../lib/browser/dom-container';
+import { DOMContainer } from '../../../dom-container';
 import {
   PluginUserOptions,
   PluginUserOptionDep,
   PluginUserOption,
-} from '../../../lib/plugin/types/plugin-user-options';
+} from '../../../plugin/types/plugin-user-options';
 import { UserSettingsContainer } from '../user-settings.container';
 import { PluginSectionContainer, PluginSettingsSection } from '../user-settings.types';
 import { Input } from './inputs/input.class';

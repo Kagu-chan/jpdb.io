@@ -1,11 +1,11 @@
-import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../lib/plugin/types/plugin-options';
+import { JPDBPlugin } from '../plugin/jpdb-plugin';
+import { PluginOptions } from '../plugin/types/plugin-options';
 import {
   PluginUserOptions,
   PluginUserOptionFieldType,
   PluginUserOptionCheckbox,
   PluginUserOptionDependencyAction,
-} from '../lib/plugin/types/plugin-user-options';
+} from '../plugin/types/plugin-user-options';
 
 type CustomLink = {
   url: string;

@@ -1,10 +1,10 @@
-import { DOMContainer } from '../../lib/browser/dom-container';
-import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
-import { PluginOptions } from '../../lib/plugin/types/plugin-options';
+import { DOMContainer } from '../../dom-container';
+import { JPDBPlugin } from '../../plugin/jpdb-plugin';
+import { PluginOptions } from '../../plugin/types/plugin-options';
 import {
   PluginUserOptionFieldType,
   PluginUserOptions,
-} from '../../lib/plugin/types/plugin-user-options';
+} from '../../plugin/types/plugin-user-options';
 import { UserSettingsPluginAPI } from './user-settings-plugin.api';
 import { UserSettingsContainer } from './user-settings.container';
 import { PluginSettingsSection } from './user-settings.types';
