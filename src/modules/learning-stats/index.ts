@@ -75,7 +75,7 @@ export class LearningStats {
 
   private addListeners(): void {
     jpdb.runOnceOnEnable('/settings', this.LEARNING_STATS, () => {
-      jpdb.settings.setModuleOption(
+      jpdb.settings.persistence.setModuleOption(
         this.LEARNING_STATS,
         this.SETTING,
         jpdb.settings.getJpdbSetting(this.SETTING),
@@ -290,7 +290,7 @@ export class LearningStats {
   }
 
   private appendNewCardsToday(): void {
-    const target = jpdb.settings.getModuleOption(this.LEARNING_STATS, this.SETTING, 20);
+    const target = jpdb.settings.persistence.getModuleOption(this.LEARNING_STATS, this.SETTING, 20);
 
     void jpdb.cache
       .fromCacheAsync<string>(

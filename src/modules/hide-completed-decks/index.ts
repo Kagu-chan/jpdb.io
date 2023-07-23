@@ -50,7 +50,7 @@ class HideCompletedDecks {
 
     jpdb.runOnce('/settings', () => {
       const rbs = jpdb.settings.getJpdbRadioSetting('learning-order');
-      jpdb.settings.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
+      jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
       if (rbs.includes('all-decks')) {
         jpdb.settings.disableModule(this.HIDE_NON_NEW_FIRST);

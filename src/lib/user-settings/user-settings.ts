@@ -1,7 +1,10 @@
 import { IActivatable } from './ui/module-settings/activatable.interface';
 import { SettingsUI } from './ui/settings-ui';
+import { UserSettingsPersistence } from './user-settings-persistence';
 
 export class UserSettings {
+  public readonly persistence = new UserSettingsPersistence();
+
   private SETTINGS = '/settings';
   private ACTIVE_MODULES = 'active-modules';
 
@@ -9,7 +12,7 @@ export class UserSettings {
   private _activeModules: string[];
 
   constructor() {
-    this._activeModules = this.read<string[]>(this.ACTIVE_MODULES, []);
+    this._activeModules = this.persistence.read<string[]>(this.ACTIVE_MODULES, []);
 
     this.onSettings(() => {
       this._ui = new SettingsUI();
@@ -38,7 +41,7 @@ export class UserSettings {
       document.dispatchEvent(new CustomEvent('module-enabled', { detail: { name } }));
       this._activeModules.push(name);
 
-      this.write(this.ACTIVE_MODULES, this._activeModules);
+      this.persistence.write(this.ACTIVE_MODULES, this._activeModules);
     }
   }
 
@@ -47,7 +50,7 @@ export class UserSettings {
       document.dispatchEvent(new CustomEvent('module-disabled', { detail: { name } }));
       this._activeModules = this._activeModules.filter((n) => n !== name);
 
-      this.write(this.ACTIVE_MODULES, this._activeModules);
+      this.persistence.write(this.ACTIVE_MODULES, this._activeModules);
     }
   }
 
@@ -69,32 +72,9 @@ export class UserSettings {
     return document.jpdb.findElements<'input'>(`[name="${name}"]`).find((e) => e.checked)?.value;
   }
 
-  public getModuleOption<T>(module: string, key: string, defaultValue: T): T {
-    return this.read<Record<string, T>>(module, { [key]: defaultValue })[key];
-  }
-
-  public setModuleOption<T>(module: string, key: string, value: T): void {
-    const data = this.read<Record<string, T>>(module, {});
-
-    data[key] = value;
-    this.write(module, data);
-  }
-
   private onSettings(fn: Function): void {
     if (location.match(this.SETTINGS)) {
       fn();
     }
-  }
-
-  private read<TResult>(key: string, defaultValue: TResult): TResult {
-    if (!localStorage.getItem(key)) {
-      this.write(key, defaultValue);
-    }
-
-    return JSON.parse(localStorage.getItem(key)) as TResult;
-  }
-
-  private write<TData>(key: string, value: TData): void {
-    localStorage.setItem(key, JSON.stringify(value));
   }
 }
