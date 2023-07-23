@@ -1,4 +1,4 @@
-import { PluginUserOptionRadioButton } from '../../../../lib/types';
+import { PluginUserOptionRadioButton } from '../../../../lib/plugin/types/plugin-user-options';
 import { Input } from './input.class';
 
 export class RadioButtonInput extends Input<string, HTMLInputElement> {

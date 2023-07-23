@@ -1,6 +1,10 @@
 import { JPDBRequest } from '../lib/jpdb.io/request';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
-import { PluginOptions, PluginUserOptionFieldType, PluginUserOptions } from '../lib/types';
+import { PluginOptions } from '../lib/plugin/types/plugin-options';
+import {
+  PluginUserOptions,
+  PluginUserOptionFieldType,
+} from '../lib/plugin/types/plugin-user-options';
 
 type DeckTarget = {
   deckId: number;
@@ -48,7 +52,8 @@ export class MoveCardPlugin extends JPDBPlugin {
   protected run(): void {
     if (this.isPremadeDeck()) return;
 
-    this._currentDeckId = Number(this.QUERY['id']);
+    this._currentDeckId = Number(5);
+    // this._currentDeckId = Number(this.QUERY['id']);
 
     const targets = this.getUsersSetting<DeckTarget[]>('objects').filter(
       ({ deckId }) => deckId !== this._currentDeckId,
@@ -77,9 +82,10 @@ export class MoveCardPlugin extends JPDBPlugin {
               tag: 'a',
               innerText: `Move to: ${target.label}`,
               handler: (): void => {
-                const vocabData = this.queryToObject<VocabData>(
-                  document.jpdb.findElement(e, 'a').getAttribute('href').split('?')[1],
-                );
+                const vocabData: VocabData = {} as unknown as VocabData;
+                //  this.queryToObject<VocabData>(
+                //   document.jpdb.findElement(e, 'a').getAttribute('href').split('?')[1],
+                // );
 
                 this.moveDeck(vocabData, target);
               },

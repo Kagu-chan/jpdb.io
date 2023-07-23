@@ -1,4 +1,4 @@
-import { PluginUserOptionNumber } from '../../../../lib/types';
+import { PluginUserOptionNumber } from '../../../../lib/plugin/types/plugin-user-options';
 import { TextBoxBasedInput } from './textbox-based-input.class';
 
 export class NumberInput extends TextBoxBasedInput<number> {

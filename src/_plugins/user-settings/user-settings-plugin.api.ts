@@ -1,17 +1,13 @@
-import { Globals } from '../../lib/globals';
 import { JPDBPlugin } from '../../lib/plugin/jpdb-plugin';
-import { PluginManager } from '../../lib/plugin/plugin-manager';
 import { PluginSettingsSection } from './user-settings.types';
 
 export class UserSettingsPluginAPI {
   public readonly sections = new Map<string, PluginSettingsSection>();
 
-  private _manager: PluginManager;
   private _plugins: Map<string, JPDBPlugin>;
 
   constructor() {
-    this._manager = Globals.pluginManager;
-    this._plugins = this._manager.plugins;
+    this._plugins = new Map<string, JPDBPlugin>();
   }
 
   public buildMaps(includeBeta: boolean): void {
@@ -53,25 +49,23 @@ export class UserSettingsPluginAPI {
   }
 
   public resetSettings(): void {
-    Globals.persistence.unset();
-
     window.location.reload();
   }
 
   public saveSettings(skipReload?: boolean): void {
-    const pluginSettings: ReturnType<typeof Globals.persistence.get<'plugins'>> = {};
+    // const pluginSettings: ReturnType<typeof Globals.persistence.get<'plugins'>> = {};
 
-    this._plugins.forEach((p: JPDBPlugin) => {
-      if (!p.userSettings.length) return;
+    // this._plugins.forEach((p: JPDBPlugin) => {
+    //   if (!p.userSettings.length) return;
 
-      pluginSettings[p.constructor.name] = {};
+    //   pluginSettings[p.constructor.name] = {};
 
-      p.userSettings.forEach(({ key }) => {
-        pluginSettings[p.constructor.name][key] = p.usersSettings[key];
-      });
-    });
+    //   p.userSettings.forEach(({ key }) => {
+    //     pluginSettings[p.constructor.name][key] = p.usersSettings[key];
+    //   });
+    // });
 
-    Globals.persistence.set('plugins', pluginSettings);
+    // Globals.persistence.set('plugins', pluginSettings);
 
     if (skipReload) return;
     window.location.reload();

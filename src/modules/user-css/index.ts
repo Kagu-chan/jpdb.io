@@ -15,4 +15,8 @@
       },
     ],
   });
+
+  jpdb.runAlwaysWhenActive(/.*/, USER_CSS, () =>
+    jpdb.css.add(USER_CSS, jpdb.settings.getModuleOption(USER_CSS, 'styles', '')),
+  );
 })();

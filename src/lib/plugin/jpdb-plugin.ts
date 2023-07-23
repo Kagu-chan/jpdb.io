@@ -1,10 +1,13 @@
 import { DOMManager } from '../browser/dom-manager';
 import { Globals } from '../globals';
-import { Root } from '../root';
-import { PluginUserOption, PluginUserOptionFieldType, PluginUserOptions } from '../types';
 import { PluginOptions } from './types/plugin-options';
+import {
+  PluginUserOptions,
+  PluginUserOption,
+  PluginUserOptionFieldType,
+} from './types/plugin-user-options';
 
-export abstract class JPDBPlugin extends Root {
+export abstract class JPDBPlugin {
   protected abstract _pluginOptions: PluginOptions;
   protected _userSettings: PluginUserOptions = [];
   protected _usersSettings: Record<string, unknown> = {};
@@ -18,10 +21,6 @@ export abstract class JPDBPlugin extends Root {
    * @deprecated
    */
   protected _body: HTMLBodyElement;
-
-  constructor() {
-    super();
-  }
 
   public get pluginOptions(): PluginOptions {
     return this._pluginOptions;
@@ -53,25 +52,7 @@ export abstract class JPDBPlugin extends Root {
   }
 
   public loadUsersSettings(): void {
-    const allPlugins = Globals.persistence.get('plugins') ?? {};
-    const thisPlugin = allPlugins[this.constructor.name] ?? {};
-    let persistDefaults: boolean = false;
-
-    this._userSettings.forEach(({ key, default: defaultValue }) => {
-      if (thisPlugin[key] === undefined) {
-        thisPlugin[key] = defaultValue;
-
-        persistDefaults = true;
-      }
-
-      this._usersSettings[key] = thisPlugin[key];
-    });
-
-    if (persistDefaults) {
-      allPlugins[this.constructor.name] = thisPlugin;
-
-      Globals.persistence.set('plugins', allPlugins);
-    }
+    /* NOP */
   }
 
   public execute(): void {
@@ -93,7 +74,7 @@ export abstract class JPDBPlugin extends Root {
    */
   private isActive(): boolean {
     const isActive = (activeAt: string | RegExp): boolean =>
-      typeof activeAt === 'string' ? activeAt === this.PATH : activeAt.test(this.PATH);
+      typeof activeAt === 'string' ? activeAt === '' : activeAt.test('');
 
     return (
       !this._sleeps &&

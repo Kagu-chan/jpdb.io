@@ -1,4 +1,7 @@
-import { ObjectSchemaItem, PluginUserOptionObjectList } from '../../../../lib/types';
+import {
+  PluginUserOptionObjectList,
+  ObjectSchemaItem,
+} from '../../../../lib/plugin/types/plugin-user-options';
 import { ListBasedInput } from './list-based-input.class';
 
 export class ObjectListInput extends ListBasedInput<Record<string, string | number>> {

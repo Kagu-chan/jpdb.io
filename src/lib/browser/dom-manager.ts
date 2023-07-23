@@ -1,5 +1,3 @@
-import { Root } from '../root';
-
 export type DOMElementOptions = {
   id?: string;
   class?: string[];
@@ -14,7 +12,7 @@ export type DOMFilterFn = (e: HTMLElement, index: number) => boolean;
 /**
  * @deprecated
  */
-export class DOMManager extends Root {
+export class DOMManager {
   //#region Selectors
   public find(selector: string): HTMLElement[];
   public find<K extends keyof HTMLElementTagNameMap>(

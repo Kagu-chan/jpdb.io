@@ -1,12 +1,10 @@
-// import { Globals } from '../lib/globals';
 import { JPDBPlugin } from '../lib/plugin/jpdb-plugin';
+import { PluginOptions } from '../lib/plugin/types/plugin-options';
 import {
-  PluginOptions,
-  PluginUserOptionDependencyAction,
-  PluginUserOptionFieldType,
   PluginUserOptions,
-} from '../lib/types';
-// import { CSSPlugin } from './css/css.plugin';
+  PluginUserOptionFieldType,
+  PluginUserOptionDependencyAction,
+} from '../lib/plugin/types/plugin-user-options';
 
 const deckListDescription = `A value can either be a simple string or a regular expression.<br />
 <br />

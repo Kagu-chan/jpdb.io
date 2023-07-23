@@ -1,4 +1,7 @@
-import { PluginUserOption, PluginUserOptionFieldType } from '../../../lib/types';
+import {
+  PluginUserOptionFieldType,
+  PluginUserOption,
+} from '../../../lib/plugin/types/plugin-user-options';
 import { CheckBoxInput } from './inputs/checkbox.input';
 import { DividerInput } from './inputs/divider.input';
 import { HeaderInput } from './inputs/header.input';
