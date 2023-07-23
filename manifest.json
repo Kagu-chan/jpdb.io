@@ -15,6 +15,7 @@
     "unsuspend",
     "tsc",
     "hide-deck-numbers",
+    "hide-decks",
     "hide-completed-decks",
     "widen-viewport",
     "sticky-navbar",
