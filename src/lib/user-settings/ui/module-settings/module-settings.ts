@@ -1,4 +1,5 @@
 import { checkbox, CheckboxOptions } from '../../../elements/checkbox';
+import { ModuleUserOptions } from './activatable.interface';
 
 export type ModuleSettingsOptions = {
   name: string;
@@ -10,6 +11,7 @@ export type ModuleSettingsOptions = {
   source?: string;
   description?: string;
   experimental?: boolean;
+  children?: ModuleUserOptions;
 };
 
 export class ModuleSettingsContainer {

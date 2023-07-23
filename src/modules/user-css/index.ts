@@ -5,6 +5,14 @@
     name: USER_CSS,
     category: 'UI',
     displayText: 'Allows adding own CSS definitions',
-    children: [],
+    description:
+      'Allows you to add your own CSS definitions to change the look and feel of JPDB.io',
+    children: [
+      {
+        key: 'styles',
+        type: ModuleUserOptionFieldType.TEXTAREA,
+        default: '',
+      },
+    ],
   });
 })();
