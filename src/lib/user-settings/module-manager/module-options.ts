@@ -4,8 +4,6 @@ export enum ModuleUserOptionDependencyAction {
 }
 
 export enum ModuleUserOptionFieldType {
-  HEADER = 'header',
-  DIVIDER = 'divider',
   CHECKBOX = 'checkbox',
   RADIOBUTTON = 'radio',
   TEXT = 'text',
@@ -15,85 +13,63 @@ export enum ModuleUserOptionFieldType {
   OBJECTLIST = 'objectlist',
 }
 
-export type ModuleUserOptionNoDep = {
-  dependsOn?: undefined;
-};
-export type ModuleUserOptionDep = {
-  dependsOn: string;
-  indent: boolean;
-  hideOrDisable: ModuleUserOptionDependencyAction;
-  indentWith?: string;
-};
-export type ModuleUserOptionDependsOn = ModuleUserOptionNoDep | ModuleUserOptionDep;
-
-type ModuleUserOptionBase<T> = ModuleUserOptionDependsOn & {
+type ModuleUserOptionBase<T> = {
   key: string;
   text?: string;
   description?: string;
   default?: T;
+  type: `${ModuleUserOptionFieldType}`;
+  hideOrDisable: `${ModuleUserOptionDependencyAction}`;
+  indent?: boolean;
+  indentWith?: string;
+  children?: ModuleUserOptions;
 };
 type ModuleUserOptionBaseRequired<T> = ModuleUserOptionBase<T> &
   Required<Pick<ModuleUserOptionBase<T>, 'default'>>;
 
-export type ModuleUserOptionHeader = ModuleUserOptionBase<void> & {
-  type: ModuleUserOptionFieldType.HEADER;
-};
-export type ModuleUserOptionDivider = ModuleUserOptionBase<void> & {
-  type: ModuleUserOptionFieldType.DIVIDER;
-};
 export type ModuleUserOptionCheckbox = ModuleUserOptionBase<boolean> & {
-  type: ModuleUserOptionFieldType.CHECKBOX;
+  type: 'checkbox';
 };
 export type ModuleUserOptionRadioButton = ModuleUserOptionBase<string> & {
-  type: ModuleUserOptionFieldType.RADIOBUTTON;
+  type: 'radio';
   options: object;
   labels: object;
 };
 export type ModuleUserOptionText = ModuleUserOptionBase<string> & {
-  type: ModuleUserOptionFieldType.TEXT;
+  type: 'text';
   placeholder?: string;
 };
 export type ModuleUserOptionTextarea = ModuleUserOptionBase<string> & {
-  type: ModuleUserOptionFieldType.TEXTAREA;
+  type: 'textarea';
   placeholder?: string;
 };
 export type ModuleUserOptionNumber = ModuleUserOptionBase<number> & {
-  type: ModuleUserOptionFieldType.NUMBER;
+  type: 'number';
   placeholder?: string;
   min?: number;
   max?: number;
 };
 
 export type ModuleUserOptionList = ModuleUserOptionBaseRequired<string[]> & {
-  type: ModuleUserOptionFieldType.LIST;
+  type: 'list';
   text: string;
 };
 
 export type ObjectSchemaItem = {
   key: string;
   label: string;
-  type: ModuleUserOptionFieldType.NUMBER | ModuleUserOptionFieldType.TEXT;
+  type: 'number' | 'text';
   min?: number;
   max?: number;
 };
 export type ObjectSchema = ObjectSchemaItem[];
 export type ModuleUserOptionObjectList = ModuleUserOptionBaseRequired<object[]> & {
-  type: ModuleUserOptionFieldType.OBJECTLIST;
+  type: 'objectlist';
   text: string;
   schema: ObjectSchema;
 };
 
-export type ModuleUserOptionEnabled = ModuleUserOptionNoDep & {
-  key: 'enabled';
-  text: string;
-  type: ModuleUserOptionFieldType.CHECKBOX;
-  default: boolean;
-  description: undefined;
-};
-
 export type ModuleUserOption =
-  | ModuleUserOptionHeader
-  | ModuleUserOptionDivider
   | ModuleUserOptionCheckbox
   | ModuleUserOptionRadioButton
   | ModuleUserOptionText
@@ -103,7 +79,7 @@ export type ModuleUserOption =
   | ModuleUserOptionObjectList;
 export type ModuleUserOptions = ModuleUserOption[];
 
-export interface IActivatable {
+export interface IModuleOptions {
   name: string;
   category: string;
   experimental?: boolean;
@@ -111,5 +87,5 @@ export interface IActivatable {
   description?: string;
   author?: string;
   source?: string;
-  children?: ModuleUserOptions;
+  options?: ModuleUserOptions;
 }

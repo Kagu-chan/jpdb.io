@@ -1,5 +1,5 @@
 import { checkbox, CheckboxOptions } from '../../../elements/checkbox';
-import { ModuleUserOptions } from './activatable.interface';
+import { ModuleUserOptions } from '../../module-manager/module-options';
 
 export type ModuleSettingsOptions = {
   name: string;

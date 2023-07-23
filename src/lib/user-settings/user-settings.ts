@@ -1,4 +1,4 @@
-import { ModuleManager } from './module-manager';
+import { ModuleManager } from './module-manager/module-manager';
 import { SettingsUI } from './ui/settings-ui';
 import { UserSettingsPersistence } from './user-settings-persistence';
 

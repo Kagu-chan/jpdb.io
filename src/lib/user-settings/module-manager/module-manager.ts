@@ -1,6 +1,6 @@
-import { IActivatable } from './ui/module-settings/activatable.interface';
-import { SettingsUI } from './ui/settings-ui';
-import { UserSettingsPersistence } from './user-settings-persistence';
+import { SettingsUI } from '../ui/settings-ui';
+import { UserSettingsPersistence } from '../user-settings-persistence';
+import { IModuleOptions } from './module-options';
 
 export class ModuleManager {
   private ACTIVE_MODULES = 'active-modules';
@@ -12,7 +12,7 @@ export class ModuleManager {
     this._activeModules = this._persistence.read<string[]>(this.ACTIVE_MODULES, []);
   }
 
-  public register(options: IActivatable): void {
+  public register(options: IModuleOptions): void {
     const { name, displayText } = options;
 
     this._ui?.registerConfigurable({

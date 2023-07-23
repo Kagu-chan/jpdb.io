@@ -7,10 +7,11 @@
     displayText: 'Allows adding own CSS definitions',
     description:
       'Allows you to add your own CSS definitions to change the look and feel of JPDB.io',
-    children: [
+    options: [
       {
         key: 'styles',
-        type: ModuleUserOptionFieldType.TEXTAREA,
+        type: 'textarea',
+        hideOrDisable: 'hide',
         default: '',
       },
     ],
