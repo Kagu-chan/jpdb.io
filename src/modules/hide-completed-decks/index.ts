@@ -44,7 +44,7 @@ class HideCompletedDecks {
           description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}%`,
         });
       } else {
-        jpdb.settings.disableModule(this.HIDE_THRESHOLD_DECKS);
+        jpdb.settings.moduleManager.disableModule(this.HIDE_THRESHOLD_DECKS);
       }
     });
 
@@ -53,7 +53,7 @@ class HideCompletedDecks {
       jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
       if (rbs.includes('all-decks')) {
-        jpdb.settings.disableModule(this.HIDE_NON_NEW_FIRST);
+        jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_FIRST);
       } else {
         jpdb.settings.registerConfigurable({
           name: this.HIDE_NON_NEW_FIRST,

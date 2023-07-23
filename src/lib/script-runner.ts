@@ -82,7 +82,7 @@ export class ScriptRunner {
    * @param {Function} action Function to execute
    */
   public runOnceWhenActive(match: Path | Path[], enableKey: string, action: Function): void {
-    if (this.settings.getActiveState(enableKey)) {
+    if (this.settings.moduleManager.getActiveState(enableKey)) {
       this.runOnce(match, action);
     }
   }
@@ -99,7 +99,7 @@ export class ScriptRunner {
     enableKeys: string[],
     action: Function,
   ): void {
-    if (enableKeys.some((key) => this.settings.getActiveState(key))) {
+    if (enableKeys.some((key) => this.settings.moduleManager.getActiveState(key))) {
       this.runOnce(match, action);
     }
   }
@@ -127,7 +127,7 @@ export class ScriptRunner {
    * @param {Function} action Function to execute
    */
   public runAlwaysWhenActive(match: Path | Path[], enableKey: string, action: Function): void {
-    if (this.settings.getActiveState(enableKey)) {
+    if (this.settings.moduleManager.getActiveState(enableKey)) {
       this.runAlways(match, action);
     }
   }
@@ -145,7 +145,7 @@ export class ScriptRunner {
     enableKeys: string[],
     action: Function,
   ): void {
-    if (enableKeys.some((key) => this.settings.getActiveState(key))) {
+    if (enableKeys.some((key) => this.settings.moduleManager.getActiveState(key))) {
       this.runAlways(match, action);
     }
   }
@@ -183,7 +183,7 @@ export class ScriptRunner {
     this.on(
       `${enableKey}-enabled`,
       () => this.runOnce(match, action),
-      this.settings.getActiveState(enableKey),
+      this.settings.moduleManager.getActiveState(enableKey),
     );
   }
 

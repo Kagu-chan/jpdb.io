@@ -1,26 +1,20 @@
+import { ModuleManager } from './module-manager';
 import { IActivatable } from './ui/module-settings/activatable.interface';
 import { SettingsUI } from './ui/settings-ui';
 import { UserSettingsPersistence } from './user-settings-persistence';
 
 export class UserSettings {
   public readonly persistence = new UserSettingsPersistence();
+  public readonly moduleManager = new ModuleManager();
 
   private SETTINGS = '/settings';
-  private ACTIVE_MODULES = 'active-modules';
 
   private _ui: SettingsUI;
-  private _activeModules: string[];
 
   constructor() {
-    this._activeModules = this.persistence.read<string[]>(this.ACTIVE_MODULES, []);
-
     this.onSettings(() => {
       this._ui = new SettingsUI();
     });
-  }
-
-  public getActiveState(name: string): boolean {
-    return this._activeModules.includes(name);
   }
 
   public registerConfigurable(options: IActivatable): void {
@@ -29,29 +23,11 @@ export class UserSettings {
     this._ui?.registerConfigurable({
       ...options,
       displayText: displayText ?? name,
-      value: this.getActiveState(name),
+      value: this.moduleManager.getActiveState(name),
       change: (val: boolean) => {
-        val ? this.enableModule(name) : this.disableModule(name);
+        val ? this.moduleManager.enableModule(name) : this.moduleManager.disableModule(name);
       },
     });
-  }
-
-  public enableModule(name: string): void {
-    if (!this.getActiveState(name)) {
-      document.dispatchEvent(new CustomEvent('module-enabled', { detail: { name } }));
-      this._activeModules.push(name);
-
-      this.persistence.write(this.ACTIVE_MODULES, this._activeModules);
-    }
-  }
-
-  public disableModule(name: string): void {
-    if (this.getActiveState(name)) {
-      document.dispatchEvent(new CustomEvent('module-disabled', { detail: { name } }));
-      this._activeModules = this._activeModules.filter((n) => n !== name);
-
-      this.persistence.write(this.ACTIVE_MODULES, this._activeModules);
-    }
   }
 
   public hasPatreonPerks(): boolean {
