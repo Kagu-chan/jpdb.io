@@ -2,7 +2,7 @@ form {
   display: inline;
 }
 
-input.show-deck-list {
+input.show-deck-list:not(.mobile) {
   margin-left: 1rem;
   margin-bottom: 0;
 }

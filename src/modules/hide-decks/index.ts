@@ -32,6 +32,7 @@ import { button } from '../../lib/elements/button';
     );
 
     btn.classList.add('show-deck-list');
+    jpdb.onMobile(() => btn.classList.add('mobile'));
 
     const decksH = document.jpdb.findElement('#deck_list');
     const deckL = decksH.nextSibling;
