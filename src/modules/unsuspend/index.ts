@@ -49,4 +49,10 @@
 
     document.jpdb.withElement('.dropdown-content', withNode);
   });
+  jpdb.runAlways(/\/search/, () => {
+    document.jpdb
+      .findElements<'div'>('.result.vocabulary')
+      .filter((e) => !!document.jpdb.findElement(e, '.tag.suspended'))
+      .map((e) => withNode(e));
+  });
 })();
