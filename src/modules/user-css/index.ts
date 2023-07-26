@@ -4,15 +4,17 @@
   jpdb.settings.moduleManager.register({
     name: USER_CSS,
     category: 'UI',
-    displayText: 'Allows adding own CSS definitions',
+    displayText: 'Add own CSS definitions',
     description:
       'Allows you to add your own CSS definitions to change the look and feel of JPDB.io',
     options: [
       {
         key: 'styles',
         type: 'textarea',
-        hideOrDisable: 'hide',
         default: '',
+        placeholder: 'CSS',
+        description: 'Description',
+        text: 'Text',
       },
     ],
   });

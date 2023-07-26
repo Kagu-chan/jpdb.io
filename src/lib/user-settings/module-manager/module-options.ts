@@ -1,91 +1,101 @@
-export enum ModuleUserOptionDependencyAction {
-  HIDE = 'hide',
-  DISABLE = 'disable',
-}
+import { container } from '../../elements/container';
+import { ModuleOption } from './module-option/module-option';
+import { IModuleOptions } from './module-options.type';
 
-export enum ModuleUserOptionFieldType {
-  CHECKBOX = 'checkbox',
-  RADIOBUTTON = 'radio',
-  TEXT = 'text',
-  TEXTAREA = 'textarea',
-  NUMBER = 'number',
-  LIST = 'list',
-  OBJECTLIST = 'objectlist',
-}
+export class ModuleOptions {
+  private _container = container([]);
+  private _main: ModuleOption;
 
-type ModuleUserOptionBase<T> = {
-  key: string;
-  text?: string;
-  description?: string;
-  default?: T;
-  type: `${ModuleUserOptionFieldType}`;
-  hideOrDisable: `${ModuleUserOptionDependencyAction}`;
-  indent?: boolean;
-  indentWith?: string;
-  children?: ModuleUserOptions;
-};
-type ModuleUserOptionBaseRequired<T> = ModuleUserOptionBase<T> &
-  Required<Pick<ModuleUserOptionBase<T>, 'default'>>;
+  constructor(private _data: IModuleOptions) {
+    this._main = new ModuleOption(
+      this._data.name,
+      {
+        type: 'checkbox',
+        key: '_',
+        hideOrDisable: 'hide',
+        children: _data.options,
+        indent: true,
+        text: _data.displayText,
+        description: this.getDescription(),
+      },
+      this._container,
+      () => jpdb.settings.moduleManager.getActiveState(this._data.name),
+      (value: boolean) => {
+        value
+          ? jpdb.settings.moduleManager.enableModule(this._data.name)
+          : jpdb.settings.moduleManager.disableModule(this._data.name);
 
-export type ModuleUserOptionCheckbox = ModuleUserOptionBase<boolean> & {
-  type: 'checkbox';
-};
-export type ModuleUserOptionRadioButton = ModuleUserOptionBase<string> & {
-  type: 'radio';
-  options: object;
-  labels: object;
-};
-export type ModuleUserOptionText = ModuleUserOptionBase<string> & {
-  type: 'text';
-  placeholder?: string;
-};
-export type ModuleUserOptionTextarea = ModuleUserOptionBase<string> & {
-  type: 'textarea';
-  placeholder?: string;
-};
-export type ModuleUserOptionNumber = ModuleUserOptionBase<number> & {
-  type: 'number';
-  placeholder?: string;
-  min?: number;
-  max?: number;
-};
+        jpdb.emit(value ? 'module-enabled' : 'module-disabled', this._data);
+        jpdb.emit(value ? `${this._data.name}-enabled` : `${this._data.name}-disabled`, this._data);
+        jpdb.toaster.toast(
+          `${value ? 'Enabled' : 'Disabled'}: ${this._data.displayText} `,
+          'success',
+        );
+      },
+    );
+  }
 
-export type ModuleUserOptionList = ModuleUserOptionBaseRequired<string[]> & {
-  type: 'list';
-  text: string;
-};
+  public getEl(): HTMLDivElement {
+    return this._container;
+  }
 
-export type ObjectSchemaItem = {
-  key: string;
-  label: string;
-  type: 'number' | 'text';
-  min?: number;
-  max?: number;
-};
-export type ObjectSchema = ObjectSchemaItem[];
-export type ModuleUserOptionObjectList = ModuleUserOptionBaseRequired<object[]> & {
-  type: 'objectlist';
-  text: string;
-  schema: ObjectSchema;
-};
+  private getDescription(): string {
+    const { description, author, source } = this._data;
 
-export type ModuleUserOption =
-  | ModuleUserOptionCheckbox
-  | ModuleUserOptionRadioButton
-  | ModuleUserOptionText
-  | ModuleUserOptionTextarea
-  | ModuleUserOptionNumber
-  | ModuleUserOptionList
-  | ModuleUserOptionObjectList;
-export type ModuleUserOptions = ModuleUserOption[];
+    const { createElement } = document.jpdb;
+    const formatString = (...parts: string[]): string =>
+      parts
+        .filter((v) => v?.length)
+        .join(' ')
+        .trim()
+        .replace(/\s?\.\.?/, '.')
+        .replace(/^\.\s*/, '') + ' ';
 
-export interface IModuleOptions {
-  name: string;
-  category: string;
-  experimental?: boolean;
-  displayText?: string;
-  description?: string;
-  author?: string;
-  source?: string;
-  options?: ModuleUserOptions;
+    if (!author?.length && !source?.length) return description;
+
+    if (author?.length && source?.length) {
+      const s = createElement('span', {
+        innerText: formatString(description, '.', 'Created by'),
+        children: [
+          {
+            tag: 'a',
+            attributes: { href: source, target: '_blank' },
+            innerText: author,
+          },
+        ],
+      });
+
+      return s.innerHTML;
+    }
+
+    if (author?.length) {
+      const s = createElement('span', {
+        innerText: formatString(description, '.', 'Created by'),
+        children: [
+          {
+            tag: 'span',
+            style: {
+              color: 'green',
+            },
+            innerText: author,
+          },
+        ],
+      });
+
+      return s.innerHTML;
+    }
+
+    const s = createElement('span', {
+      innerText: formatString(description, '.'),
+      children: [
+        {
+          tag: 'a',
+          attributes: { href: source, target: '_blank' },
+          innerText: 'Original source',
+        },
+      ],
+    });
+
+    return s.innerHTML;
+  }
 }

@@ -1,6 +1,7 @@
 import { SettingsUI } from '../ui/settings-ui';
 import { UserSettingsPersistence } from '../user-settings-persistence';
-import { IModuleOptions } from './module-options';
+import { IModuleOptions } from './module-options.type';
+import { ModuleSection } from './module-section';
 
 export class ModuleManager {
   private ACTIVE_MODULES = 'active-modules';
@@ -8,21 +9,23 @@ export class ModuleManager {
   private _persistence = new UserSettingsPersistence();
   private _activeModules: string[];
 
+  private _stableModules: ModuleSection;
+  private _experimentalModules: ModuleSection;
+
   constructor(private _ui: SettingsUI | undefined) {
     this._activeModules = this._persistence.read<string[]>(this.ACTIVE_MODULES, []);
+
+    this._stableModules = new ModuleSection('Module settings', this._ui.stable);
+    this._experimentalModules = new ModuleSection('Experimental settings', this._ui.experimental);
   }
 
   public register(options: IModuleOptions): void {
-    const { name, displayText } = options;
-
-    this._ui?.registerConfigurable({
-      ...options,
-      displayText: displayText ?? name,
-      value: this.getActiveState(name),
-      change: (val: boolean) => {
-        val ? this.enableModule(name) : this.disableModule(name);
-      },
+    jpdb.css.add({
+      key: 'settings',
+      css: __load_css('./src/lib/user-settings/ui/settings-ui.css'),
     });
+
+    (options.experimental ? this._experimentalModules : this._stableModules).register(options);
   }
 
   public getActiveState(name: string): boolean {
