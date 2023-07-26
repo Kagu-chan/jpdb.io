@@ -6,7 +6,7 @@ export abstract class Renderer<
 > {
   constructor(
     public _options: TOption,
-    public _value: TVal,
+    public _getValue: () => TVal,
     public _setValue: (val: TVal) => void,
   ) {}
 

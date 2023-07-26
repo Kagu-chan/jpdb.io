@@ -9,7 +9,7 @@ export class CheckboxRenderer extends Renderer<ModuleUserOptionCheckbox, boolean
       checkbox({
         label: this._options.text,
         name: this._options.key,
-        value: this._value ?? this._options.default,
+        value: this._getValue() ?? this._options.default,
         helpText: this._options.description,
         change: (value: boolean) => {
           this._setValue(value);

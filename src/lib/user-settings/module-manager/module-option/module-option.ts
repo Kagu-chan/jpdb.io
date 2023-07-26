@@ -16,7 +16,7 @@ export class ModuleOption {
     private _setValue: (val: unknown) => void,
   ) {
     const ctor = this.getRenderer();
-    this._renderer = new ctor(_option, this._getValue(), this._setValue);
+    this._renderer = new ctor(_option, this._getValue, this._setValue);
 
     this._renderer?.render(this._renderIn);
 
@@ -41,10 +41,11 @@ export class ModuleOption {
     }
   }
 
-  private getRenderer(): new (o: ModuleUserOption, g: unknown, s: (v: unknown) => void) => Renderer<
-    ModuleUserOption,
-    unknown
-  > {
+  private getRenderer(): new (
+    o: ModuleUserOption,
+    g: () => unknown,
+    s: (v: unknown) => void,
+  ) => Renderer<ModuleUserOption, unknown> {
     switch (this._option.type) {
       case 'checkbox':
         return CheckboxRenderer;
@@ -63,23 +64,17 @@ export class ModuleOption {
     if (this._option.type !== 'checkbox') return;
 
     const sv = this._renderer._setValue;
+    const cls = o.hideOrDisable === 'hide' ? 'hidden' : 'disabled';
+
+    const setTrue = (): void => childsContainer.classList.remove(cls);
+    const setFalse = (): void => childsContainer.classList.add(cls);
 
     this._renderer._setValue = (v: boolean): void => {
-      if (o.hideOrDisable === 'hide') {
-        sv(v);
+      sv(v);
 
-        if (v) {
-          childsContainer.classList.remove('hidden');
-        } else {
-          childsContainer.classList.add('hidden');
-        }
-
-        if (!this._getValue()) {
-          childsContainer.classList.add('hidden');
-        } else {
-          // @TODO: Disable Children!
-        }
-      }
+      return v ? setTrue() : setFalse();
     };
+
+    if (!this._getValue()) setFalse();
   }
 }
