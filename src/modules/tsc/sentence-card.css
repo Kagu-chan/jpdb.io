@@ -1,0 +1,4 @@
+.review-hidden .answer-box .sentence > .highlight.rem {
+  color: var(--text-color);
+  font-weight: inherit;
+}
