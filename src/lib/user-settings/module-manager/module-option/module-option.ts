@@ -64,10 +64,13 @@ export class ModuleOption {
     if (this._option.type !== 'checkbox') return;
 
     const sv = this._renderer._setValue;
+    const isHide = o.hideOrDisable === 'hide';
     const cls = o.hideOrDisable === 'hide' ? 'hidden' : 'disabled';
 
-    const setTrue = (): void => childsContainer.classList.remove(cls);
-    const setFalse = (): void => childsContainer.classList.add(cls);
+    const setTrue = (): void =>
+      isHide ? childsContainer.classList.remove(cls) : this.enableTree(childsContainer);
+    const setFalse = (): void =>
+      isHide ? childsContainer.classList.add(cls) : this.disableTree(childsContainer);
 
     this._renderer._setValue = (v: boolean): void => {
       sv(v);
@@ -76,5 +79,25 @@ export class ModuleOption {
     };
 
     if (!this._getValue()) setFalse();
+  }
+
+  private disableTree(c: HTMLDivElement): void {
+    document.jpdb.withElements(c, 'input:not(:disabled)', (i: HTMLInputElement) => {
+      i.classList.add(`disabled-by-${this._option.key}`);
+      i.disabled = true;
+    });
+  }
+
+  private enableTree(c: HTMLDivElement): void {
+    document.jpdb.withElements(
+      c,
+      `input.disabled-by-${this._option.key}`,
+      (i: HTMLInputElement) => {
+        i.classList.remove(`disabled-by-${this._option.key}`);
+        if (!Array.from(i.classList).find((c) => c.startsWith('disabled-by-'))) {
+          i.disabled = false;
+        }
+      },
+    );
   }
 }
