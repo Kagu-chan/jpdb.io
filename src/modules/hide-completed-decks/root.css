@@ -25,3 +25,9 @@
 .non-new {
   border-color: var(--outline-v4-color) !important;
 }
+
+.hide-decks .completed,
+.hide-decks .threshold-reached,
+.hide-decks .non-new {
+  display: none;
+}

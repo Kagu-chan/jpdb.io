@@ -1,4 +1,6 @@
 export class Deck {
+  public readonly parameters = new Map<string, any>();
+
   private _title: string;
   private _newCards: HTMLDivElement;
   private _body: HTMLDivElement;
