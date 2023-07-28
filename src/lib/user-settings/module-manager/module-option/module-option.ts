@@ -20,11 +20,13 @@ export class ModuleOption {
 
     this._renderer?.render(this._renderIn);
 
-    if (this._option.children?.length) {
+    const children = this._option.children?.filter((c) => !!c) ?? [];
+
+    if (children.length) {
       const childsContainer = container([]);
 
       document.jpdb.appendElement(this._renderIn, childsContainer);
-      this._option.children.forEach((c: ModuleUserOption) => {
+      children.forEach((c: ModuleUserOption) => {
         new ModuleOption(
           this._name,
           c,
