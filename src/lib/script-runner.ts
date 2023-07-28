@@ -33,6 +33,13 @@ export class ScriptRunner {
 
       this.singleActions = [];
     });
+
+    if (isMobile()) {
+      const c = (): void => document.jpdb.findElement('.container.bugfix').classList.add('mobile');
+
+      this.reloadActions.push(c);
+      c();
+    }
   }
 
   /**
