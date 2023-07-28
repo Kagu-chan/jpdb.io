@@ -49,35 +49,39 @@ class StickyNavbar {
   }
 
   private addStickyNavbar(): void {
-    document.jpdb.adjacentElement('body', 'afterbegin', {
-      tag: 'div',
-      class: ['navbar-spacer'],
-      style: {},
+    add_and_run_event_listener(document, 'virtual-refresh', () => {
+      document.jpdb.adjacentElement('body', 'afterbegin', {
+        tag: 'div',
+        class: ['navbar-spacer'],
+        style: {},
+      });
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      add_and_run_event_listener(document, 'resize', this.resizeNavbarSpacer);
     });
 
     jpdb.css.add({
       key: this.STICKY_NAVBAR,
       css: __load_css('./src/modules/sticky-navbar/navbar.css'),
     });
-
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    add_and_run_event_listener(document, 'resize', this.resizeNavbarSpacer);
   }
 
   private addStickyFooter(): void {
-    document.jpdb.adjacentElement('body', 'beforeend', {
-      tag: 'div',
-      class: ['footer-spacer'],
-      style: {},
+    add_and_run_event_listener(document, 'virtual-refresh', () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      add_and_run_event_listener(document, 'resize', this.resizeFooterSpacer);
+
+      document.jpdb.adjacentElement('body', 'beforeend', {
+        tag: 'div',
+        class: ['footer-spacer'],
+        style: {},
+      });
     });
 
     jpdb.css.add({
       key: this.STICKY_FOOTER,
       css: __load_css('./src/modules/sticky-navbar/footer.css'),
     });
-
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    add_and_run_event_listener(document, 'resize', this.resizeFooterSpacer);
   }
 
   private removeStickyNavbar(): void {

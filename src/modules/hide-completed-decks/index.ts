@@ -14,7 +14,7 @@ class HideCompletedDecks {
   constructor() {
     this.register();
 
-    this.addRootCss();
+    this.addRootElements();
     this.buildDeckList();
 
     this.hideCompletedDecks();
@@ -71,7 +71,7 @@ class HideCompletedDecks {
     });
   }
 
-  private addRootCss(): void {
+  private addRootElements(): void {
     jpdb.runOnceWhenEitherIsActive(
       /\/deck-list/,
       [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
@@ -80,7 +80,13 @@ class HideCompletedDecks {
           `${this.HIDE_COMPLETED_DECKS}-${this.HIDE_THRESHOLD_DECKS}-${this.HIDE_NON_NEW_FIRST}`,
           __load_css('./src/modules/hide-completed-decks/root.css'),
         );
+      },
+    );
 
+    jpdb.runAlwaysWhenEitherIsActive(
+      /\/deck-list/,
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
+      () => {
         this._labelContainer = document.jpdb.adjacentElement('h4', 'afterend', container([]));
         this._labelContainer.classList.add('show-hide-container');
 
@@ -91,7 +97,7 @@ class HideCompletedDecks {
   }
 
   private buildDeckList(): void {
-    jpdb.runOnceWhenEitherIsActive(
+    jpdb.runAlwaysWhenEitherIsActive(
       /\/deck-list/,
       [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {

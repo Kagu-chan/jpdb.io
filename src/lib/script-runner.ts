@@ -188,6 +188,22 @@ export class ScriptRunner {
   }
 
   /**
+   * Runs a given Function when matching given Path object and when enabled in /settings or when being enabled in settings
+   * Function will be executed on call and when virtual_refresh is called
+   *
+   * @param {Path | Path[]} match Path match to fulfill
+   * @param {string} enableKey Key which needs to be enabled
+   * @param {Function} action Function to execute
+   */
+  public runAlwaysOnEnable(match: Path | Path[], enableKey: string, action: Function): void {
+    this.on(
+      `${enableKey}-enabled`,
+      () => this.runAlways(match, action),
+      this.settings.moduleManager.getActiveState(enableKey),
+    );
+  }
+
+  /**
    * Runs a given Function when matching given Path object and when being disabled in /settings
    *
    * @param {Path | Path[]} match Path match to fulfill
@@ -224,5 +240,7 @@ export class ScriptRunner {
 
   private refreshUiElements(): void {
     this._toaster = new Toaster(this.css);
+
+    this.emit('ui');
   }
 }
