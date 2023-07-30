@@ -2,6 +2,8 @@
   const withNode = (node: HTMLDivElement): void => {
     const { adjacentElement, findElement, findElements, textFromNode } = document.jpdb;
 
+    if (findElement(node, 'a[href*="review-history"]')) return;
+
     const getWord = (): string => {
       return (
         textFromNode('.primary-spelling ruby') ??
@@ -13,6 +15,8 @@
     const s = findElement<'input'>(form, 'input[name=s]').value;
     const li = form.parentElement;
     const word = getWord();
+    const isUnsuspend = findElement(node, '.suspended');
+    const isUnlock = findElement(node, '.locked');
 
     adjacentElement(li, 'afterend', {
       tag: 'li',
@@ -31,9 +35,13 @@
             {
               tag: 'input',
               attributes: {
+                value: isUnsuspend
+                  ? 'Unsuspend'
+                  : isUnlock
+                  ? 'Unlock and learn'
+                  : 'Add failed review',
                 type: 'submit',
-                value: 'Unsuspend',
-                onclick: `post_refresh_and_notify('Unsuspended ${word}')`,
+                onclick: `post_refresh_and_notify('Added review to ${word}')`,
               },
             },
           ],
@@ -42,17 +50,17 @@
     });
   };
   jpdb.runAlways('/deck', () => {
-    document.jpdb.withElements('.entry.suspended', withNode);
+    document.jpdb.withElements('.entry.suspended, .entry.locked, .entry.new', withNode);
   });
   jpdb.runAlways(/\/vocabulary/, () => {
-    if (!document.jpdb.findElement('.tag.suspended')) return;
+    if (!document.jpdb.findElement('.tag.suspended, .tag.locked, .tag.new')) return;
 
     document.jpdb.withElement('.dropdown-content', withNode);
   });
   jpdb.runAlways(/\/search/, () => {
     document.jpdb
       .findElements<'div'>('.result.vocabulary')
-      .filter((e) => !!document.jpdb.findElement(e, '.tag.suspended'))
+      .filter((e) => !!document.jpdb.findElement(e, '.tag.suspended, .tag.locked, .tag.new'))
       .map((e) => withNode(e));
   });
 })();
