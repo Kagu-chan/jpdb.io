@@ -1,0 +1,3 @@
+body, .container.bugfix, .review-reveal, .review-hidden, .text-content {
+  max-width: 73rem !important;
+}

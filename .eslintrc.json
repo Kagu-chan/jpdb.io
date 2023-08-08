@@ -23,6 +23,7 @@
       }
     }
   },
+  "ignorePatterns": ["webpack.config.js", "plugin/**/*", "scripts/**/*.js", "runtime/**/*", "dist/**/*.js"],
   "plugins": ["@typescript-eslint", "eslint-plugin-jsdoc", "import"],
   "rules": {
     "arrow-parens": ["error", "always"],
@@ -100,7 +101,8 @@
       {
         "types": {
           "object": false,
-          "Record": false
+          "Record": false,
+          "Function": false
         },
         "extendDefaults": true
       }

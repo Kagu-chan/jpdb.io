@@ -1,26 +1,23 @@
 {
   "name": "jpdb.io-script-runer",
-  "version": "0.1.2",
+  "version": "1.0.0.rc-0",
   "description": "JPDB.io Script Runner",
   "main": "src/index.ts",
   "scripts": {
     "watch": "webpack --watch",
     "build": "webpack",
-    "lint": "eslint src --ext .ts",
-    "preversion": "npm run lint && npm run build",
-    "version": "node update-version.js && git add userscripts/*",
-    "postversion": "npm run build"
+    "lint": "eslint src --ext .ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kagu-chan/jpdb.io.git"
   },
   "author": "Kagu-chan",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Kagu-chan/jpdb.io/issues"
   },
-  "homepage": "https://github.com/Kagu-chan/jpdb.io/releases",
+  "homepage": "https://github.com/Kagu-chan/jpdb.io",
   "devDependencies": {
     "@types/node": "^20.4.8",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
@@ -31,12 +28,14 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^46.4.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "fast-xml-parser": "^4.2.5",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "prettier": "^2.8.3",
-    "replace-in-file": "^7.0.1",
-    "terser-webpack-plugin": "^5.3.9",
+    "string-replace-webpack-plugin": "^0.1.3",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-watch-files-plugin": "^1.2.1"
   }
 }

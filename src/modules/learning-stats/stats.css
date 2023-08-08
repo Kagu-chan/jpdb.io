@@ -1,0 +1,28 @@
+.learning-stats tbody tr th:not(:first-of-type) {
+  text-align: right !important;
+}
+
+.learning-stats tbody tr th:last-of-type {
+  padding-right: 0 !important;
+}
+
+.learning-stats tbody tr th:first-of-type {
+  text-align: left !important;
+}
+
+.learning-stats .sum-divider {
+  border-top: 1px solid var(--table-border-color);
+}
+
+.learning-stats .green {
+  color: green;
+}
+
+.learning-stats .red {
+  color: red;
+}
+
+.learning-stats .opac {
+  opacity: 0.75;
+  color: var(--table-header-color);
+}

@@ -1,0 +1,33 @@
+.show-hide-container {
+  margin-bottom: 0.5rem;
+}
+
+.show-hide-container:not(:has(.show-hide-control:not(.disabled))) {
+  display: none;
+}
+
+.show-hide-control {
+  font-size: 1rem;
+  opacity: 0.8;
+  display: block;
+}
+
+.show-hide-control.disabled {
+  display: none;
+}
+
+.show-hide-control:not(.disabled) {
+  cursor: pointer;
+}
+
+.completed,
+.threshold-reached,
+.non-new {
+  border-color: var(--outline-v4-color) !important;
+}
+
+.hide-decks .completed,
+.hide-decks .threshold-reached,
+.hide-decks .non-new {
+  display: none;
+}
