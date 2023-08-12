@@ -1,6 +1,6 @@
 import { container } from './container';
 import { getPlacehoolder } from './utils/get-place-holder';
-import { appendHelpText } from './utils/help-text';
+import { appendHelpText } from './utils/append-help-text';
 
 export type TextfieldOptions<T extends string | number> = {
   change: (value: T) => void;

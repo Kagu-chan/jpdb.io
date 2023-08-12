@@ -1,6 +1,6 @@
 import { container } from './container';
+import { appendHelpText } from './utils/append-help-text';
 import { getPlacehoolder } from './utils/get-place-holder';
-import { appendHelpText } from './utils/help-text';
 
 export type TextareaOptions = {
   change: (value: string) => void;
