@@ -22,7 +22,8 @@
     "sticky-navbar",
     "debloat-reviews",
     "learning-stats",
-    "settings-nav"
+    "settings-nav",
+    "scroll-controls"
   ],
   "output": {
     "build": {

@@ -16,21 +16,22 @@ export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
       'data-key': options.name,
     },
   });
-  const c = container([
-    input,
-    {
-      tag: 'label',
-      innerHTML: options.label,
-      attributes: {
-        for: input.id,
+  const c = container(
+    [
+      input,
+      {
+        tag: 'label',
+        innerHTML: options.label,
+        attributes: {
+          for: input.id,
+        },
       },
-    },
-  ]);
+    ],
+    { class: 'checkbox' },
+  );
 
   input.checked = options.value;
   input.onchange = (): void => options.change(input.checked);
-
-  c.classList.add('checkbox');
 
   if (options.helpText) {
     return container([

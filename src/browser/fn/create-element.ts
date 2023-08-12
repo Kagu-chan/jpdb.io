@@ -35,7 +35,10 @@ export function createElement(
     (e.style as any)[key] = options.style[key as keyof CSSStyleDeclaration];
   });
 
-  e.classList.add(...(options.class ?? []));
+  if (options.class) {
+    options.class = Array.isArray(options.class) ? options.class : [options.class];
+    e.classList.add(...options.class);
+  }
 
   (options.children ?? [])
     .filter((ch) => ch)

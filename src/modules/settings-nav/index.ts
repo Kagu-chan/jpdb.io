@@ -46,7 +46,7 @@ class SettingsNav {
     });
     const ul = document.jpdb.appendElement(div, {
       tag: 'ul',
-      class: ['settings-navigation'],
+      class: 'settings-navigation',
     });
 
     let lastMainSection: HTMLUListElement;
@@ -68,7 +68,7 @@ class SettingsNav {
       if (e.tagName.toLowerCase() === 'h4') {
         lastMainSection = document.jpdb.createElement({
           tag: 'ul',
-          class: ['settings-subnavigation'],
+          class: 'settings-subnavigation',
         });
 
         document.jpdb.appendElement<typeof ul, 'li'>(ul, {
@@ -86,22 +86,22 @@ class SettingsNav {
   private getBurgerMenu(): HTMLElement {
     const cb = document.jpdb.createElement({
       tag: 'input',
-      class: ['s-nav-btn'],
+      class: 's-nav-btn',
       attributes: { type: 'checkbox' },
     });
 
     const div = document.jpdb.createElement('div', {
-      class: ['s-nav-menu'],
+      class: 's-nav-menu',
       children: [
         cb,
         {
           tag: 'label',
-          class: ['s-nav-icon'],
+          class: 's-nav-icon',
           attributes: { for: cb.id },
           children: [
             {
               tag: 'span',
-              class: ['navicon'],
+              class: 'navicon',
             },
           ],
           handler: (): void => {

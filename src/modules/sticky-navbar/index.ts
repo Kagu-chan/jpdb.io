@@ -52,7 +52,7 @@ class StickyNavbar {
     add_and_run_event_listener(document, 'virtual-refresh', () => {
       document.jpdb.adjacentElement('body', 'afterbegin', {
         tag: 'div',
-        class: ['navbar-spacer'],
+        class: 'navbar-spacer',
         style: {},
       });
 
@@ -73,7 +73,7 @@ class StickyNavbar {
 
       document.jpdb.adjacentElement('body', 'beforeend', {
         tag: 'div',
-        class: ['footer-spacer'],
+        class: 'footer-spacer',
         style: {},
       });
     });

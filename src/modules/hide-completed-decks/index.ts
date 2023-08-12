@@ -164,7 +164,7 @@ class HideCompletedDecks {
       const text = (): string => `${amount} decks ${isHidden ? 'hidden' : 'shown'}`;
 
       const btn = document.jpdb.createElement('span', {
-        class: ['show-hide-control'],
+        class: 'show-hide-control',
         innerText: text(),
         handler: () => {
           this._deckContainer.classList.toggle('hide-decks');

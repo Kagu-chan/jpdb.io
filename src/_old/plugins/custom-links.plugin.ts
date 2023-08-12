@@ -103,7 +103,7 @@ export class CustomLinksPlugin extends JPDBPlugin {
     this.getUsersSetting<CustomLink[]>(settingKey, []).forEach(({ url, label }) => {
       document.jpdb.adjacentElement(target, 'afterbegin', {
         tag: 'a',
-        class: ['nav-item'],
+        class: 'nav-item',
         innerText: label,
         attributes: {
           href: url,

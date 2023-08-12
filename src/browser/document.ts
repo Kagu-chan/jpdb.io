@@ -16,7 +16,7 @@ import { withElements } from './fn/with-elements';
 
 type DOMElementBaseOptions = {
   id?: string;
-  class?: string[];
+  class?: string | string[];
   attributes?: Record<string, string | boolean>;
   style?: Partial<CSSStyleDeclaration>;
   innerText?: string | number;
