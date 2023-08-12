@@ -14,12 +14,11 @@ export const textarea = (options: TextareaOptions): HTMLDivElement => {
     innerHTML: options.value,
     attributes: {
       name: options.name,
-      placeholder:
-        options.placeholder ?? options.helpText
-          ? typeof options.helpText === 'string'
-            ? options.helpText
-            : options.helpText.innerHTML
-          : '',
+      placeholder: options.placeholder?.length
+        ? options.placeholder
+        : typeof options.helpText === 'string'
+        ? options.helpText
+        : options.helpText.innerHTML ?? '',
       spellcheck: 'false',
     },
     style: {

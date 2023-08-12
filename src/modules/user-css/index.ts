@@ -13,8 +13,6 @@
         type: 'textarea',
         default: '',
         placeholder: 'CSS',
-        description: 'Description',
-        text: 'Text',
       },
     ],
   });
