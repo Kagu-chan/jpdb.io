@@ -32,6 +32,7 @@ class ScrollControls {
       category: 'UI',
       displayText: 'Enable scrolling controls on longer pages',
       description: 'Adds a Scroll to Top and Scroll to Bottom control on pages with more content',
+      experimental: true,
       options: [
         {
           key: 'button-order',
@@ -58,11 +59,13 @@ class ScrollControls {
           key: 'in-media-search',
           type: 'checkbox',
           text: 'Enable in media search',
+          description: 'Enables scroll controls on deck search, e.g. `Built-in decks`',
         },
         {
           key: 'in-deck-list',
           type: 'checkbox',
           text: 'Enable in deck list',
+          description: 'Enables scroll controls on your deck list',
           hideOrDisable: 'hide',
           indent: true,
           children: [
