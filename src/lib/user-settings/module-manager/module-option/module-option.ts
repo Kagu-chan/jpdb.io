@@ -4,6 +4,7 @@ import { Renderer } from './renderers/_renderer';
 import { CheckboxRenderer } from './renderers/checkbox';
 import { EmptyRenderer } from './renderers/empty-renderer';
 import { NumberRenderer } from './renderers/number';
+import { RadioRenderer } from './renderers/radio';
 import { TextareaRenderer } from './renderers/textarea';
 
 export class ModuleOption {
@@ -51,6 +52,8 @@ export class ModuleOption {
     switch (this._option.type) {
       case 'checkbox':
         return CheckboxRenderer;
+      case 'radio':
+        return RadioRenderer;
       case 'textarea':
         return TextareaRenderer;
       case 'number':
