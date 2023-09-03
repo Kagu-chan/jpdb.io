@@ -1,3 +1,6 @@
+/**
+ * @FIXME: Control to modify Mnemonics should still be visible, probaply with a own label / restyled
+ */
 class DebloadReviewsModule {
   private DEBLOAT_REVIEWS: string = 'debloat-reviews';
 
