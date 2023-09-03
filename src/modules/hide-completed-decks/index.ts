@@ -1,4 +1,6 @@
-// TODO: Do not import here! This imports should be available in global space
+/**
+ * @TODO: Do not import here! This imports should be available in global space
+ */
 import { container } from '../../lib/elements/container';
 import { Deck } from './deck';
 

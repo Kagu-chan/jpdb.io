@@ -13,5 +13,44 @@
   "[html]": {
     "editor.formatOnSave": true,
     "files.insertFinalNewline": false
+  },
+  "todo-tree.general.tags": ["TODO", "FIXME", "FIX", "BUG", "HACK", "NOTE", "IDEA", "REVIEW"],
+  "todo-tree.filtering.includeGlobs": ["**/*.js", "**/*.ts"],
+  "todo-tree.regex.regex": "((// ?@?|#|<!--|;|/\\*|\\* ?@)\\s*($TAGS)|^\\s*- \\[ \\])",
+  "todo-tree.regex.regexCaseSensitive": false,
+  "todo-tree.tree.expanded": true,
+  "todo-tree.general.statusBar": "tags",
+  "todo-tree.tree.showCountsInTree": true,
+  "todo-tree.tree.labelFormat": "${after}",
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text-and-comment",
+    "foreground": "#f00",
+    "opacity": 50,
+    "iconColour": "#f00"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "type": "line",
+      "foreground": "#0f0",
+      "iconColour": "#0f0"
+    },
+    "NOTE": {
+      "foreground": "#ffa500",
+      "iconColour": "#ffa500"
+    },
+    "REVIEW": {
+      "foreground": "#ffa500",
+      "iconColour": "#ffa500"
+    },
+    "FIXME": {
+      "foreground": "#ff0",
+      "iconColour": "#ff0"
+    },
+    "FIX": {
+      "foreground": "#00f",
+      "iconColour": "#ff0"
+    }
   }
 }

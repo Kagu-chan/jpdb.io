@@ -1,6 +1,8 @@
-// TODO: A total toal should be added.
-// This contains all learning and to review cards, also a second row for all locked + new, a third row for the total
-// Should be toggleable
+/**
+ * @TODO: A total toal should be added.
+ * @TODO: This contains all learning and to review cards, also a second row for all locked + new, a third row for the total
+ * @TODO: Should be toggleable
+ */
 interface LearningStatsDataNodes {
   container: HTMLDivElement;
   stats: HTMLTableElement;
