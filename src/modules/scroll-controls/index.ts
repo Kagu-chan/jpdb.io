@@ -1,6 +1,4 @@
-/**
- * @TODO: Implement!
- */
+// TODO: Implement
 enum ScrollControlOrder {
   BT = 'bottom-top',
   TB = 'top-bottom',
