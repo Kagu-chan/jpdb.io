@@ -3,6 +3,8 @@ import { HasChildren, ModuleUserOption } from '../module-options.type';
 import { Renderer } from './renderers/_renderer';
 import { CheckboxRenderer } from './renderers/checkbox';
 import { EmptyRenderer } from './renderers/empty-renderer';
+import { NumberRenderer } from './renderers/number';
+import { RadioRenderer } from './renderers/radio';
 import { TextareaRenderer } from './renderers/textarea';
 
 export class ModuleOption {
@@ -17,7 +19,6 @@ export class ModuleOption {
   ) {
     const ctor = this.getRenderer();
     this._renderer = new ctor(_option, this._getValue, this._setValue);
-
     this._renderer?.render(this._renderIn);
 
     const children = this._option.children?.filter((c) => !!c) ?? [];
@@ -51,8 +52,12 @@ export class ModuleOption {
     switch (this._option.type) {
       case 'checkbox':
         return CheckboxRenderer;
+      case 'radio':
+        return RadioRenderer;
       case 'textarea':
         return TextareaRenderer;
+      case 'number':
+        return NumberRenderer;
       default:
         return EmptyRenderer;
     }

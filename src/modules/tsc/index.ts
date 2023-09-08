@@ -1,3 +1,7 @@
+/**
+ * @FIXME Hides everything when there is no sample sentence. This is obviously a bug.
+ * @FIXME Also, learning names is not handled at all!
+ */
 ((): void => {
   const TSC = 'TSC';
   const HIDE_HIGHLIGHT = 'hide-highlight';

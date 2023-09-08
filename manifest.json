@@ -22,6 +22,7 @@
     "sticky-navbar",
     "debloat-reviews",
     "learning-stats",
+    "scroll-controls",
     "settings-nav"
   ],
   "output": {

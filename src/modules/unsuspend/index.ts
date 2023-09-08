@@ -23,7 +23,7 @@
       children: [
         {
           tag: 'form',
-          class: ['link-like'],
+          class: 'link-like',
           attributes: {
             method: 'post',
             action: '/review',

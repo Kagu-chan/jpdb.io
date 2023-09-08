@@ -1,4 +1,6 @@
 import { container } from './container';
+import { appendHelpText } from './utils/append-help-text';
+import { getPlacehoolder } from './utils/get-place-holder';
 
 export type TextareaOptions = {
   change: (value: string) => void;
@@ -14,19 +16,15 @@ export const textarea = (options: TextareaOptions): HTMLDivElement => {
     innerHTML: options.value,
     attributes: {
       name: options.name,
-      placeholder:
-        options.placeholder ?? options.helpText
-          ? typeof options.helpText === 'string'
-            ? options.helpText
-            : options.helpText.innerHTML
-          : '',
+      placeholder: getPlacehoolder(options),
+      'data-key': options.name,
       spellcheck: 'false',
     },
     style: {
       height: '15rem',
     },
   });
-  const ic = container([input]);
+  const ic = container([input], { class: 'style-textarea-handle', style: { marginTop: '1rem' } });
   const c = container([
     {
       tag: 'label',
@@ -38,21 +36,9 @@ export const textarea = (options: TextareaOptions): HTMLDivElement => {
     ic,
   ]);
 
-  ic.classList.add('style-textarea-handle');
-  ic.style.marginTop = '1rem';
-
   input.onchange = (): void => options.change(input.value);
 
-  if (options.helpText) {
-    document.jpdb.appendElement(c, {
-      tag: 'p',
-      innerHTML: typeof options.helpText === 'string' ? options.helpText : undefined,
-      children: typeof options.helpText !== 'string' ? [options.helpText] : [],
-      style: {
-        opacity: '.8',
-      },
-    });
-  }
+  appendHelpText(c, options.helpText);
 
   return c;
 };

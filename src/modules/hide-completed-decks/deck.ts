@@ -1,3 +1,6 @@
+/**
+ * @TODO: Move to main lib and export via globals
+ */
 export class Deck {
   public readonly parameters = new Map<string, any>();
 

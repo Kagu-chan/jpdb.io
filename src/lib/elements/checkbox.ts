@@ -1,4 +1,5 @@
 import { container } from './container';
+import { getHelpTextConfig } from './utils/get-help-text-config';
 
 export type CheckboxOptions = {
   change: (value: boolean) => void;
@@ -16,35 +17,28 @@ export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
       'data-key': options.name,
     },
   });
-  const c = container([
-    input,
-    {
-      tag: 'label',
-      innerHTML: options.label,
-      attributes: {
-        for: input.id,
+  const c = container(
+    [
+      input,
+      {
+        tag: 'label',
+        innerHTML: options.label,
+        attributes: {
+          for: input.id,
+        },
       },
-    },
-  ]);
+    ],
+    { class: 'checkbox' },
+  );
 
   input.checked = options.value;
   input.onchange = (): void => options.change(input.checked);
 
-  c.classList.add('checkbox');
-
   if (options.helpText) {
-    return container([
-      c,
-      {
-        tag: 'p',
-        innerHTML: typeof options.helpText === 'string' ? options.helpText : undefined,
-        children: typeof options.helpText !== 'string' ? [options.helpText] : [],
-        style: {
-          opacity: '.8',
-          marginLeft: '2rem',
-        },
-      },
-    ]);
+    const hco = getHelpTextConfig(options.helpText);
+    hco.style.marginLeft = '2rem';
+
+    return container([c, hco]);
   }
 
   return c;
