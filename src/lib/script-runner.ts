@@ -245,6 +245,11 @@ export class ScriptRunner {
     this._listenOnce[eventName] = [];
   }
 
+  public clearEvents(eventName: string): void {
+    delete this._listen[eventName];
+    delete this._listenOnce[eventName];
+  }
+
   private refreshUiElements(): void {
     this._toaster = new Toaster(this.css);
 
