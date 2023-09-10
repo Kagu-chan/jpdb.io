@@ -18,7 +18,8 @@ export class ModuleOption {
     private _setValue: (val: unknown) => void,
   ) {
     const ctor = this.getRenderer();
-    this._renderer = new ctor(_option, this._getValue, this._setValue);
+
+    this._renderer = new ctor(_name, _option, this._getValue, this._setValue);
     this._renderer?.render(this._renderIn);
 
     const children = this._option.children?.filter((c) => !!c) ?? [];
@@ -45,9 +46,10 @@ export class ModuleOption {
   }
 
   private getRenderer(): new (
+    s: string,
     o: ModuleUserOption,
-    g: () => unknown,
-    s: (v: unknown) => void,
+    gv: () => unknown,
+    sv: (v: unknown) => void,
   ) => Renderer<ModuleUserOption, unknown> {
     switch (this._option.type) {
       case 'checkbox':

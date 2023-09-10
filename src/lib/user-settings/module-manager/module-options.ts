@@ -4,10 +4,9 @@ import { IModuleOptions } from './module-options.type';
 
 export class ModuleOptions {
   private _container = container([]);
-  private _main: ModuleOption;
 
   constructor(private _data: IModuleOptions) {
-    this._main = new ModuleOption(
+    new ModuleOption(
       this._data.name,
       {
         type: 'checkbox',
