@@ -13,6 +13,7 @@ export const renderSettings = (
     class: ['settings-scroll-controls'],
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const targets: [HTMLSpanElement, HTMLSpanElement] =
     position === ScrollControlPosition.B ? [l, r] : ScrollControlPosition.L ? [l, l] : [r, r];
 };
