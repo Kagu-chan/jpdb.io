@@ -5,7 +5,10 @@ export class ModuleSection {
   private _categories = new Map<string, HTMLDivElement>();
   private _titleNode: HTMLHeadingElement;
 
-  constructor(private _title: string, private _container: HTMLDivElement) {
+  constructor(
+    private _title: string,
+    private _container: HTMLDivElement,
+  ) {
     this._titleNode = document.jpdb.appendElement(this._container, {
       tag: 'h4',
       innerText: this._title,
