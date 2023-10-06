@@ -1,9 +1,3 @@
-/**
- * @TODO: Do not import here! This imports should be available in global space
- */
-import { container } from '../../lib/elements/container';
-import { Deck } from './deck';
-
 class HideCompletedDecks {
   private HIDE_COMPLETED_DECKS: string = 'hide-completed-decks';
   private HIDE_THRESHOLD_DECKS: string = 'hide-threshold-decks';
@@ -24,7 +18,7 @@ class HideCompletedDecks {
     this.hideThresholdDecks();
     this.hideNonNewFirstDecks();
 
-    this.displayShowHideControl();
+    this.displayShowControl();
   }
 
   private register(): void {
@@ -90,8 +84,12 @@ class HideCompletedDecks {
       /\/deck-list/,
       [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
-        this._labelContainer = document.jpdb.adjacentElement('h4', 'afterend', container([]));
-        this._labelContainer.classList.add('show-hide-container');
+        this._labelContainer = document.jpdb.adjacentElement(
+          'h4',
+          'afterend',
+          document.util.container([]),
+        );
+        this._labelContainer.classList.add('show-container');
 
         this._deckContainer = document.jpdb.findElement<'div'>('.deck-list');
         this._deckContainer.classList.add('hide-decks');
@@ -157,29 +155,21 @@ class HideCompletedDecks {
     });
   }
 
-  private displayShowHideControl(): void {
+  private displayShowControl(): void {
     jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
       const amount: number = this._deckList.filter((d) => d.parameters.get('hidden')).length;
 
       if (!amount) return;
 
-      let isHidden: boolean = true;
-      const text = (): string => `${amount} decks ${isHidden ? 'hidden' : 'shown'}`;
-
       const btn = document.jpdb.createElement('span', {
-        class: 'show-hide-control',
-        innerText: text(),
+        class: 'show-control',
+        innerText: `Show ${amount} hidden deck${amount > 1 ? 's' : ''}`,
         handler: () => {
           this._deckContainer.classList.toggle('hide-decks');
-          isHidden = !isHidden;
 
-          btn.innerText = text();
+          btn.remove();
         },
       });
-
-      if (!amount) {
-        btn.classList.add('disabled');
-      }
 
       document.jpdb.appendElement(this._labelContainer, btn);
     });

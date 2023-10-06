@@ -1,9 +1,8 @@
-import { container } from '../../elements/container';
 import { ModuleOption } from './module-option/module-option';
 import { IModuleOptions } from './module-options.type';
 
 export class ModuleOptions {
-  private _container = container([]);
+  private _container = document.util.container([]);
 
   constructor(private _data: IModuleOptions) {
     new ModuleOption(

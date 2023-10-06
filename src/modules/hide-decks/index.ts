@@ -1,8 +1,3 @@
-/**
- * @TODO: Do not import here! This imports should be available in global space
- */
-import { button } from '../../lib/elements/button';
-
 ((): void => {
   const HIDE_DECKS: string = 'hide-decks';
   const HIDE_SPECIAL_DECKS: string = 'hide-special-decks';
@@ -28,7 +23,7 @@ import { button } from '../../lib/elements/button';
     const btn = document.jpdb.adjacentElement(
       'form',
       'afterend',
-      button(`Show ${decks} decks`, {
+      document.util.button(`Show ${decks} decks`, {
         handler: () => (location.href = '/deck-list'),
         type: 'default',
       }),

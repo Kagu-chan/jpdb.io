@@ -1,4 +1,3 @@
-import { textarea } from '../../../../elements/textarea';
 import { ModuleUserOptionTextarea } from '../../module-options.type';
 import { Renderer } from './_renderer';
 
@@ -6,7 +5,7 @@ export class TextareaRenderer extends Renderer<ModuleUserOptionTextarea, string>
   public render(container: HTMLDivElement): void {
     document.jpdb.appendElement(
       container,
-      textarea({
+      document.util.textarea({
         label: this._options.text,
         name: this._options.key,
         value: this._getValue() ?? this._options.default,

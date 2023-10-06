@@ -1,13 +1,15 @@
 import { container } from './container';
-import { getHelpTextConfig } from './utils/get-help-text-config';
+import { getHelpTextConfig } from './internal/get-help-text-config';
 
-export type CheckboxOptions = {
-  change: (value: boolean) => void;
-  name: string;
-  label: string;
-  value: boolean;
-  helpText?: string | HTMLElement;
-};
+declare global {
+  type CheckboxOptions = {
+    change: (value: boolean) => void;
+    name: string;
+    label: string;
+    value: boolean;
+    helpText?: string | HTMLElement;
+  };
+}
 
 export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
   const input = document.jpdb.createElement('input', {

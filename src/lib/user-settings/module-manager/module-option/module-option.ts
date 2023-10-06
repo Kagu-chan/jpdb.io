@@ -1,4 +1,3 @@
-import { container } from '../../../elements/container';
 import { HasChildren, ModuleUserOption } from '../module-options.type';
 import { Renderer } from './renderers/_renderer';
 import { CheckboxRenderer } from './renderers/checkbox';
@@ -25,7 +24,7 @@ export class ModuleOption {
     const children = this._option.children?.filter((c) => !!c) ?? [];
 
     if (children.length) {
-      const childsContainer = container([]);
+      const childsContainer = document.util.container([]);
 
       document.jpdb.appendElement(this._renderIn, childsContainer);
       children.forEach((c: ModuleUserOption) => {
