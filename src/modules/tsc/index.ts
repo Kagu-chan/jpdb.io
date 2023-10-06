@@ -1,7 +1,3 @@
-/**
- * @FIXME Hides everything when there is no sample sentence. This is obviously a bug.
- * @FIXME Also, learning names is not handled at all!
- */
 ((): void => {
   const TSC = 'TSC';
   const HIDE_HIGHLIGHT = 'hide-highlight';
@@ -34,8 +30,13 @@
   });
 
   jpdb.runOnceWhenEitherIsActive('/review', [TSC, HIDE_HIGHLIGHT], () => {
-    if (document.jpdb.findElement('.kind')?.innerText !== 'Vocabulary') return;
+    const target = document.jpdb.findElement('.sentence > .highlight');
 
+    if (!target) {
+      return;
+    }
+
+    if (document.jpdb.findElement('.kind')?.innerText !== 'Vocabulary') return;
     if (jpdb.settings.moduleManager.getActiveState(TSC)) {
       document.jpdb.hideElement('.answer-box .plain');
     }
@@ -43,7 +44,6 @@
     if (jpdb.settings.moduleManager.getActiveState(HIDE_HIGHLIGHT)) {
       jpdb.css.add(TSC, __load_css('./src/modules/tsc/sentence-card.css'));
 
-      const target = document.jpdb.findElement('.sentence > .highlight');
       target.classList.add('rem');
 
       if (jpdb.settings.persistence.getModuleOption(TSC, 'rem-highlight-hover', false)) {
