@@ -26,3 +26,14 @@
   opacity: 0.75;
   color: var(--table-header-color);
 }
+
+.learning-stats .sm {
+  padding-left: 0;
+  text-align: left;
+}
+
+@media (max-width: 389px) {
+  table.small-header th {
+    font-size: 70%;
+  }
+}
