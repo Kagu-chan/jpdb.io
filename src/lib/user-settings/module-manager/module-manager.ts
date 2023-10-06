@@ -15,14 +15,18 @@ export class ModuleManager {
   constructor(private _ui: SettingsUI | undefined) {
     this._activeModules = this._persistence.read<string[]>(this.ACTIVE_MODULES, []);
 
-    if (!this._ui) return;
+    if (!this._ui) {
+      return;
+    }
 
     this._stableModules = new ModuleSection('Module settings', this._ui.stable);
     this._experimentalModules = new ModuleSection('Experimental settings', this._ui.experimental);
   }
 
   public register(options: IModuleOptions): void {
-    if (!this._ui) return;
+    if (!this._ui) {
+      return;
+    }
 
     jpdb.css.add({
       key: 'settings',

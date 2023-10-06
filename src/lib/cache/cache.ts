@@ -24,9 +24,12 @@ export class Cache {
   ): Promise<TVal> {
     const current = this.read<TVal>(moduleKey, key);
 
-    if (current) return Promise.resolve(current);
+    if (current) {
+      return Promise.resolve(current);
+    }
 
     const val = await retrieveFn();
+
     this.write(moduleKey, key, ttl, val);
 
     return val;
@@ -54,7 +57,9 @@ export class Cache {
     const item = current[`${moduleKey}-${key}`];
     const now = new Date();
 
-    if (!item || item.exp < now.getTime()) return undefined;
+    if (!item || item.exp < now.getTime()) {
+      return undefined;
+    }
 
     return item.value as TVal;
   }

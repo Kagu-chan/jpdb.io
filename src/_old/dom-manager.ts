@@ -158,15 +158,28 @@ export class DOMManager {
   ): HTMLElementTagNameMap[K] {
     const e = document.createElement(tagName);
 
-    if (options.id) e.setAttribute('id', options.id);
-    if (options.innerText) e.innerText = options.innerText;
-    if (options.innerHTML) e.innerHTML = options.innerHTML;
-    if (options.handler) e.onclick = options.handler;
+    if (options.id) {
+      e.setAttribute('id', options.id);
+    }
+
+    if (options.innerText) {
+      e.innerText = options.innerText;
+    }
+
+    if (options.innerHTML) {
+      e.innerHTML = options.innerHTML;
+    }
+
+    if (options.handler) {
+      e.onclick = options.handler;
+    }
 
     Object.keys(options.attributes ?? {}).forEach((key: string) => {
       const value = options.attributes[key];
 
-      if (value === false) return;
+      if (value === false) {
+        return;
+      }
       e.setAttribute(key, value as string);
     });
     Object.keys(options.style ?? {}).forEach((key: string) => {
@@ -218,7 +231,9 @@ export class DOMManager {
 
   //#region Misc
   public toggleHide(e: HTMLElement): void {
-    if (e.classList.contains('hidden')) return e.classList.remove('hidden');
+    if (e.classList.contains('hidden')) {
+      return e.classList.remove('hidden');
+    }
 
     e.classList.add('hidden');
   }
@@ -232,8 +247,11 @@ export class DOMManager {
   }
 
   public hidden(e: HTMLElement, hidden: boolean): void {
-    if (hidden) e.classList.add('hidden');
-    else e.classList.remove('hidden');
+    if (hidden) {
+      e.classList.add('hidden');
+    } else {
+      e.classList.remove('hidden');
+    }
   }
   //#endregion
 }

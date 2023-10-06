@@ -6,7 +6,9 @@ export function textFromNode<TElement extends HTMLElement = HTMLElement>(element
 export function textFromNode(element: string | HTMLElement): string {
   const el = resolveElement(element);
 
-  if (!el) return;
+  if (!el) {
+    return;
+  }
 
   const texts = [];
   let child = el.firstChild;

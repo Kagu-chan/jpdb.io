@@ -36,7 +36,10 @@
       return;
     }
 
-    if (document.jpdb.findElement('.kind')?.innerText !== 'Vocabulary') return;
+    if (document.jpdb.findElement('.kind')?.innerText !== 'Vocabulary') {
+      return;
+    }
+
     if (jpdb.settings.moduleManager.getActiveState(TSC)) {
       document.jpdb.hideElement('.answer-box .plain');
     }

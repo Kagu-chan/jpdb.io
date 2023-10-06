@@ -44,7 +44,9 @@ export class Toaster {
 
     let timeout: NodeJS.Timeout;
     const startTimeout = (t: number = 5000): void => {
-      if (timeout) return;
+      if (timeout) {
+        return;
+      }
       timeout = setTimeout(() => {
         toast.classList.add('hide');
         stopTimeout();

@@ -94,6 +94,7 @@ export class UserSettingsPlugin extends JPDBPlugin {
 
   protected run(): void {
     const enableBeta = this.getUsersSetting<boolean>('enable-beta');
+
     this.api = new UserSettingsPluginAPI();
     this.dom = new UserSettingsContainer(this.api);
 

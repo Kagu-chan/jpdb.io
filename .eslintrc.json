@@ -32,6 +32,8 @@
   ],
   "plugins": ["@typescript-eslint", "eslint-plugin-jsdoc", "import"],
   "rules": {
+    "curly": ["error"],
+    "require-await": ["error"],
     "arrow-parens": ["error", "always"],
     "no-console": ["error"],
     "no-debugger": ["error"],
@@ -70,6 +72,39 @@
     "no-parameter-properties": ["off"],
     "no-unused-vars": ["off"],
     "lines-between-class-members": ["off"],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["return", "continue", "throw"]
+      },
+      {
+        "blankLine": "always",
+        "prev": ["const", "let"],
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": ["const", "let"],
+        "next": ["const", "let"]
+      },
+      {
+        "blankLine": "never",
+        "prev": "break",
+        "next": ["case", "default"]
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "break"
+      },
+      {
+        "blankLine": "always",
+        "prev": ["expression", "block-like"],
+        "next": ["if", "for", "do", "while", "try"]
+      }
+    ],
     "@typescript-eslint/lines-between-class-members": ["off"],
     "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/no-unused-vars": [

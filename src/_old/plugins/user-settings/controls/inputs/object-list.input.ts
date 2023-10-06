@@ -88,7 +88,9 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
         input.value = this.itemToString(value);
       });
       i.addEventListener('keypress', (e) => {
-        if (e.key !== 'Enter') return;
+        if (e.key !== 'Enter') {
+          return;
+        }
 
         if (cid === schema.length - 1) {
           input.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter' }));

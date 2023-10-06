@@ -131,6 +131,7 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
   protected run(): void {
     const x: string = '';
+
     switch (x) {
       case '/settings':
         this.handleSettings();
@@ -148,15 +149,22 @@ export class ScrollControlsPlugin extends JPDBPlugin {
         /* NOP */
         break;
       default:
-        if (this.getUsersSetting<boolean>('always-rerender')) this.shiftFooter();
+        if (this.getUsersSetting<boolean>('always-rerender')) {
+          this.shiftFooter();
+        }
     }
 
     this._hasRan = true;
   }
 
   protected handleSettings(): void {
-    if (this._hasRan) return;
-    if (!this.getUsersSetting<boolean>('in-settings')) return;
+    if (this._hasRan) {
+      return;
+    }
+
+    if (!this.getUsersSetting<boolean>('in-settings')) {
+      return;
+    }
 
     this.addContainers(document.jpdb.findElement('#save-all-settings-box'));
     this.addScrollElement('left');
@@ -164,18 +172,24 @@ export class ScrollControlsPlugin extends JPDBPlugin {
   }
 
   protected handleMedia(): void {
-    if (!this.getUsersSetting<boolean>('in-media-search')) return;
+    if (!this.getUsersSetting<boolean>('in-media-search')) {
+      return;
+    }
 
     this.addScrollControls();
   }
 
   protected handleDecks(): void {
-    if (!this.getUsersSetting<boolean>('in-deck-list')) return;
+    if (!this.getUsersSetting<boolean>('in-deck-list')) {
+      return;
+    }
+
     if (
       this.getUsersSetting<boolean>('set-threshold') &&
       this.countDecks() <= this.getUsersSetting<number>('threshold')
-    )
+    ) {
       return;
+    }
 
     this.addScrollControls();
   }

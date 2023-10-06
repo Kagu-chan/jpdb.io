@@ -49,7 +49,9 @@ export class ModuleOptions {
         .replace(/\s?\.\.?/, '.')
         .replace(/^\.\s*/, '') + ' ';
 
-    if (!author?.length && !source?.length) return description;
+    if (!author?.length && !source?.length) {
+      return description;
+    }
 
     if (author?.length && source?.length) {
       const s = createElement('span', {

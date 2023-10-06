@@ -20,14 +20,24 @@ export function createElement(
   document.jpdb.id++;
   e.setAttribute('id', options.id ?? `${tag}-${document.jpdb.id}`);
 
-  if (options.innerText !== undefined) e.innerText = String(options.innerText);
-  if (options.innerHTML) e.innerHTML = options.innerHTML;
-  if (options.handler) e.onclick = options.handler;
+  if (options.innerText !== undefined) {
+    e.innerText = String(options.innerText);
+  }
+
+  if (options.innerHTML) {
+    e.innerHTML = options.innerHTML;
+  }
+
+  if (options.handler) {
+    e.onclick = options.handler;
+  }
 
   Object.keys(options.attributes ?? {}).forEach((key: string) => {
     const value = options.attributes[key];
 
-    if (value === false) return;
+    if (value === false) {
+      return;
+    }
     e.setAttribute(key, value as string);
   });
   Object.keys(options.style ?? {}).forEach((key: string) => {

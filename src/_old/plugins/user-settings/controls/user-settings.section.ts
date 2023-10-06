@@ -118,7 +118,9 @@ export class UserSettingsSection extends DOMContainer {
 
   protected applyChangeEvents(): void {
     this._inputs.forEach((e: Input<unknown, HTMLElement>) => {
-      if (!e || e.isVirtual) return;
+      if (!e || e.isVirtual) {
+        return;
+      }
 
       e.onchange = (val: unknown): void => {
         this._data.plugin.setUsersSetting(e.key, val);

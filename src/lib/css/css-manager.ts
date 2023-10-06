@@ -17,7 +17,9 @@ export class CSSManager {
   public add(p0: CSSOverwrite | string, p1?: string): void {
     const { key, css } = typeof p0 === 'string' ? { key: p0, css: p1 } : p0;
 
-    if (this._registry.has(key)) return;
+    if (this._registry.has(key)) {
+      return;
+    }
     this._registry.set(key, css.trim());
 
     this.renderKey(key);
@@ -33,7 +35,9 @@ export class CSSManager {
         changed = true;
       });
 
-    if (!changed) return;
+    if (!changed) {
+      return;
+    }
 
     this._style.innerHTML = '';
     this._registry.forEach((_, key) => this.renderKey(key));

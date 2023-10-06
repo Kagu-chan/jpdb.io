@@ -47,7 +47,9 @@ export class MoveCardPlugin extends JPDBPlugin {
   protected _currentDeckId: number;
 
   protected run(): void {
-    if (this.isPremadeDeck()) return;
+    if (this.isPremadeDeck()) {
+      return;
+    }
 
     this._currentDeckId = Number(5);
     // this._currentDeckId = Number(this.QUERY['id']);

@@ -117,7 +117,9 @@ export abstract class JPDBPlugin {
       unfinished,
     } = this._pluginOptions;
 
-    if (!canBeDisabled) return;
+    if (!canBeDisabled) {
+      return;
+    }
 
     const option: PluginUserOption = {
       key: 'enabled',
@@ -142,6 +144,7 @@ export abstract class JPDBPlugin {
 
     if (beta) {
       const span = `<span class="beta">${unfinished ? 'unfinished' : 'beta'}</span>`;
+
       option.description = option.description ? `${option.description} ${span}` : span;
     }
 

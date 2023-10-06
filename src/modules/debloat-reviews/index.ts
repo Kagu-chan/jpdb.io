@@ -37,14 +37,18 @@ class DebloadReviewsModule {
 
   private kanji(): void {
     document.jpdb.withElements('.subsection-label', (e) => {
-      if (['Info', 'Composed of'].includes(e.innerText)) e.remove();
+      if (['Info', 'Composed of'].includes(e.innerText)) {
+        e.remove();
+      }
       document.jpdb.destroyElement('.keyword-missing');
     });
   }
 
   private vocabulary(): void {
     document.jpdb.withElements('.subsection-label', (e) => {
-      if (['Meanings', 'Custom definition'].includes(e.innerText)) e.remove();
+      if (['Meanings', 'Custom definition'].includes(e.innerText)) {
+        e.remove();
+      }
     });
   }
 

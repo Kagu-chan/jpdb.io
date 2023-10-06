@@ -33,10 +33,14 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   ) {
     this._mainElement = this.render();
 
-    if (this._virtual) return;
+    if (this._virtual) {
+      return;
+    }
 
     this._dom.addEventListener(this._mainElement, 'change', (): void => {
-      if (this.onchange) this.onchange(this.readValue());
+      if (this.onchange) {
+        this.onchange(this.readValue());
+      }
     });
   }
 
@@ -46,18 +50,19 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   }
 
   public renderLabel(target: string | HTMLElement): HTMLLabelElement {
-    if (this.options.text?.length)
+    if (this.options.text?.length) {
       return this.append('label', target, 'label', {
         innerHTML: this.options.text,
         attributes: { for: this.name },
       });
+    }
   }
 
   public renderDescription(
     target: string | HTMLElement,
     marginLeft?: string,
   ): HTMLParagraphElement {
-    if (this.options.description?.length)
+    if (this.options.description?.length) {
       return this.append('description', target, 'p', {
         innerHTML: this.options.description,
         style: {
@@ -65,6 +70,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
           marginLeft,
         },
       });
+    }
   }
 
   //#region Element Creation
@@ -74,6 +80,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
     options: DOMElementOptions = {},
   ): HTMLElementTagNameMap[K] {
     const e = this._dom.createElement(tagName, options);
+
     this._elements.set(key, e);
 
     return e;
@@ -90,6 +97,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
       tagName,
       options,
     );
+
     this._elements.set(key, e);
 
     return e;
@@ -106,6 +114,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
       tagName,
       options,
     );
+
     this._elements.set(key, e);
 
     return e;
@@ -124,6 +133,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
       tagName,
       options,
     );
+
     this._elements.set(key, e);
 
     return e;
@@ -131,7 +141,9 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   //#endregion
 
   protected readValue(): TValue {
-    if (!('value' in this._mainElement)) throw new Error('readValue must be overwritten');
+    if (!('value' in this._mainElement)) {
+      throw new Error('readValue must be overwritten');
+    }
 
     return this._mainElement.value as TValue;
   }

@@ -346,7 +346,9 @@ export class LearningStats {
           }),
       )
       .then((today: string) => {
-        if (today === '?') return;
+        if (today === '?') {
+          return;
+        }
 
         document.jpdb.findElement('.new-today').classList.toggle('hidden');
         document.jpdb.findElement('.new-today-stats').innerText = `${today} / ${target}`;

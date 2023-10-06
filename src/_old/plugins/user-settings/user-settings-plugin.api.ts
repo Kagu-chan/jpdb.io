@@ -67,7 +67,9 @@ export class UserSettingsPluginAPI {
 
     // Globals.persistence.set('plugins', pluginSettings);
 
-    if (skipReload) return;
+    if (skipReload) {
+      return;
+    }
     window.location.reload();
   }
 }

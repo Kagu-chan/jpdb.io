@@ -50,6 +50,7 @@ class HideCompletedDecks {
 
     jpdb.runOnce('/settings', () => {
       const rbs = jpdb.settings.getJpdbRadioSetting('learning-order');
+
       jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
       if (rbs.includes('all-decks')) {
@@ -145,7 +146,9 @@ class HideCompletedDecks {
         return true;
       });
 
-      if (!found) return;
+      if (!found) {
+        return;
+      }
 
       hide.forEach((d) => {
         d.parameters.set('hidden', true);
@@ -159,7 +162,9 @@ class HideCompletedDecks {
     jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
       const amount: number = this._deckList.filter((d) => d.parameters.get('hidden')).length;
 
-      if (!amount) return;
+      if (!amount) {
+        return;
+      }
 
       const btn = document.jpdb.createElement('span', {
         class: 'show-control',

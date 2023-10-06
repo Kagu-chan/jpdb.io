@@ -31,6 +31,7 @@ export const textfield = <T extends string | number>(
       maxWidth: '16rem',
     },
   });
+
   input.onchange = (): void =>
     options.change((options.type === 'number' ? Number(input.value) : options.value) as T);
 

@@ -57,7 +57,9 @@ export class ScriptRunner {
    * @param {Function} fn Function to execute
    */
   public onMobile(fn: Function): void {
-    if (isMobile()) fn();
+    if (isMobile()) {
+      fn();
+    }
   }
 
   /**
@@ -66,7 +68,9 @@ export class ScriptRunner {
    * @param {Function} fn Function to execute
    */
   public onDesktop(fn: Function): void {
-    if (!isMobile()) fn();
+    if (!isMobile()) {
+      fn();
+    }
   }
 
   /**
@@ -225,15 +229,21 @@ export class ScriptRunner {
   public on(eventName: string, cb: () => void, run: boolean): void;
 
   public on(eventName: string, cb: Function, run?: boolean): void {
-    if (!this._listen[eventName]) this._listen[eventName] = [];
+    if (!this._listen[eventName]) {
+      this._listen[eventName] = [];
+    }
 
     this._listen[eventName].push(cb);
 
-    if (run) cb();
+    if (run) {
+      cb();
+    }
   }
 
   public once(eventName: string, cb: Function): void {
-    if (!this._listenOnce[eventName]) this._listenOnce[eventName] = [];
+    if (!this._listenOnce[eventName]) {
+      this._listenOnce[eventName] = [];
+    }
 
     this._listenOnce[eventName].push(cb);
   }

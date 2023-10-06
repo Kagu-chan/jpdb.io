@@ -2,7 +2,9 @@
   const withNode = (node: HTMLDivElement): void => {
     const { adjacentElement, findElement, findElements, textFromNode } = document.jpdb;
 
-    if (findElement(node, 'a[href*="review-history"]')) return;
+    if (findElement(node, 'a[href*="review-history"]')) {
+      return;
+    }
 
     const getWord = (): string => {
       return (
@@ -49,11 +51,14 @@
       ],
     });
   };
+
   jpdb.runAlways('/deck', () => {
     document.jpdb.withElements('.entry.suspended, .entry.locked, .entry.new', withNode);
   });
   jpdb.runAlways(/\/vocabulary/, () => {
-    if (!document.jpdb.findElement('.tag.suspended, .tag.locked, .tag.new')) return;
+    if (!document.jpdb.findElement('.tag.suspended, .tag.locked, .tag.new')) {
+      return;
+    }
 
     document.jpdb.withElement('.dropdown-content', withNode);
   });

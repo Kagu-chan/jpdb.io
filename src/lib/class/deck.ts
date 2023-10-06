@@ -121,12 +121,15 @@ export class Deck {
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
     const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+
     this._donePercent = done;
     this._seenPercent = seen ?? done;
   }
 
   protected parseCov(): void {
-    if (!this._coverage) return;
+    if (!this._coverage) {
+      return;
+    }
 
     const [, content] = this.childs(this._coverage);
 
@@ -136,15 +139,19 @@ export class Deck {
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
     const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+
     this._covPercent = done;
     this._recPercent = seen ?? done;
 
     const targetCoverageNode = document.jpdb.findElement(this._coverage, 'div[style*="target"]');
+
     this._targetCov = Number(targetCoverageNode?.style.left?.replace(/[^\d]+/g, '') ?? 0);
   }
 
   protected parseKanji(): void {
-    if (!this._kanji) return;
+    if (!this._kanji) {
+      return;
+    }
 
     const [title, content] = this.childs(this._kanji);
     const [, textContent] = this.childs(title);
@@ -160,6 +167,7 @@ export class Deck {
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
     const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+
     this._kanjiDonePercent = done;
     this._kanjiSeenPercent = seen ?? done;
   }

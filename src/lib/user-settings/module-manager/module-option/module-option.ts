@@ -67,9 +67,13 @@ export class ModuleOption {
   private updateChildOptions(childsContainer: HTMLDivElement): void {
     const o = this._option as HasChildren;
 
-    if (o.indent) childsContainer.style.paddingLeft = o.indentWith ?? '2rem';
+    if (o.indent) {
+      childsContainer.style.paddingLeft = o.indentWith ?? '2rem';
+    }
 
-    if (this._option.type !== 'checkbox') return;
+    if (this._option.type !== 'checkbox') {
+      return;
+    }
 
     const sv = this._renderer._setValue;
     const isHide = o.hideOrDisable === 'hide';
@@ -86,7 +90,9 @@ export class ModuleOption {
       return v ? setTrue() : setFalse();
     };
 
-    if (!this._getValue()) setFalse();
+    if (!this._getValue()) {
+      setFalse();
+    }
   }
 
   private disableTree(c: HTMLDivElement): void {
@@ -102,6 +108,7 @@ export class ModuleOption {
       `input.disabled-by-${this._option.key}`,
       (i: HTMLInputElement) => {
         i.classList.remove(`disabled-by-${this._option.key}`);
+
         if (!Array.from(i.classList).find((c) => c.startsWith('disabled-by-'))) {
           i.disabled = false;
         }

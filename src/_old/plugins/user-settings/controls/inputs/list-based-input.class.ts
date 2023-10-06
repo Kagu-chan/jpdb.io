@@ -62,7 +62,9 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       class: ['accordion', 'user-settings'],
     });
 
-    if (this.openOnStart()) details.setAttribute('open', '');
+    if (this.openOnStart()) {
+      details.setAttribute('open', '');
+    }
 
     this.append('label', details, 'summary', {
       innerText: this.options.text,
@@ -90,7 +92,9 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
 
     this.renderInputHeaderContent(div);
 
-    if (div.innerHTML === '') return;
+    if (div.innerHTML === '') {
+      return;
+    }
 
     /**
      * Append some fake items to this container
@@ -168,7 +172,9 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       this.addItemControls(c, id);
       this._inputCollection.push(i);
 
-      if (focusLatest && last) i.focus();
+      if (focusLatest && last) {
+        i.focus();
+      }
 
       i.addEventListener('change', () => (this._workingValue[id] = this.stringToItem(i.value)));
       i.addEventListener('keypress', (e) => {
@@ -203,6 +209,7 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
 
   protected swapPositions(index1: number, index2: number): void {
     const tmp = this._workingValue[index1];
+
     this._workingValue[index1] = this._workingValue[index2];
     this._workingValue[index2] = tmp;
   }
@@ -233,8 +240,13 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       },
     });
 
-    if (id === 0) up.setAttribute('disabled', '');
-    if (id === this._workingValue.length - 1) down.setAttribute('disabled', '');
+    if (id === 0) {
+      up.setAttribute('disabled', '');
+    }
+
+    if (id === this._workingValue.length - 1) {
+      down.setAttribute('disabled', '');
+    }
 
     this._dom.appendNewElement(container, 'input', {
       id: `${this.name}-${id}-rem`,
