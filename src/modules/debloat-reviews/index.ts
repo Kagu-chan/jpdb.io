@@ -1,6 +1,3 @@
-/**
- * @FIXME: Control to modify Mnemonics should still be visible, probaply with a own label / restyled
- */
 class DebloadReviewsModule {
   private DEBLOAT_REVIEWS: string = 'debloat-reviews';
 
@@ -28,8 +25,12 @@ class DebloadReviewsModule {
   }
 
   private review(): void {
+    const whiteList: string[] = ['Keyword', 'Meanings', 'Mnemonic'];
+
     document.jpdb.withElements('.subsection-label', (e) => {
-      if (!e.innerText.startsWith('Keyword') || !e.innerText.startsWith('Meanings')) e.remove();
+      if (!whiteList.find((w) => e.innerText.startsWith(w))) {
+        e.remove();
+      }
     });
     document.jpdb.destroyElement('.keyword-missing');
   }
