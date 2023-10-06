@@ -14,6 +14,8 @@ import { textFromNode } from './fn/text-from-node';
 import { withElement } from './fn/with-element';
 import { withElements } from './fn/with-elements';
 
+import { _button, _checkbox, _container, _radiobutton, _textarea, _textfield } from './util/index';
+
 type DOMElementBaseOptions = {
   id?: string;
   class?: string | string[];
@@ -44,6 +46,15 @@ declare global {
       withElement: typeof withElement;
       withElements: typeof withElements;
     };
+
+    util: {
+      button: typeof _button;
+      checkbox: typeof _checkbox;
+      container: typeof _container;
+      radiobutton: typeof _radiobutton;
+      textarea: typeof _textarea;
+      textfield: typeof _textfield;
+    };
   }
 
   type DOMElementOptions = DOMElementBaseOptions & {
@@ -73,4 +84,13 @@ document.jpdb = {
   textFromNode,
   withElement,
   withElements,
+};
+
+document.util = {
+  button: _button,
+  checkbox: _checkbox,
+  container: _container,
+  radiobutton: _radiobutton,
+  textarea: _textarea,
+  textfield: _textfield,
 };

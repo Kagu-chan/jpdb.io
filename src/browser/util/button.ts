@@ -1,7 +1,9 @@
-type ButtonOptions = {
-  type?: 'default' | 'error' | 'gray' | 'warning' | 'success';
-  handler?: () => void;
-};
+declare global {
+  type ButtonOptions = {
+    type?: 'default' | 'error' | 'gray' | 'warning' | 'success';
+    handler?: () => void;
+  };
+}
 
 const typeMap: Record<ButtonOptions['type'], string> = {
   default: 'v0',

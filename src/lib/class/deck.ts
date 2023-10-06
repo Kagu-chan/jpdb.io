@@ -1,30 +1,27 @@
-/**
- * @TODO: Move to main lib and export via globals
- */
 export class Deck {
   public readonly parameters = new Map<string, any>();
 
-  private _title: string;
-  private _newCards: HTMLDivElement;
-  private _body: HTMLDivElement;
-  private _vocab: HTMLDivElement;
-  private _kanji: HTMLDivElement;
-  private _progress: HTMLDivElement;
-  private _coverage: HTMLDivElement;
+  protected _title: string;
+  protected _newCards: HTMLDivElement;
+  protected _body: HTMLDivElement;
+  protected _vocab: HTMLDivElement;
+  protected _kanji: HTMLDivElement;
+  protected _progress: HTMLDivElement;
+  protected _coverage: HTMLDivElement;
 
-  private _done: number;
-  private _total: number;
-  private _donePercent: number;
-  private _seenPercent: number;
+  protected _done: number;
+  protected _total: number;
+  protected _donePercent: number;
+  protected _seenPercent: number;
 
-  private _kanjiDone: number = 0;
-  private _kanjiTotal: number = 0;
-  private _kanjiDonePercent: number = 0;
-  private _kanjiSeenPercent: number = 0;
+  protected _kanjiDone: number = 0;
+  protected _kanjiTotal: number = 0;
+  protected _kanjiDonePercent: number = 0;
+  protected _kanjiSeenPercent: number = 0;
 
-  private _covPercent: number = 0;
-  private _recPercent: number = 0;
-  private _targetCov: number = 0;
+  protected _covPercent: number = 0;
+  protected _recPercent: number = 0;
+  protected _targetCov: number = 0;
 
   //#region Getters
   public get deckNode(): HTMLDivElement {
@@ -96,7 +93,7 @@ export class Deck {
   }
   //#endregion
 
-  constructor(private _deckNode: HTMLDivElement) {
+  constructor(protected _deckNode: HTMLDivElement) {
     this._title = document.jpdb.findElement(this._deckNode, '.deck-title a')?.innerText;
     this._body = document.jpdb.findElement<'div'>(this._deckNode, '.deck-body div');
     this._newCards = document.jpdb.findElement<'div'>(this._deckNode, '.deck-title .tooltip');
@@ -109,7 +106,7 @@ export class Deck {
     this.parseKanji();
   }
 
-  private parseVocab(): void {
+  protected parseVocab(): void {
     const [title, content] = this.childs(this._progress);
     const [, textContent] = this.childs(title);
 
@@ -128,7 +125,7 @@ export class Deck {
     this._seenPercent = seen ?? done;
   }
 
-  private parseCov(): void {
+  protected parseCov(): void {
     if (!this._coverage) return;
 
     const [, content] = this.childs(this._coverage);
@@ -146,7 +143,7 @@ export class Deck {
     this._targetCov = Number(targetCoverageNode?.style.left?.replace(/[^\d]+/g, '') ?? 0);
   }
 
-  private parseKanji(): void {
+  protected parseKanji(): void {
     if (!this._kanji) return;
 
     const [title, content] = this.childs(this._kanji);
@@ -167,7 +164,7 @@ export class Deck {
     this._kanjiSeenPercent = seen ?? done;
   }
 
-  private childs<T extends HTMLElement = HTMLDivElement>(e: HTMLDivElement): T[] {
+  protected childs<T extends HTMLElement = HTMLDivElement>(e: HTMLDivElement): T[] {
     return Array.from(e?.childNodes ?? []) as T[];
   }
 }

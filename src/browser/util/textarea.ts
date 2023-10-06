@@ -1,15 +1,17 @@
 import { container } from './container';
-import { appendHelpText } from './utils/append-help-text';
-import { getPlacehoolder } from './utils/get-place-holder';
+import { appendHelpText } from './internal/append-help-text';
+import { getPlacehoolder } from './internal/get-place-holder';
 
-export type TextareaOptions = {
-  change: (value: string) => void;
-  name: string;
-  label: string;
-  value: string;
-  placeholder?: string;
-  helpText?: string | HTMLElement;
-};
+declare global {
+  type TextareaOptions = {
+    change: (value: string) => void;
+    name: string;
+    label: string;
+    value: string;
+    placeholder?: string;
+    helpText?: string | HTMLElement;
+  };
+}
 
 export const textarea = (options: TextareaOptions): HTMLDivElement => {
   const input = document.jpdb.createElement('textarea', {

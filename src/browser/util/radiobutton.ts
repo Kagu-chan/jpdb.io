@@ -1,14 +1,16 @@
 import { container } from './container';
 
-export type RadiobuttonOptions = {
-  change: (value: string) => void;
-  name: string;
-  label: string;
-  value: string;
-  options: object;
-  labels: object;
-  helpText?: string | HTMLElement;
-};
+declare global {
+  type RadiobuttonOptions = {
+    change: (value: string) => void;
+    name: string;
+    label: string;
+    value: string;
+    options: object;
+    labels: object;
+    helpText?: string | HTMLElement;
+  };
+}
 
 export const radiobutton = (options: RadiobuttonOptions): HTMLDivElement => {
   const input = document.jpdb.createElement('input', {

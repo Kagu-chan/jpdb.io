@@ -1,22 +1,15 @@
-.show-hide-container {
+.show-container {
   margin-bottom: 0.5rem;
 }
 
-.show-hide-container:not(:has(.show-hide-control:not(.disabled))) {
+.show-container:not(:has(.show-control)) {
   display: none;
 }
 
-.show-hide-control {
+.show-control {
   font-size: 1rem;
   opacity: 0.8;
   display: block;
-}
-
-.show-hide-control.disabled {
-  display: none;
-}
-
-.show-hide-control:not(.disabled) {
   cursor: pointer;
 }
 

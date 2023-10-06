@@ -1,18 +1,20 @@
 import { container } from './container';
-import { appendHelpText } from './utils/append-help-text';
-import { getPlacehoolder } from './utils/get-place-holder';
+import { appendHelpText } from './internal/append-help-text';
+import { getPlacehoolder } from './internal/get-place-holder';
 
-export type TextfieldOptions<T extends string | number> = {
-  change: (value: T) => void;
-  name: string;
-  label: string;
-  value: T;
-  type: T extends string ? 'text' : 'number';
-  min?: T extends number ? number : never;
-  max?: T extends number ? number : never;
-  placeholder?: string;
-  helpText?: string | HTMLElement;
-};
+declare global {
+  type TextfieldOptions<T extends string | number> = {
+    change: (value: T) => void;
+    name: string;
+    label: string;
+    value: T;
+    type: T extends string ? 'text' : 'number';
+    min?: T extends number ? number : never;
+    max?: T extends number ? number : never;
+    placeholder?: string;
+    helpText?: string | HTMLElement;
+  };
+}
 
 export const textfield = <T extends string | number>(
   options: TextfieldOptions<T>,

@@ -1,4 +1,3 @@
-import { container } from '../../elements/container';
 import { ModuleOptions } from './module-options';
 import { IModuleOptions } from './module-options.type';
 
@@ -26,7 +25,7 @@ export class ModuleSection {
 
   private getCategory(category: string): HTMLDivElement {
     if (!this._categories.has(category)) {
-      const cat = container([{ tag: 'h6', innerText: category }]);
+      const cat = document.util.container([{ tag: 'h6', innerText: category }]);
 
       this._categories.set(category, cat);
       this.renderCategory(category, cat);
