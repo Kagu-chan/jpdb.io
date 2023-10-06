@@ -3,14 +3,14 @@ import { PluginOptions } from '../plugin/types/plugin-options';
 import { PluginUserOptions, PluginUserOptionFieldType } from '../plugin/types/plugin-user-options';
 import { JPDBRequest } from '../request';
 
-type DeckTarget = {
+interface DeckTarget {
   deckId: number;
   label: string;
-};
-type VocabData = {
+}
+interface VocabData {
   s: string;
   v: string;
-};
+}
 
 export class MoveCardPlugin extends JPDBPlugin {
   protected _pluginOptions: PluginOptions = {

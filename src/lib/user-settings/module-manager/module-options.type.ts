@@ -13,17 +13,17 @@ export enum ModuleUserOptionFieldType {
   OBJECTLIST = 'objectlist',
 }
 
-export type HasChildren = {
+export interface HasChildren {
   hideOrDisable: `${ModuleUserOptionDependencyAction}`;
   indent?: boolean;
   indentWith?: string;
   children: ModuleUserOptions;
-};
+}
 
-export type HasNoChildren = {
+export interface HasNoChildren {
   hideOrDisable?: undefined;
   children?: [] | undefined;
-};
+}
 
 type ModuleUserOptionBase<T> = {
   key: string;
@@ -64,13 +64,13 @@ export type ModuleUserOptionList = ModuleUserOptionBaseRequired<string[]> & {
   text: string;
 };
 
-export type ObjectSchemaItem = {
+export interface ObjectSchemaItem {
   key: string;
   label: string;
   type: 'number' | 'text';
   min?: number;
   max?: number;
-};
+}
 export type ObjectSchema = ObjectSchemaItem[];
 export type ModuleUserOptionObjectList = ModuleUserOptionBaseRequired<object[]> & {
   type: 'objectlist';

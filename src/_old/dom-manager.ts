@@ -1,4 +1,4 @@
-export type DOMElementOptions = {
+export interface DOMElementOptions {
   id?: string;
   class?: string[];
   attributes?: Record<string, string | boolean>;
@@ -6,7 +6,7 @@ export type DOMElementOptions = {
   innerText?: string;
   innerHTML?: string;
   handler?: (ev?: MouseEvent) => void;
-};
+}
 export type DOMFilterFn = (e: HTMLElement, index: number) => boolean;
 
 /**

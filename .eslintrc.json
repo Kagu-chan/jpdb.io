@@ -5,8 +5,8 @@
     "browser": true
   },
   "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -23,7 +23,13 @@
       }
     }
   },
-  "ignorePatterns": ["webpack.config.js", "plugin/**/*", "scripts/**/*.js", "runtime/**/*", "dist/**/*.js"],
+  "ignorePatterns": [
+    "webpack.config.js",
+    "plugin/**/*",
+    "scripts/**/*.js",
+    "runtime/**/*",
+    "dist/**/*.js"
+  ],
   "plugins": ["@typescript-eslint", "eslint-plugin-jsdoc", "import"],
   "rules": {
     "arrow-parens": ["error", "always"],
@@ -107,6 +113,7 @@
         "extendDefaults": true
       }
     ],
-    "@typescript-eslint/explicit-function-return-type": ["error"]
+    "@typescript-eslint/explicit-function-return-type": ["error"],
+    "@typescript-eslint/prefer-nullish-coalescing": ["off"]
   }
 }

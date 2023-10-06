@@ -1,4 +1,4 @@
-export type CSSOverwrite = {
+export interface CSSOverwrite {
   key: string;
   css: string;
-};
+}

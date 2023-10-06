@@ -273,11 +273,11 @@ export class ScrollControlsPlugin extends JPDBPlugin {
 
     switch (this.getUsersSetting<ScrollControlPosition>('button-position')) {
       case ScrollControlPosition.L:
-        [, containerName] = ScrollStyles['left'];
+        [, containerName] = ScrollStyles.left;
 
         break;
       case ScrollControlPosition.R:
-        [, containerName] = ScrollStyles['right'];
+        [, containerName] = ScrollStyles.right;
 
         break;
     }

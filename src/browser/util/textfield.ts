@@ -3,7 +3,7 @@ import { appendHelpText } from './internal/append-help-text';
 import { getPlacehoolder } from './internal/get-place-holder';
 
 declare global {
-  type TextfieldOptions<T extends string | number> = {
+  interface TextfieldOptions<T extends string | number> {
     change: (value: T) => void;
     name: string;
     label: string;
@@ -13,7 +13,7 @@ declare global {
     max?: T extends number ? number : never;
     placeholder?: string;
     helpText?: string | HTMLElement;
-  };
+  }
 }
 
 export const textfield = <T extends string | number>(

@@ -14,7 +14,7 @@ export class UserSettingsPluginAPI {
     const plugins = Array.from(this._plugins.values());
     const activePlugins = plugins.filter((pl) => includeBeta || !pl.pluginOptions.beta);
     const invalidActivePlugins = plugins.filter(
-      (pl) => !includeBeta && pl.pluginOptions.beta && pl.usersSettings['enabled'],
+      (pl) => !includeBeta && pl.pluginOptions.beta && pl.usersSettings.enabled,
     );
 
     invalidActivePlugins.forEach((pl) => {

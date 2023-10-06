@@ -2,13 +2,13 @@ import { container } from './container';
 import { getHelpTextConfig } from './internal/get-help-text-config';
 
 declare global {
-  type CheckboxOptions = {
+  interface CheckboxOptions {
     change: (value: boolean) => void;
     name: string;
     label: string;
     value: boolean;
     helpText?: string | HTMLElement;
-  };
+  }
 }
 
 export const checkbox = (options: CheckboxOptions): HTMLDivElement => {

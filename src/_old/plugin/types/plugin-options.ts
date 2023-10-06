@@ -1,4 +1,4 @@
-type RawPluginOptions = {
+interface RawPluginOptions {
   /**
    * @var {string} name Human Readable Plugin Name
    */
@@ -10,7 +10,7 @@ type RawPluginOptions = {
   /**
    * @var {string | RegExp | Array<string | RegExp>} activeAt Regular Expression or literal stating on which pathname this plugin should interact
    */
-  activeAt: string | RegExp | Array<string | RegExp>;
+  activeAt: string | RegExp | (string | RegExp)[];
   /**
    * @var {boolean} runAgain Weather or not the plugin should run again after a virtual reload
    */
@@ -43,7 +43,7 @@ type RawPluginOptions = {
    * @var {boolean} [unfinished=false] Marks a beta plugin as unfinished
    */
   unfinished?: boolean;
-};
+}
 
 type NonBetaPlugin = RawPluginOptions & {
   beta?: false;

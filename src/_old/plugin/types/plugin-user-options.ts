@@ -15,15 +15,15 @@ export enum PluginUserOptionFieldType {
   OBJECTLIST = 'objectlist',
 }
 
-export type PluginUserOptionNoDep = {
+export interface PluginUserOptionNoDep {
   dependsOn?: undefined;
-};
-export type PluginUserOptionDep = {
+}
+export interface PluginUserOptionDep {
   dependsOn: string;
   indent: boolean;
   hideOrDisable: PluginUserOptionDependencyAction;
   indentWith?: string;
-};
+}
 export type PluginUserOptionDependsOn = PluginUserOptionNoDep | PluginUserOptionDep;
 
 type PluginUserOptionBase<T> = PluginUserOptionDependsOn & {
@@ -69,13 +69,13 @@ export type PluginUserOptionList = PluginUserOptionBaseRequired<string[]> & {
   text: string;
 };
 
-export type ObjectSchemaItem = {
+export interface ObjectSchemaItem {
   key: string;
   label: string;
   type: PluginUserOptionFieldType.NUMBER | PluginUserOptionFieldType.TEXT;
   min?: number;
   max?: number;
-};
+}
 export type ObjectSchema = ObjectSchemaItem[];
 export type PluginUserOptionObjectList = PluginUserOptionBaseRequired<object[]> & {
   type: PluginUserOptionFieldType.OBJECTLIST;

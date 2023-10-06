@@ -7,7 +7,7 @@ import {
 export abstract class Input<TValue, TElement extends HTMLElement> {
   public onchange: (newValue: TValue) => void;
 
-  protected _elements: Map<string, HTMLElement> = new Map();
+  protected _elements = new Map<string, HTMLElement>();
   protected _mainElement: TElement;
 
   protected _dom: DOMManager = new DOMManager();

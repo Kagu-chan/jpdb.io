@@ -1,6 +1,7 @@
 import {
   PluginUserOptionObjectList,
   ObjectSchemaItem,
+  PluginUserOptionFieldType,
 } from '../../../../plugin/types/plugin-user-options';
 import { ListBasedInput } from './list-based-input.class';
 
@@ -17,7 +18,7 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
     const object: Record<string, string | number> = {};
 
     (this.options as PluginUserOptionObjectList).schema.forEach(({ key, type, min }) => {
-      object[key] = type === 'text' ? '' : min ?? 0;
+      object[key] = type === PluginUserOptionFieldType.TEXT ? '' : min ?? 0;
     });
 
     return object;
@@ -82,7 +83,8 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
       });
 
       i.addEventListener('blur', () => {
-        value[current.key] = current.type === 'number' ? Number(i.value) : i.value;
+        value[current.key] =
+          current.type === PluginUserOptionFieldType.NUMBER ? Number(i.value) : i.value;
         input.value = this.itemToString(value);
       });
       i.addEventListener('keypress', (e) => {

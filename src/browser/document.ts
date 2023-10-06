@@ -16,7 +16,7 @@ import { withElements } from './fn/with-elements';
 
 import { _button, _checkbox, _container, _radiobutton, _textarea, _textfield } from './util/index';
 
-type DOMElementBaseOptions = {
+interface DOMElementBaseOptions {
   id?: string;
   class?: string | string[];
   attributes?: Record<string, string | boolean>;
@@ -24,7 +24,7 @@ type DOMElementBaseOptions = {
   innerText?: string | number;
   innerHTML?: string;
   handler?: (ev?: MouseEvent) => void;
-};
+}
 
 declare global {
   interface Document {

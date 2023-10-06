@@ -1,7 +1,7 @@
 import { container } from './container';
 
 declare global {
-  type RadiobuttonOptions = {
+  interface RadiobuttonOptions {
     change: (value: string) => void;
     name: string;
     label: string;
@@ -9,7 +9,7 @@ declare global {
     options: object;
     labels: object;
     helpText?: string | HTMLElement;
-  };
+  }
 }
 
 export const radiobutton = (options: RadiobuttonOptions): HTMLDivElement => {

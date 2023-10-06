@@ -38,9 +38,12 @@ class SettingsNav {
   }
 
   private getList(): HTMLDivElement {
-    type SettingsLink = { text: string; e: HTMLElement };
+    interface SettingsLink {
+      text: string;
+      e: HTMLElement;
+    }
 
-    const elements: Array<SettingsLink> = [];
+    const elements: SettingsLink[] = [];
     const div = document.jpdb.createElement('div', {
       class: ['s-nav-wrapper', 'outline', 'v2', 'closed'],
     });

@@ -7,10 +7,10 @@ import {
   PluginUserOptionDependencyAction,
 } from '../plugin/types/plugin-user-options';
 
-type CustomLink = {
+interface CustomLink {
   url: string;
   label: string;
-};
+}
 
 const TOP_LINKS: CustomLink[] = [
   { url: '/prebuilt_decks', label: 'Built-in decks' },

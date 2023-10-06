@@ -1,8 +1,8 @@
 declare global {
-  type ButtonOptions = {
+  interface ButtonOptions {
     type?: 'default' | 'error' | 'gray' | 'warning' | 'success';
     handler?: () => void;
-  };
+  }
 }
 
 const typeMap: Record<ButtonOptions['type'], string> = {

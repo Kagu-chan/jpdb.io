@@ -3,14 +3,14 @@ import { appendHelpText } from './internal/append-help-text';
 import { getPlacehoolder } from './internal/get-place-holder';
 
 declare global {
-  type TextareaOptions = {
+  interface TextareaOptions {
     change: (value: string) => void;
     name: string;
     label: string;
     value: string;
     placeholder?: string;
     helpText?: string | HTMLElement;
-  };
+  }
 }
 
 export const textarea = (options: TextareaOptions): HTMLDivElement => {
