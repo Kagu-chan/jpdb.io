@@ -123,7 +123,7 @@ export class LearningStats {
   private getPresentStats(): LearningStatsPresentData {
     const { statsBody } = this.nodes;
     const data: Partial<LearningStatsPresentData> = {};
-    const [, ...rows] = document.jpdb.findElements<'tr'>(statsBody, 'tr');
+    const [, ...rows] = document.jpdb.findElements<'tr'>(statsBody!, 'tr');
 
     rows.forEach((r) => this.assignStatsFromRow(r, data));
 
@@ -157,7 +157,7 @@ export class LearningStats {
       sumPercent,
 
       nonRedundant: nodes.nonRedundant
-        ? Number(nodes.nonRedundant.childNodes[1].nodeValue.trim())
+        ? Number(nodes.nonRedundant.childNodes[1]!.nodeValue!.trim())
         : 0,
     };
 
@@ -175,8 +175,8 @@ export class LearningStats {
       });
     }
 
-    const upcomingNodeContents = nodes.upcoming.innerHTML
-      .replace(/<\/?span( class="strong")?>/g, '')
+    const upcomingNodeContents = nodes
+      .upcoming!.innerHTML.replace(/<\/?span( class="strong")?>/g, '')
       .replace(/\&nbsp\;/g, ' ');
     const hasParatheses = upcomingNodeContents.includes('(');
 
@@ -208,8 +208,8 @@ export class LearningStats {
       result.wordsLK + result.wordsIndirectLK + result.kanjiLK + result.kanjiIndirectLK;
 
     // New + Due + Locked (NDL)
-    result.wordsNDL = result.newVocab + result.dueVocab + result.lockedWords;
-    result.kanjiNDL = result.newKanji + result.dueKanji + result.lockedKanji;
+    result.wordsNDL = result.newVocab! + result.dueVocab! + result.lockedWords!;
+    result.kanjiNDL = result.newKanji! + result.dueKanji! + result.lockedKanji!;
     result.sumNDL = result.wordsNDL + result.kanjiNDL;
 
     result.wordsABS = result.wordsLK + result.wordsNDL;

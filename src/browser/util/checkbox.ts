@@ -39,7 +39,7 @@ export const checkbox = (options: CheckboxOptions): HTMLDivElement => {
   if (options.helpText) {
     const hco = getHelpTextConfig(options.helpText);
 
-    hco.style.marginLeft = '2rem';
+    hco.style!.marginLeft = '2rem';
 
     return container([c, hco]);
   }

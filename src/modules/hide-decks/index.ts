@@ -33,9 +33,9 @@
     jpdb.onMobile(() => btn.classList.add('mobile'));
 
     const decksH = document.jpdb.findElement('#deck_list');
-    const deckL = decksH.nextSibling;
-    const mDecks = deckL.nextSibling;
-    const manage = mDecks.nextSibling;
+    const deckL = decksH.nextSibling!;
+    const mDecks = deckL.nextSibling!;
+    const manage = mDecks.nextSibling!;
 
     [decksH, deckL, mDecks, manage].forEach((e) => e.remove());
 
@@ -47,7 +47,7 @@
       .findElements('h4')
       .find(({ innerText }) => innerText === 'Special decks');
 
-    sDecks.nextSibling.remove();
-    sDecks.remove();
+    sDecks?.nextSibling!.remove();
+    sDecks?.remove();
   });
 })();

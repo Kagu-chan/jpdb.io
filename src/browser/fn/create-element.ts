@@ -32,18 +32,24 @@ export function createElement(
     e.onclick = options.handler;
   }
 
-  Object.keys(options.attributes ?? {}).forEach((key: string) => {
-    const value = options.attributes[key];
+  if (options.attributes) {
+    for (const key of Object.keys(options.attributes)) {
+      const value = options.attributes[key];
 
-    if (value === false) {
-      return;
+      if (value !== false) {
+        e.setAttribute(key, value as string);
+      }
     }
-    e.setAttribute(key, value as string);
-  });
-  Object.keys(options.style ?? {}).forEach((key: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (e.style as any)[key] = options.style[key as keyof CSSStyleDeclaration];
-  });
+  }
+
+  if (options.style) {
+    for (const key of Object.keys(options.style)) {
+      const style = options.style[key as keyof CSSStyleDeclaration];
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (e.style as any)[key] = style;
+    }
+  }
 
   if (options.class) {
     options.class = Array.isArray(options.class) ? options.class : [options.class];
@@ -52,7 +58,9 @@ export function createElement(
 
   (options.children ?? [])
     .filter((ch) => ch)
-    .forEach((ch) => appendElement(e, ch instanceof HTMLElement ? ch : createElement(ch)));
+    .forEach((ch: HTMLElement | DOMElementTagOptions<keyof HTMLElementTagNameMap>) =>
+      appendElement(e, ch instanceof HTMLElement ? ch : createElement(ch)),
+    );
 
   return e;
 }

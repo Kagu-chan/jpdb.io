@@ -11,7 +11,7 @@ export class ModuleOptions {
         type: 'checkbox',
         key: '_',
         hideOrDisable: 'hide',
-        children: _data.options,
+        children: _data.options!,
         indent: true,
         text: _data.displayText,
         description: this.getDescription(),
@@ -90,7 +90,7 @@ export class ModuleOptions {
       children: [
         {
           tag: 'a',
-          attributes: { href: source, target: '_blank' },
+          attributes: { href: source!, target: '_blank' },
           innerText: 'Original source',
         },
       ],

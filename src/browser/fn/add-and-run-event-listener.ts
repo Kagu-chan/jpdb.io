@@ -6,8 +6,8 @@ export const _addAndRunEventListener = (
   e.addEventListener(ev, fn);
 
   if ('handleEvent' in fn) {
-    return fn.handleEvent(null);
+    return fn.handleEvent(new Event('null'));
   }
 
-  fn(null);
+  fn(new Event('null'));
 };

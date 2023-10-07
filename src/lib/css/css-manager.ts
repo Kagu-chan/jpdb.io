@@ -15,7 +15,7 @@ export class CSSManager {
   public add(key: string, css: string): void;
 
   public add(p0: CSSOverwrite | string, p1?: string): void {
-    const { key, css } = typeof p0 === 'string' ? { key: p0, css: p1 } : p0;
+    const { key, css } = typeof p0 === 'string' ? { key: p0, css: p1! } : p0;
 
     if (this._registry.has(key)) {
       return;

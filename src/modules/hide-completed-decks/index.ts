@@ -53,7 +53,7 @@ class HideCompletedDecks {
 
       jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
-      if (rbs.includes('all-decks')) {
+      if (rbs?.includes('all-decks')) {
         jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_FIRST);
       } else {
         jpdb.settings.moduleManager.register({

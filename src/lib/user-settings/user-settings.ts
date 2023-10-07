@@ -33,7 +33,7 @@ export class UserSettings {
     return e.value as T;
   }
 
-  public getJpdbRadioSetting(name: string): string {
+  public getJpdbRadioSetting(name: string): string | undefined {
     return document.jpdb.findElements<'input'>(`[name="${name}"]`).find((e) => e.checked)?.value;
   }
 

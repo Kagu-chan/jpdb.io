@@ -19,8 +19,7 @@ export const renderDesktopTable = (
   const dueVocab = additional.dueVocab === 0 ? additional.due : additional.dueVocab;
 
   const showSum = present.wordsTotal !== additional.sumTotal;
-
-  document.jpdb.adjacentElement(nodes.stats, 'beforebegin', {
+  const content: DOMElementTagOptions<'table'> = {
     tag: 'table',
     class: [
       'cross-table',
@@ -248,5 +247,7 @@ export const renderDesktopTable = (
         ],
       },
     ],
-  });
+  };
+
+  document.jpdb.adjacentElement(nodes.stats!, 'beforebegin', content);
 };

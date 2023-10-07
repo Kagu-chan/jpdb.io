@@ -10,9 +10,9 @@ export function findElement<K extends keyof HTMLElementTagNameMap>(
   resultTag?: K,
 ): HTMLElementTagNameMap[K];
 
-export function findElement(p0: string | HTMLElement, p1?: string, _?: string): HTMLElement {
+export function findElement(p0: string | HTMLElement, p1?: string, _?: string): HTMLElement | null {
   const root = typeof p0 === 'string' ? document : p0;
-  const selector = typeof p0 === 'string' ? p0 : p1;
+  const selector = typeof p0 === 'string' ? p0 : p1!;
 
   return root.querySelector(selector);
 }

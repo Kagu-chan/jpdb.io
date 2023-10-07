@@ -5,7 +5,7 @@ declare global {
   }
 }
 
-const typeMap: Record<ButtonOptions['type'], string> = {
+const typeMap: Record<Exclude<ButtonOptions['type'], undefined>, string> = {
   default: 'v0',
   error: 'v1',
   gray: 'v2',
@@ -23,7 +23,7 @@ export const button = (text: string, options?: ButtonOptions): HTMLInputElement 
       value: text,
     },
     handler: (e): void => {
-      e.preventDefault();
+      e?.preventDefault();
 
       options?.handler?.();
     },

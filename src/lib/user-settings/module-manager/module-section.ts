@@ -34,7 +34,7 @@ export class ModuleSection {
       this.renderCategory(category, cat);
     }
 
-    return this._categories.get(category);
+    return this._categories.get(category)!;
   }
 
   private renderCategory(newName: string, item: HTMLDivElement): void {
@@ -43,7 +43,7 @@ export class ModuleSection {
     const previousIndex = ownIndex - 1;
 
     const previousItem = previousIndex >= 0 && sortedCategories[previousIndex];
-    const node = previousItem ? this._categories.get(previousItem) : this._titleNode;
+    const node = previousItem ? this._categories.get(previousItem)! : this._titleNode;
 
     document.jpdb.adjacentElement(node, 'afterend', item);
   }

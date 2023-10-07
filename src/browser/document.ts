@@ -58,7 +58,7 @@ declare global {
   }
 
   type DOMElementOptions = DOMElementBaseOptions & {
-    children?: (DOMElementTagOptions | HTMLElement)[];
+    children?: (undefined | false | DOMElementTagOptions | HTMLElement)[];
   };
 
   type DOMElementTagOptions<K extends keyof HTMLElementTagNameMap = keyof HTMLElementTagNameMap> =

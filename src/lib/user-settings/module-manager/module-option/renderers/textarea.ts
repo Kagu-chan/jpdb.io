@@ -6,7 +6,7 @@ export class TextareaRenderer extends Renderer<ModuleUserOptionTextarea, string>
     document.jpdb.appendElement(
       container,
       document.util.textarea({
-        label: this._options.text,
+        label: this._options.text!,
         name: this._options.key,
         value: this._getValue() ?? this._options.default,
         helpText: this._options.description,

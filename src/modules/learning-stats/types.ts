@@ -1,12 +1,12 @@
 export interface LearningStatsDataNodes {
   container: HTMLDivElement;
-  stats: HTMLTableElement;
-  locked: HTMLTableElement;
-  statsBody: HTMLTableSectionElement;
-  lockedBody: HTMLTableSectionElement;
-  nonRedundant: HTMLParagraphElement;
-  fulfilled: HTMLParagraphElement;
-  upcoming: HTMLParagraphElement;
+  stats?: HTMLTableElement;
+  locked?: HTMLTableElement;
+  statsBody?: HTMLTableSectionElement;
+  lockedBody?: HTMLTableSectionElement;
+  nonRedundant?: HTMLParagraphElement;
+  fulfilled?: HTMLParagraphElement;
+  upcoming?: HTMLParagraphElement;
 }
 
 export interface LearningStatsPresentData {

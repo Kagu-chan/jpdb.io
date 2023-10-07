@@ -42,7 +42,7 @@ export class Toaster {
       ],
     });
 
-    let timeout: NodeJS.Timeout;
+    let timeout: NodeJS.Timeout | undefined;
     const startTimeout = (t: number = 5000): void => {
       if (timeout) {
         return;

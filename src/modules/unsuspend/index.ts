@@ -20,7 +20,7 @@
     const isUnsuspend = findElement(node, '.suspended');
     const isUnlock = findElement(node, '.locked');
 
-    adjacentElement(li, 'afterend', {
+    adjacentElement(li!, 'afterend', {
       tag: 'li',
       children: [
         {

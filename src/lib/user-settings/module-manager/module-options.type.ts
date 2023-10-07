@@ -86,14 +86,14 @@ export type ModuleUserOption =
   | ModuleUserOptionNumber
   | ModuleUserOptionList
   | ModuleUserOptionObjectList;
-export type ModuleUserOptions = ModuleUserOption[];
+export type ModuleUserOptions = (ModuleUserOption | undefined | false)[];
 
 export interface IModuleOptions {
   name: string;
   category: string;
+  description: string;
   experimental?: boolean;
   displayText?: string;
-  description?: string;
   author?: string;
   source?: string;
   options?: ModuleUserOptions;

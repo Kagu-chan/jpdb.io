@@ -15,7 +15,7 @@ export class UserSettingsPersistence {
       this.write(key, defaultValue);
     }
 
-    return JSON.parse(localStorage.getItem(key)) as TResult;
+    return JSON.parse(localStorage.getItem(key)!) as TResult;
   }
 
   public write<TData>(key: string, value: TData): void {

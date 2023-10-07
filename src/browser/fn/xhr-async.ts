@@ -8,7 +8,7 @@ export const _xhrAsync = <TResult = unknown>(
   return new Promise((res, rej) => {
     void waitFor<'xhr'>('xhr', method, url, payload, (req: null | XMLHttpRequest) => {
       if (req === null) {
-        rej();
+        return rej();
       }
 
       res([req.response as TResult, req.responseText]);

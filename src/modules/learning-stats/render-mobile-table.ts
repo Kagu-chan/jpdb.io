@@ -22,7 +22,7 @@ export const renderMobileTable = (
   const showSum = present.wordsTotal !== additional.sumTotal;
   const showUpcomingSum = present.kanjiTotal !== 0;
 
-  document.jpdb.adjacentElement(nodes.stats, 'beforebegin', {
+  const content: DOMElementTagOptions<'table'> = {
     tag: 'table',
     class: [
       'cross-table',
@@ -262,5 +262,7 @@ export const renderMobileTable = (
         ],
       },
     ],
-  });
+  };
+
+  document.jpdb.adjacentElement(nodes.stats!, 'beforebegin', content);
 };
