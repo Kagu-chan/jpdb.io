@@ -50,24 +50,18 @@ export interface LearningStatsAdditionalStats {
   newVocab: number;
   newKanji: number;
 
-  wordsLK: number;
-  wordsNDL: number;
+  wordsProgress: number;
+  wordsUpcoming: number;
   wordsABS: number;
   wordsABSPercent: number;
 
-  kanjiLK: number;
-  kanjiNDL: number;
+  kanjiProgress: number;
+  kanjiUpcoming: number;
   kanjiABS: number;
   kanjiABSPercent: number;
 
-  wordsIndirectLK: number;
-  wordsIndirectABS: number;
-
-  kanjiIndirectLK: number;
-  kanjiIndirectABS: number;
-
-  sumLK: number;
-  sumNDL: number;
+  sumProgress: number;
+  sumUpcoming: number;
   sumABS: number;
   sumABSPercent: number;
 }

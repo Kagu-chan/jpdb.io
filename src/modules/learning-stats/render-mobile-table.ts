@@ -11,7 +11,7 @@ export const renderMobileTable = (
   showAbsolutes: boolean,
   showMains: boolean,
 ): void => {
-  const showLocked = !!nodes.locked && additional.lockedKanji > 0 && additional.lockedWords > 0;
+  const showLocked = additional.lockedWords + additional.lockedKanji > 0;
   const showK = present.kanjiTotal > 0;
   const showWI = present.wordsIndirectTotal > 0;
   const showKI = present.kanjiIndirectTotal > 0;
@@ -105,61 +105,68 @@ export const renderMobileTable = (
           },
           //#endregion
           //#region Locked Progress
-          {
+          (showMains || showLocked) && {
             tag: 'tr',
             children: [
               { tag: 'th' },
-              { tag: 'th', innerText: 'New' },
-              { tag: 'th', innerText: 'Due' },
+              { tag: 'th', innerText: showMains ? 'New' : '' },
+              { tag: 'th', innerText: showMains ? 'Due' : '' },
               { tag: 'th' },
               { tag: 'th', innerText: showLocked ? 'Locked' : '' },
             ],
           },
-          {
+          (showMains || showLocked) && {
             tag: 'tr',
             children: [
               { tag: 'th', innerText: 'Words' },
-              { tag: 'td', class: 'green', innerText: newVocab },
-              { tag: 'td', class: dueVocab > 0 ? 'red' : 'green', innerText: dueVocab },
+              { tag: 'td', class: 'green', innerText: showMains ? newVocab : '' },
+              {
+                tag: 'td',
+                class: dueVocab > 0 ? 'red' : 'green',
+                innerText: showMains ? dueVocab : '',
+              },
               { tag: 'td' },
               { tag: 'td', class: 'opac', innerText: showLocked ? additional.lockedWords : '' },
             ],
           },
-          showK && {
-            tag: 'tr',
-            children: [
-              { tag: 'th', innerText: 'Kanji' },
-              { tag: 'td', class: 'green', innerText: additional.newKanji },
-              {
-                tag: 'td',
-                class: additional.dueKanji > 0 ? 'red' : 'green',
-                innerText: additional.dueKanji,
-              },
-              { tag: 'td' },
-              { tag: 'td', class: 'opac', innerText: showLocked ? additional.lockedKanji : '' },
-            ],
-          },
-          showUpcomingSum && { tag: 'tr', class: 'sum-divider', children: [] },
-          showUpcomingSum && {
-            tag: 'tr',
-            class: 'sum',
-            children: [
-              { tag: 'th' },
-              { tag: 'td', class: 'green', innerText: additional.new },
-              {
-                tag: 'td',
-                class: additional.due > 0 ? 'red' : 'green',
-                innerText: additional.due,
-              },
-              { tag: 'td' },
-              {
-                tag: 'td',
-                class: 'opac',
-                innerText: showLocked ? additional.lockedWords + additional.lockedKanji : '',
-              },
-            ],
-          },
-          {
+          (showMains || showLocked) &&
+            showK && {
+              tag: 'tr',
+              children: [
+                { tag: 'th', innerText: 'Kanji' },
+                { tag: 'td', class: 'green', innerText: showMains ? additional.newKanji : '' },
+                {
+                  tag: 'td',
+                  class: additional.dueKanji > 0 ? 'red' : 'green',
+                  innerText: showMains ? additional.dueKanji : '',
+                },
+                { tag: 'td' },
+                { tag: 'td', class: 'opac', innerText: showLocked ? additional.lockedKanji : '' },
+              ],
+            },
+          (showMains || showLocked) &&
+            showUpcomingSum && { tag: 'tr', class: 'sum-divider', children: [] },
+          (showMains || showLocked) &&
+            showUpcomingSum && {
+              tag: 'tr',
+              class: 'sum',
+              children: [
+                { tag: 'th' },
+                { tag: 'td', class: 'green', innerText: showMains ? additional.new : '' },
+                {
+                  tag: 'td',
+                  class: additional.due > 0 ? 'red' : 'green',
+                  innerText: showMains ? additional.due : '',
+                },
+                { tag: 'td' },
+                {
+                  tag: 'td',
+                  class: 'opac',
+                  innerText: showLocked ? additional.lockedWords + additional.lockedKanji : '',
+                },
+              ],
+            },
+          (showMains || showLocked) && {
             tag: 'tr',
             children: [{ tag: 'th', innerHTML: '&nbsp;' }],
           },
@@ -170,7 +177,7 @@ export const renderMobileTable = (
             children: [
               { tag: 'th' },
               { tag: 'th', innerText: 'Total' },
-              { tag: 'th', innerText: 'In Progress' },
+              { tag: 'th', innerText: 'Progress' },
               { tag: 'th', innerText: 'Upcoming ' },
               { tag: 'th' },
             ],
@@ -180,42 +187,20 @@ export const renderMobileTable = (
             children: [
               { tag: 'th', innerText: 'Words' },
               { tag: 'td', innerText: additional.wordsABS },
-              { tag: 'td', innerText: additional.wordsLK },
-              { tag: 'td', innerText: additional.wordsNDL },
+              { tag: 'td', innerText: additional.wordsProgress },
+              { tag: 'td', innerText: additional.wordsUpcoming },
               { tag: 'td', class: 'opac', innerText: `${additional.wordsABSPercent}%` },
             ],
           },
-          showAbsolutes &&
-            showWI && {
-              tag: 'tr',
-              children: [
-                { tag: 'th', innerText: 'Words (indirect)' },
-                { tag: 'td' },
-                { tag: 'td', innerText: additional.wordsIndirectLK },
-                { tag: 'td' },
-                { tag: 'td' },
-              ],
-            },
           showAbsolutes &&
             showK && {
               tag: 'tr',
               children: [
                 { tag: 'th', innerText: 'Kanji' },
                 { tag: 'td', innerText: additional.kanjiABS },
-                { tag: 'td', innerText: additional.kanjiLK },
-                { tag: 'td', innerText: additional.kanjiNDL },
+                { tag: 'td', innerText: additional.kanjiProgress },
+                { tag: 'td', innerText: additional.kanjiUpcoming },
                 { tag: 'td', class: 'opac', innerText: `${additional.kanjiABSPercent}%` },
-              ],
-            },
-          showAbsolutes &&
-            showKI && {
-              tag: 'tr',
-              children: [
-                { tag: 'th', innerText: 'Kanji (indirect)' },
-                { tag: 'td' },
-                { tag: 'td', innerText: additional.kanjiIndirectLK },
-                { tag: 'td' },
-                { tag: 'td' },
               ],
             },
           showAbsolutes && showSum && { tag: 'tr', class: 'sum-divider', children: [] },
@@ -226,8 +211,8 @@ export const renderMobileTable = (
               children: [
                 { tag: 'th' },
                 { tag: 'td', innerText: additional.sumABS },
-                { tag: 'td', innerText: additional.sumLK },
-                { tag: 'td', innerText: additional.sumNDL },
+                { tag: 'td', innerText: additional.sumProgress },
+                { tag: 'td', innerText: additional.sumUpcoming },
                 { tag: 'td', class: 'opac', innerText: `${additional.sumABSPercent}%` },
               ],
             },

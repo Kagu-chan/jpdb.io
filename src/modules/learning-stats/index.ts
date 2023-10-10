@@ -40,7 +40,15 @@ export class LearningStats {
           key: 'show-total-total',
           type: 'checkbox',
           text: 'Show combined totals',
-          description: 'Shows totals of learning and known as well as some additional statistics',
+          // Learning [Learning + Due](Progress)
+          // Upcoming [New + Locked](Upcoming)
+          description:
+            // eslint-disable-next-line max-len
+            `<div style="margin-bottom:.5rem;">Shows some additional stats, which are as follows:</div>
+<ul><li>Progress: Learning + Due</li>
+<li>Upcoming: New + Locked</li>
+<li>Sum of non-suspended Elements</li>
+<li>Percentage of cards seen (Learning, Upcoming and known) out of non suspended elements</li></ul>`,
           default: false,
         },
       ],
@@ -159,6 +167,15 @@ export class LearningStats {
       nonRedundant: nodes.nonRedundant
         ? Number(nodes.nonRedundant.childNodes[1]!.nodeValue!.trim())
         : 0,
+
+      lockedWords: 0,
+      lockedKanji: 0,
+
+      dueVocab: 0,
+      dueKanji: 0,
+
+      newVocab: 0,
+      newKanji: 0,
     };
 
     if (nodes.lockedBody) {
@@ -199,29 +216,28 @@ export class LearningStats {
       }
     }
 
-    // Learning + Known (LK)
-    result.wordsLK = present.wordsKnown + present.wordsLearning;
-    result.wordsIndirectLK = present.wordsIndirectKnown + present.wordsIndirectLearning;
-    result.kanjiLK = present.kanjiKnown + present.kanjiLearning;
-    result.kanjiIndirectLK = present.kanjiIndirectKnown + present.kanjiIndirectLearning;
-    result.sumLK =
-      result.wordsLK + result.wordsIndirectLK + result.kanjiLK + result.kanjiIndirectLK;
+    // Learning [Learning + Due](Progress)
+    result.wordsProgress =
+      present.wordsLearning +
+      present.wordsIndirectLearning +
+      (!!result.dueVocab ? result.dueVocab : result.due);
+    result.kanjiProgress = present.kanjiLearning + present.kanjiIndirectLearning + result.dueKanji!;
+    result.sumProgress = result.wordsProgress + result.kanjiProgress;
 
-    // New + Due + Locked (NDL)
-    result.wordsNDL = result.newVocab! + result.dueVocab! + result.lockedWords!;
-    result.kanjiNDL = result.newKanji! + result.dueKanji! + result.lockedKanji!;
-    result.sumNDL = result.wordsNDL + result.kanjiNDL;
+    // Upcoming [New + Locked](Upcoming)
+    result.wordsUpcoming = result.newVocab! + result.lockedWords!;
+    result.kanjiUpcoming = result.newKanji! + result.lockedKanji!;
+    result.sumUpcoming = result.wordsUpcoming + result.kanjiUpcoming;
 
-    result.wordsABS = result.wordsLK + result.wordsNDL;
-    result.wordsIndirectABS = result.wordsIndirectLK;
-    result.kanjiABS = result.kanjiLK + result.kanjiNDL;
-    result.kanjiIndirectABS = result.kanjiIndirectLK;
-    result.sumABS =
-      result.wordsABS + result.wordsIndirectABS + result.kanjiABS + result.kanjiIndirectABS;
+    result.wordsABS =
+      result.wordsProgress + result.wordsUpcoming + present.wordsKnown + present.wordsIndirectKnown;
+    result.kanjiABS =
+      result.kanjiProgress + result.kanjiUpcoming + present.kanjiKnown + present.kanjiIndirectKnown;
+    result.sumABS = result.wordsABS + result.kanjiABS;
 
-    result.wordsABSPercent = Math.floor((result.wordsLK / result.wordsABS) * 100);
-    result.kanjiABSPercent = Math.floor((result.kanjiLK / result.kanjiABS) * 100);
-    result.sumABSPercent = Math.floor((result.sumLK / result.sumABS) * 100);
+    result.wordsABSPercent = Math.floor((result.wordsProgress / result.wordsABS) * 100);
+    result.kanjiABSPercent = Math.floor((result.kanjiProgress / result.kanjiABS) * 100);
+    result.sumABSPercent = Math.floor((result.sumProgress / result.sumABS) * 100);
 
     return this.fillEmptyAdditionalStats(result);
   }
@@ -300,24 +316,18 @@ export class LearningStats {
       newVocab: data.newVocab ?? 0,
       newKanji: data.newKanji ?? 0,
 
-      wordsLK: data.wordsLK ?? 0,
-      wordsNDL: data.wordsNDL ?? 0,
+      wordsProgress: data.wordsProgress ?? 0,
+      wordsUpcoming: data.wordsUpcoming ?? 0,
       wordsABS: data.wordsABS ?? 0,
       wordsABSPercent: data.wordsABSPercent ?? 0,
 
-      kanjiLK: data.kanjiLK ?? 0,
-      kanjiNDL: data.kanjiNDL ?? 0,
+      kanjiProgress: data.kanjiProgress ?? 0,
+      kanjiUpcoming: data.kanjiUpcoming ?? 0,
       kanjiABS: data.kanjiABS ?? 0,
       kanjiABSPercent: data.kanjiABSPercent ?? 0,
 
-      wordsIndirectLK: data.wordsIndirectLK ?? 0,
-      wordsIndirectABS: data.wordsIndirectABS ?? 0,
-
-      kanjiIndirectLK: data.kanjiIndirectLK ?? 0,
-      kanjiIndirectABS: data.kanjiIndirectABS ?? 0,
-
-      sumLK: data.sumLK ?? 0,
-      sumNDL: data.sumNDL ?? 0,
+      sumProgress: data.sumProgress ?? 0,
+      sumUpcoming: data.sumUpcoming ?? 0,
       sumABS: data.sumABS ?? 0,
       sumABSPercent: data.sumABSPercent ?? 0,
     };
@@ -381,22 +391,10 @@ export class LearningStats {
     const showMains = !document.jpdb.findElement('.dropdown.right-aligned');
 
     if (isMobile() || showSmallTable) {
-      return renderMobileTable(
-        this.nodes,
-        this.present,
-        this.additional,
-        showMains && showAbsolutes,
-        showMains,
-      );
+      return renderMobileTable(this.nodes, this.present, this.additional, showAbsolutes, showMains);
     }
 
-    renderDesktopTable(
-      this.nodes,
-      this.present,
-      this.additional,
-      showMains && showAbsolutes,
-      showMains,
-    );
+    renderDesktopTable(this.nodes, this.present, this.additional, showAbsolutes, showMains);
   }
 }
 
