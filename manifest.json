@@ -12,6 +12,8 @@
   "build": [
     "browser",
     "lib",
+    "auto-fail-new-cards",
+    "custom-fonts",
     "custom-links",
     "debloat-reviews",
     "deck-sorter",
@@ -21,6 +23,7 @@
     "hotkeys",
     "learning-stats",
     "move-cards",
+    "search-compilation",
     "scroll-controls",
     "sticky-navbar",
     "tsc",
