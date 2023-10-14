@@ -25,9 +25,10 @@ export class LearningStats {
       name: this.LEARNING_STATS,
       category: 'Decks',
       displayText: 'Display deck statistics in one table',
-      description:
-        // eslint-disable-next-line max-len
-        'Display deck statistics, like new or learning cards, in a more compact way by including those stats into the present table',
+      description: `
+<div>Display deck statistics, like new or learning cards, in a more compact way by including those stats into the present table.</div>
+<p>Due to how those stats are retrieved from the server, calculated stats are not accurate!</p>
+`,
       options: [
         !isMobile() && {
           key: 'show-small-table',
