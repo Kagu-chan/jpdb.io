@@ -68,14 +68,14 @@ class StickyNavbar {
 
   private addStickyFooter(): void {
     add_and_run_event_listener(document, 'virtual-refresh', () => {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      add_and_run_event_listener(document, 'resize', this.resizeFooterSpacer);
-
       document.jpdb.adjacentElement('body', 'beforeend', {
         tag: 'div',
         class: 'footer-spacer',
         style: {},
       });
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      add_and_run_event_listener(document, 'resize', this.resizeFooterSpacer);
     });
 
     jpdb.css.add({
