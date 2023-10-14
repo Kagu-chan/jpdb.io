@@ -10,12 +10,11 @@
 
   display: flex;
   flex-wrap: wrap;
-  padding: 1.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.75rem;
   justify-content: flex-end;
   align-items: center;
   flex-shrink: 0;
+
+  padding: 0 1.5rem;
 }
 
 .footer .menu {
@@ -107,7 +106,7 @@
 }
 
 @media (min-width: 41rem) {
-  .footer:not(.minimal) .nav-item {
+  .footer:not(.minimal) .a {
     align-self: auto;
     padding: 0.3rem 1.15rem;
     line-height: 2;
@@ -123,5 +122,11 @@
 
   .footer:not(.minimal) .menu-icon {
     display: none;
+  }
+
+  .footer:not(.minimal) {
+    padding: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.75rem;
   }
 }
