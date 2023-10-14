@@ -235,9 +235,17 @@ export class LearningStats {
       result.kanjiProgress + result.kanjiUpcoming + present.kanjiKnown + present.kanjiIndirectKnown;
     result.sumABS = result.wordsABS + result.kanjiABS;
 
-    result.wordsABSPercent = Math.floor((result.wordsProgress / result.wordsABS) * 100);
-    result.kanjiABSPercent = Math.floor((result.kanjiProgress / result.kanjiABS) * 100);
-    result.sumABSPercent = Math.floor((result.sumProgress / result.sumABS) * 100);
+    result.wordsABSPercent = Math.floor(
+      ((result.wordsProgress + present.wordsKnown + present.wordsIndirectKnown) / result.wordsABS) *
+        100,
+    );
+    result.kanjiABSPercent = Math.floor(
+      ((result.kanjiProgress + present.kanjiKnown + present.kanjiIndirectKnown) / result.kanjiABS) *
+        100,
+    );
+    result.sumABSPercent = Math.floor(
+      ((result.sumProgress + (result.sumKnown ?? 0)) / result.sumABS) * 100,
+    );
 
     return this.fillEmptyAdditionalStats(result);
   }
