@@ -17,3 +17,111 @@
   align-items: center;
   flex-shrink: 0;
 }
+
+.footer .menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.footer .menu a {
+  color: var(--footer-color);
+  padding: 0.5rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.footer .menu-btn {
+  display: none;
+}
+
+.footer .menu-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 1.4rem;
+  padding-top: 1.3rem;
+  padding-bottom: 1.5rem;
+  padding-right: 0.3rem;
+  user-select: none;
+}
+
+.footer .menu-icon .navicon {
+  background: var(--burger-color);
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: background 0.2s ease-out;
+  width: 1rem;
+}
+
+.footer .menu-icon .navicon:before,
+.footer .menu-icon .navicon:after {
+  background: var(--burger-color);
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all 0.2s ease-out;
+  width: 100%;
+}
+
+.footer .menu-icon .navicon:before {
+  top: 5px;
+}
+
+.footer .menu-icon .navicon:after {
+  top: -5px;
+}
+
+.footer .menu {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  transition: max-height 0.2s ease-out;
+}
+
+.footer .menu-btn ~ .menu {
+  max-height: 0;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.footer .menu-btn:checked ~ .menu {
+  max-height: initial;
+}
+
+.footer .menu-btn:checked ~ .menu-icon .navicon {
+  background: transparent;
+}
+
+.footer .menu-btn:checked ~ .menu-icon .navicon:before {
+  transform: rotate(-45deg);
+}
+
+.footer .menu-btn:checked ~ .menu-icon .navicon:after {
+  transform: rotate(45deg);
+}
+
+.footer .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
+.footer .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+  top: 0;
+}
+
+@media (min-width: 41rem) {
+  .footer:not(.minimal) .nav-item {
+    align-self: auto;
+    padding: 0.3rem 1.15rem;
+    line-height: 2;
+  }
+
+  .footer:not(.minimal) .menu {
+    max-height: none;
+    overflow: visible;
+    flex-direction: row;
+    width: auto;
+    max-height: none !important;
+  }
+
+  .footer:not(.minimal) .menu-icon {
+    display: none;
+  }
+}

@@ -30,12 +30,14 @@ class StickyNavbar {
     jpdb.runOnceOnEnable(/^(?!\/review)/, this.STICKY_NAVBAR, () => this.addStickyNavbar());
     jpdb.runOnceOnDisable(/^(?!\/review)/, this.STICKY_NAVBAR, () => this.removeStickyNavbar());
 
-    jpdb.runOnceOnEnable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () =>
-      this.addStickyFooter(),
-    );
-    jpdb.runOnceOnDisable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () =>
-      this.removeStickyFooter(),
-    );
+    jpdb.runOnceOnEnable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () => {
+      this.makeFooterCollapsible();
+      this.addStickyFooter();
+    });
+    jpdb.runOnceOnDisable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () => {
+      this.makeFooterUncollapsible();
+      this.removeStickyFooter();
+    });
 
     jpdb.runOnceOnEnable(/\/(review|settings)/, this.STICKY_FOOTER, () =>
       jpdb.css.add({
@@ -114,6 +116,48 @@ class StickyNavbar {
         document.jpdb.findElement('.footer')?.offsetHeight ?? 0
       }px + 1rem)`;
     });
+  }
+
+  private makeFooterCollapsible(): void {
+    const newContainer = document.jpdb.adjacentElement('.footer', 'afterbegin', {
+      tag: 'div',
+      id: 'menu-footer',
+      class: 'menu',
+    });
+    const checkbox = document.jpdb.adjacentElement('.footer', 'afterbegin', {
+      tag: 'input',
+      id: 'menu-btn-footer',
+      class: 'menu-btn',
+      attributes: {
+        type: 'checkbox',
+      },
+    });
+
+    document.jpdb.adjacentElement(checkbox, 'afterend', {
+      tag: 'label',
+      class: 'menu-icon',
+      id: 'menu-btn-control',
+      attributes: {
+        for: 'menu-btn-footer',
+      },
+      children: [
+        {
+          tag: 'span',
+          class: 'navicon',
+        },
+      ],
+    });
+
+    document.jpdb.withElements('footer > a', (e) => newContainer.append(e));
+  }
+
+  private makeFooterUncollapsible(): void {
+    const originalFooter = document.jpdb.findElement('.footer');
+
+    document.jpdb.withElements('.footer .menu .a', (e) => originalFooter.append(e));
+    document.jpdb.withElements('#menu-footer, #menu-btn-footer, #menu-btn-control', (e) =>
+      e.remove(),
+    );
   }
 }
 
