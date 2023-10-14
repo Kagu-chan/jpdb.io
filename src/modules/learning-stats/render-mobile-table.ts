@@ -1,3 +1,4 @@
+import { getRefFor } from './get-ref-for';
 import {
   LearningStatsAdditionalStats,
   LearningStatsDataNodes,
@@ -41,9 +42,9 @@ export const renderMobileTable = (
             tag: 'tr',
             children: [
               { tag: 'th' },
-              { tag: 'th', innerText: 'Total' },
-              { tag: 'th', innerText: 'Learning' },
-              { tag: 'th', innerText: 'Known' },
+              { tag: 'th', innerHTML: getRefFor('Total') },
+              { tag: 'th', innerHTML: getRefFor('Learning', 'learning') },
+              { tag: 'th', innerHTML: getRefFor('Known', 'known,never-forget') },
               { tag: 'th' },
             ],
           },
@@ -109,10 +110,10 @@ export const renderMobileTable = (
             tag: 'tr',
             children: [
               { tag: 'th' },
-              { tag: 'th', innerText: showMains ? 'New' : '' },
-              { tag: 'th', innerText: showMains ? 'Due' : '' },
+              { tag: 'th', innerHTML: showMains ? getRefFor('New', 'new') : '' },
+              { tag: 'th', innerHTML: showMains ? getRefFor('Due', 'overdue') : '' },
               { tag: 'th' },
-              { tag: 'th', innerText: showLocked ? 'Locked' : '' },
+              { tag: 'th', innerHTML: showLocked ? getRefFor('Locked', 'locked') : '' },
             ],
           },
           (showMains || showLocked) && {
@@ -177,8 +178,8 @@ export const renderMobileTable = (
             children: [
               { tag: 'th' },
               { tag: 'th', innerText: 'Total' },
-              { tag: 'th', innerText: 'Progress' },
-              { tag: 'th', innerText: 'Upcoming ' },
+              { tag: 'th', innerHTML: getRefFor('Progress', 'learning,overdue,failed') },
+              { tag: 'th', innerHTML: getRefFor('Upcoming', 'new,locked') },
               { tag: 'th' },
             ],
           },

@@ -1,3 +1,4 @@
+import { getRefFor } from './get-ref-for';
 import {
   LearningStatsAdditionalStats,
   LearningStatsDataNodes,
@@ -37,20 +38,23 @@ export const renderDesktopTable = (
             tag: 'tr',
             children: [
               { tag: 'th' },
-              { tag: 'th', innerText: 'Total' },
+              { tag: 'th', innerHTML: getRefFor('Total') },
               showAbsolutes && { tag: 'th' },
-              { tag: 'th', innerText: 'Learning' },
-              { tag: 'th', innerText: 'Known' },
+              { tag: 'th', innerHTML: getRefFor('Learning', 'learning') },
+              { tag: 'th', innerHTML: getRefFor('Known', 'known,never-forget') },
               { tag: 'th' },
 
               (showMains || showLocked) && { tag: 'td' },
-              showMains && { tag: 'th', innerText: 'New' },
-              showMains && { tag: 'th', innerText: 'Due' },
-              showLocked && { tag: 'th', innerText: 'Locked' },
+              showMains && { tag: 'th', innerHTML: getRefFor('New', 'new') },
+              showMains && { tag: 'th', innerHTML: getRefFor('Due', 'overdue') },
+              showLocked && { tag: 'th', innerHTML: getRefFor('Locked', 'locked') },
 
               showAbsolutes && { tag: 'td' },
-              showAbsolutes && { tag: 'th', innerText: 'Progress' },
-              showAbsolutes && { tag: 'th', innerText: 'Upcoming' },
+              showAbsolutes && {
+                tag: 'th',
+                innerHTML: getRefFor('Progress', 'learning,overdue,failed'),
+              },
+              showAbsolutes && { tag: 'th', innerHTML: getRefFor('Upcoming', 'new,locked') },
               showAbsolutes && { tag: 'td' },
             ],
           },
@@ -62,7 +66,10 @@ export const renderDesktopTable = (
               showAbsolutes && {
                 tag: 'td',
                 class: ['opac', 'sm'],
-                innerText: `(${additional.wordsABS})`,
+                innerHTML: getRefFor(
+                  `(${additional.wordsABS})`,
+                  'learning,new,known,never-forget,failed,overdue,locked,redundant',
+                ),
               },
               { tag: 'td', innerText: present.wordsLearning },
               { tag: 'td', innerText: present.wordsKnown },
