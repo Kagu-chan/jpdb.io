@@ -24,7 +24,6 @@ class HideCompletedDecks {
   private register(): void {
     jpdb.settings.moduleManager.register({
       name: this.HIDE_COMPLETED_DECKS,
-      experimental: true,
       category: 'Decks',
       displayText: 'Hide completed decks',
       description:
@@ -38,7 +37,6 @@ class HideCompletedDecks {
 
         jpdb.settings.moduleManager.register({
           name: this.HIDE_THRESHOLD_DECKS,
-          experimental: true,
           category: 'Decks',
           displayText: 'Hide decks at Target coverage',
           description: `Hides decks where the estimated recognition matches the Target coverage set above, currently ${tc}%`,
@@ -58,7 +56,6 @@ class HideCompletedDecks {
       } else {
         jpdb.settings.moduleManager.register({
           name: this.HIDE_NON_NEW_FIRST,
-          experimental: true,
           category: 'Decks',
           displayText: 'Hide non-new decks from front',
           description:
