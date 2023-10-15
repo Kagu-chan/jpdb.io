@@ -18,7 +18,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   }
 
   public get key(): string {
-    return this._mainElement.dataset.key;
+    return this._mainElement.dataset.key!;
   }
 
   public get isVirtual(): boolean {
@@ -49,7 +49,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
     this._mainElement.setAttribute('data-interaction-action', action);
   }
 
-  public renderLabel(target: string | HTMLElement): HTMLLabelElement {
+  public renderLabel(target: string | HTMLElement): HTMLLabelElement | undefined {
     if (this.options.text?.length) {
       return this.append('label', target, 'label', {
         innerHTML: this.options.text,
@@ -61,7 +61,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   public renderDescription(
     target: string | HTMLElement,
     marginLeft?: string,
-  ): HTMLParagraphElement {
+  ): HTMLParagraphElement | undefined {
     if (this.options.description?.length) {
       return this.append('description', target, 'p', {
         innerHTML: this.options.description,
@@ -93,7 +93,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
     options: DOMElementOptions = {},
   ): HTMLElementTagNameMap[K] {
     const e = this._dom.appendNewElement(
-      typeof target === 'string' ? this._elements.get(target) : target,
+      typeof target === 'string' ? this._elements.get(target)! : target,
       tagName,
       options,
     );
@@ -110,7 +110,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
     options: DOMElementOptions = {},
   ): HTMLElementTagNameMap[K] {
     const e = this._dom.prependNewElement(
-      typeof target === 'string' ? this._elements.get(target) : target,
+      typeof target === 'string' ? this._elements.get(target)! : target,
       tagName,
       options,
     );
@@ -129,7 +129,7 @@ export abstract class Input<TValue, TElement extends HTMLElement> {
   ): HTMLElementTagNameMap[K] {
     const e = this._dom.adjacentNewElement(
       position,
-      typeof target === 'string' ? this._elements.get(target) : target,
+      typeof target === 'string' ? this._elements.get(target)! : target,
       tagName,
       options,
     );

@@ -1,9 +1,11 @@
 import { HasChildren, ModuleUserOption } from '../module-options.type';
-import { Renderer } from './renderers/_renderer';
 import { CheckboxRenderer } from './renderers/checkbox';
 import { EmptyRenderer } from './renderers/empty-renderer';
+import { Renderer } from './renderers/lib/_renderer';
 import { NumberRenderer } from './renderers/number';
+import { ObjectListRenderer } from './renderers/objectlist';
 import { RadioRenderer } from './renderers/radio';
+import { TextRenderer } from './renderers/text';
 import { TextareaRenderer } from './renderers/textarea';
 
 export class ModuleOption {
@@ -57,9 +59,14 @@ export class ModuleOption {
         return RadioRenderer;
       case 'textarea':
         return TextareaRenderer;
+      case 'text':
+        return TextRenderer;
       case 'number':
         return NumberRenderer;
-      default:
+      case 'objectlist':
+        return ObjectListRenderer;
+      case 'numberlist':
+      case 'stringlist':
         return EmptyRenderer;
     }
   }

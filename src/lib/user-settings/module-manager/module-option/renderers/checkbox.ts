@@ -1,5 +1,5 @@
 import { ModuleUserOptionCheckbox } from '../../module-options.type';
-import { Renderer } from './_renderer';
+import { Renderer } from './lib/_renderer';
 
 export class CheckboxRenderer extends Renderer<ModuleUserOptionCheckbox, boolean> {
   public render(container: HTMLDivElement): void {

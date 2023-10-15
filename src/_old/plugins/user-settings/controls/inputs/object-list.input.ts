@@ -77,8 +77,8 @@ export class ObjectListInput extends ListBasedInput<Record<string, string | numb
           name: `${this.name}-${current.key}-${id}`,
           value: value[current.key] as string,
           type: current.type,
-          min: current.min?.toString(),
-          max: current.max?.toString(),
+          min: current.min?.toString() ?? false,
+          max: current.max?.toString() ?? false,
         },
       });
 

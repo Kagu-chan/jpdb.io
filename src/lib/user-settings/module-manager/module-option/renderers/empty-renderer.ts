@@ -1,5 +1,5 @@
 import { ModuleUserOption } from '../../module-options.type';
-import { Renderer } from './_renderer';
+import { Renderer } from './lib/_renderer';
 
 export class EmptyRenderer extends Renderer<ModuleUserOption, unknown> {
   public render(container: HTMLDivElement): void {

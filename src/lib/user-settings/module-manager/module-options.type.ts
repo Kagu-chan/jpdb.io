@@ -9,7 +9,8 @@ export enum ModuleUserOptionFieldType {
   TEXT = 'text',
   TEXTAREA = 'textarea',
   NUMBER = 'number',
-  LIST = 'list',
+  STRINGLIST = 'stringlist',
+  NUMBERLIST = 'numberlist',
   OBJECTLIST = 'objectlist',
 }
 
@@ -34,43 +35,50 @@ type ModuleUserOptionBase<T> = {
 } & (HasChildren | HasNoChildren);
 
 export type ModuleUserOptionCheckbox = ModuleUserOptionBase<boolean> & {
-  type: 'checkbox';
+  type: `${ModuleUserOptionFieldType.CHECKBOX}`;
 };
 export type ModuleUserOptionRadioButton = ModuleUserOptionBase<string> & {
-  type: 'radio';
+  type: `${ModuleUserOptionFieldType.RADIOBUTTON}`;
   options: object;
   labels: object;
 };
 export type ModuleUserOptionText = ModuleUserOptionBase<string> & {
-  type: 'text';
+  type: `${ModuleUserOptionFieldType.TEXT}`;
   placeholder?: string;
 };
 export type ModuleUserOptionTextarea = ModuleUserOptionBase<string> & {
-  type: 'textarea';
+  type: `${ModuleUserOptionFieldType.TEXTAREA}`;
   placeholder?: string;
 };
 export type ModuleUserOptionNumber = ModuleUserOptionBase<number> & {
-  type: 'number';
+  type: `${ModuleUserOptionFieldType.NUMBER}`;
   placeholder?: string;
   min?: number;
   max?: number;
 };
 
 export type ModuleUserOptionList = ModuleUserOptionBase<string[]> & {
-  type: 'list';
+  type: `${ModuleUserOptionFieldType.STRINGLIST}`;
   text: string;
+};
+
+export type ModuleUserOptionNumberList = ModuleUserOptionBase<number[]> & {
+  type: `${ModuleUserOptionFieldType.NUMBERLIST}`;
+  text: string;
+  min?: number;
+  max?: number;
 };
 
 export interface ObjectSchemaItem {
   key: string;
   label: string;
-  type: 'number' | 'text';
+  type: 'number' | 'text' | 'boolean';
   min?: number;
   max?: number;
 }
 export type ObjectSchema = ObjectSchemaItem[];
 export type ModuleUserOptionObjectList = ModuleUserOptionBase<object[]> & {
-  type: 'objectlist';
+  type: `${ModuleUserOptionFieldType.OBJECTLIST}`;
   text: string;
   schema: ObjectSchema;
 };
@@ -82,6 +90,7 @@ export type ModuleUserOption =
   | ModuleUserOptionTextarea
   | ModuleUserOptionNumber
   | ModuleUserOptionList
+  | ModuleUserOptionNumberList
   | ModuleUserOptionObjectList;
 export type ModuleUserOptions = (ModuleUserOption | undefined | false)[];
 

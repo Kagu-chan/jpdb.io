@@ -1,4 +1,4 @@
-import { ModuleUserOption } from '../../module-options.type';
+import { ModuleUserOption } from '../../../module-options.type';
 
 export abstract class Renderer<
   TOption extends ModuleUserOption = ModuleUserOption,

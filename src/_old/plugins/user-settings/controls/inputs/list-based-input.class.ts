@@ -128,7 +128,7 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       attributes: { type: 'submit', value: 'Add' },
       class: ['outline'],
       handler: (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         this._workingValue.push(this.getEmptyItem());
         this.refresh();
@@ -139,7 +139,7 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       attributes: { type: 'submit', value: 'Update' },
       class: ['outline', 'v4'],
       handler: (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         this._value = [...this._workingValue];
         this._mainElement.value = this.itemsToString(this.value);
@@ -152,7 +152,7 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       attributes: { type: 'submit', value: 'Reset' },
       class: ['outline', 'v3'],
       handler: (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         this._workingValue = [...this.value];
         this.refresh();
@@ -222,8 +222,8 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
     const up = this._dom.appendNewElement(sideBar, 'input', {
       class: ['arrow-control', 'up'],
       attributes: { type: 'submit', value: '⮝' },
-      handler: (ev) => {
-        ev.preventDefault();
+      handler: (e) => {
+        e?.preventDefault();
 
         this.swapPositions(id, id - 1);
         this.refresh();
@@ -232,8 +232,8 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
     const down = this._dom.appendNewElement(sideBar, 'input', {
       class: ['arrow-control', 'down'],
       attributes: { type: 'submit', value: '⮟' },
-      handler: (ev) => {
-        ev.preventDefault();
+      handler: (e) => {
+        e?.preventDefault();
 
         this.swapPositions(id, id + 1);
         this.refresh();
@@ -256,7 +256,7 @@ export abstract class ListBasedInput<TListType> extends Input<TListType[], HTMLI
       },
       class: ['outline', 'v1'],
       handler: (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         this._workingValue.splice(id, 1);
         this.refresh();

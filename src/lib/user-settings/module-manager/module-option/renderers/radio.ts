@@ -1,5 +1,5 @@
 import { ModuleUserOptionRadioButton } from '../../module-options.type';
-import { Renderer } from './_renderer';
+import { Renderer } from './lib/_renderer';
 
 export class RadioRenderer extends Renderer<ModuleUserOptionRadioButton, string> {
   public render(container: HTMLDivElement): void {

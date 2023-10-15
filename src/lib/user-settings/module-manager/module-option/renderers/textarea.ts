@@ -1,5 +1,5 @@
 import { ModuleUserOptionTextarea } from '../../module-options.type';
-import { Renderer } from './_renderer';
+import { Renderer } from './lib/_renderer';
 
 export class TextareaRenderer extends Renderer<ModuleUserOptionTextarea, string> {
   public render(container: HTMLDivElement): void {
