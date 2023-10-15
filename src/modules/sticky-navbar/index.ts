@@ -31,7 +31,6 @@ class StickyNavbar {
     jpdb.runOnceOnDisable(/^(?!\/review)/, this.STICKY_NAVBAR, () => this.removeStickyNavbar());
 
     jpdb.runOnceOnEnable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () => {
-      this.makeFooterCollapsible();
       this.addStickyFooter();
     });
     jpdb.runOnceOnDisable(/^(?!\/(review|settings))/, this.STICKY_FOOTER, () => {
@@ -70,6 +69,8 @@ class StickyNavbar {
 
   private addStickyFooter(): void {
     add_and_run_event_listener(document, 'virtual-refresh', () => {
+      this.makeFooterCollapsible();
+
       document.jpdb.adjacentElement('body', 'beforeend', {
         tag: 'div',
         class: 'footer-spacer',
