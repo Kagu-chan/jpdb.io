@@ -104,7 +104,9 @@ class CustomLinks {
     });
   }
 
-  private addListeners(): void {}
+  private addListeners(): void {
+    /* NOP */
+  }
 }
 
 new CustomLinks();
