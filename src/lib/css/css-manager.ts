@@ -1,5 +1,4 @@
 import { CSSOverwrite } from './css-overwrite.type';
-import { customDefinition } from './overwrites/custom-definition';
 
 export class CSSManager {
   private _style: HTMLStyleElement = document.jpdb.createElement('style');
@@ -7,8 +6,6 @@ export class CSSManager {
 
   constructor() {
     document.jpdb.appendElement('head', this._style);
-
-    this.add(customDefinition);
   }
 
   public add(options: CSSOverwrite): void;

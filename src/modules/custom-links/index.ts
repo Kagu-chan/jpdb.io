@@ -42,29 +42,6 @@ class CustomLinks {
       experimental: true,
       options: [
         {
-          key: 'test1',
-          type: 'stringlist',
-          text: 'Test List',
-          default: [],
-        },
-        {
-          key: 'test2',
-          type: 'numberlist',
-          text: 'Test Number List',
-          default: [],
-        },
-        {
-          key: 'test3',
-          type: 'objectlist',
-          text: 'Object Boolean List',
-          default: [],
-          schema: [
-            { key: 'a', label: 'a', type: 'text' },
-            { key: 'b', label: 'b', type: 'number', min: 0, max: 5 },
-            { key: 'c', label: 'c', type: 'boolean' },
-          ],
-        },
-        {
           key: 'header',
           type: 'objectlist',
           default: this.TOP_LINKS,
@@ -81,6 +58,30 @@ class CustomLinks {
             },
           ],
           text: 'Header navigation',
+          description: [
+            // eslint-disable-next-line max-len
+            '<div>Change the header links to your likings by adding, removing or rearrangig them here.</div>',
+            '<div>The learn button cannot be changed.</div>',
+            '<div>&nbsp;&nbsp;</div>',
+            '<div>The defaults are as follows:</div>',
+            '<div><ul>',
+            ...this.TOP_LINKS.map((a) => `<li><b>${a.label}</b> -> <code>${a.url}</code></li>`),
+            '</ul></div>',
+            '<div>&nbsp;&nbsp;</div>',
+            '<div>Some normally hidden links would be:</div>',
+            '<div><ul>',
+            ...[
+              ['Anime difficulty list', '/anime-difficulty-list'],
+              ['Novel difficulty list', '/novel-difficulty-list'],
+              ['Visual novel difficulty list', '/visual-novel-difficulty-list'],
+              ['Web novel diffuculty list', '/web-novel-difficulty-list'],
+              ['Live action difficulty list', '/live-action-difficulty-list'],
+              ['Kanken kanji list', '/kanken-kanji'],
+              ['Kanji frequency list', '/kanji-by-frequency'],
+              ['Text analyzer', '/analyze-text'],
+            ].map(([text, link]) => `<li><b>${text}</b> -> <code>${link}</code></li>`),
+            '</ul></div>',
+          ].join(''),
         },
         {
           key: 'footer',
@@ -99,13 +100,94 @@ class CustomLinks {
             },
           ],
           text: 'Footer navigation',
+          description: [
+            // eslint-disable-next-line max-len
+            '<div>Change the footer links to your likings by adding, removing or rearrangig them here.</div>',
+            '<div>&nbsp;&nbsp;</div>',
+            '<div>The defaults are as follows:</div>',
+            '<div><ul>',
+            ...this.BOTTOM_LINKS.map((a) => `<li><b>${a.label}</b> -> <code>${a.url}</code></li>`),
+            '</ul></div>',
+          ].join(''),
         },
       ],
     });
   }
 
   private addListeners(): void {
-    /* NOP */
+    jpdb.runOnceOnEnable('/settings', this.CUSTOM_LINKS, () => {
+      document.jpdb.withElements('.menu a', (a) => a.classList.add('hidden'));
+
+      this.addHeaderLinks();
+
+      jpdb.on(`update-${this.CUSTOM_LINKS}-header`, () => {
+        document.jpdb.withElements('.menu a', (a) => {
+          if (a.classList.contains('hidden')) {
+            return;
+          }
+
+          a.remove();
+        });
+
+        this.addHeaderLinks();
+      });
+    });
+    jpdb.runOnceOnDisable('/settings', this.CUSTOM_LINKS, () => {
+      document.jpdb.withElements('.menu a', (a) => {
+        if (a.classList.contains('hidden')) {
+          a.classList.remove('hidden');
+
+          return;
+        }
+
+        a.remove();
+      });
+    });
+
+    jpdb.runOnceWhenActive(/^(?!\/settings)/, this.CUSTOM_LINKS, () => {
+      document.jpdb.withElements('.menu a', (a) => a.remove());
+      document.jpdb.withElements('.footer a', (a) => a.remove());
+
+      this.addHeaderLinks();
+      this.addFooterLinks();
+    });
+  }
+
+  private addHeaderLinks(): void {
+    jpdb.settings.persistence
+      .getModuleOption<CustomLink[]>(this.CUSTOM_LINKS, 'header')
+      .forEach((link) => {
+        const anchor = document.jpdb.appendElement('.menu', {
+          tag: 'a',
+          innerText: link.label,
+          class: 'nav-item',
+          attributes: {
+            href: link.url,
+          },
+        });
+
+        if (link.url.startsWith('http') && !link.url.includes('jpdb.io')) {
+          anchor.setAttribute('target', '_blank');
+        }
+      });
+  }
+
+  private addFooterLinks(): void {
+    jpdb.settings.persistence
+      .getModuleOption<CustomLink[]>(this.CUSTOM_LINKS, 'footer')
+      .forEach((link) => {
+        const anchor = document.jpdb.appendElement('.footer', {
+          tag: 'a',
+          innerText: link.label,
+          attributes: {
+            href: link.url,
+          },
+        });
+
+        if (link.url.startsWith('http') && !link.url.includes('jpdb.io')) {
+          anchor.setAttribute('target', '_blank');
+        }
+      });
   }
 }
 

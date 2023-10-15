@@ -1,6 +1,7 @@
 import { Cache } from './cache/cache';
 import { NAME, VERSION } from './constants';
 import { CSSManager } from './css/css-manager';
+import { State } from './state/state';
 import { Toaster } from './toaster/toaster';
 import { UserSettings } from './user-settings/user-settings';
 
@@ -8,6 +9,7 @@ export class ScriptRunner {
   public readonly css = new CSSManager();
   public readonly settings = new UserSettings();
   public readonly cache = new Cache();
+  public readonly state = new State();
 
   public get toaster(): Toaster {
     return this._toaster;
@@ -40,6 +42,8 @@ export class ScriptRunner {
       this.reloadActions.push(c);
       c();
     }
+
+    this.css.add('main', __load_css('./src/lib/styles.css'));
   }
 
   /**

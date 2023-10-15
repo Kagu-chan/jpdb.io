@@ -3,8 +3,10 @@ import { CheckboxRenderer } from './renderers/checkbox';
 import { EmptyRenderer } from './renderers/empty-renderer';
 import { Renderer } from './renderers/lib/_renderer';
 import { NumberRenderer } from './renderers/number';
+import { NumberListRenderer } from './renderers/numberlist';
 import { ObjectListRenderer } from './renderers/objectlist';
 import { RadioRenderer } from './renderers/radio';
+import { StringListRenderer } from './renderers/stringlist';
 import { TextRenderer } from './renderers/text';
 import { TextareaRenderer } from './renderers/textarea';
 
@@ -65,8 +67,11 @@ export class ModuleOption {
         return NumberRenderer;
       case 'objectlist':
         return ObjectListRenderer;
-      case 'numberlist':
       case 'stringlist':
+        return StringListRenderer;
+      case 'numberlist':
+        return NumberListRenderer;
+      default:
         return EmptyRenderer;
     }
   }

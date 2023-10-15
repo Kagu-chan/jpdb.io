@@ -57,7 +57,7 @@ export type ModuleUserOptionNumber = ModuleUserOptionBase<number> & {
   max?: number;
 };
 
-export type ModuleUserOptionList = ModuleUserOptionBase<string[]> & {
+export type ModuleUserOptionStringList = ModuleUserOptionBase<string[]> & {
   type: `${ModuleUserOptionFieldType.STRINGLIST}`;
   text: string;
 };
@@ -69,13 +69,21 @@ export type ModuleUserOptionNumberList = ModuleUserOptionBase<number[]> & {
   max?: number;
 };
 
-export interface ObjectSchemaItem {
+interface ObjectSchemaItemString {
   key: string;
   label: string;
-  type: 'number' | 'text' | 'boolean';
+  type: 'text';
+}
+
+interface ObjectSchemaItemNumber {
+  key: string;
+  label: string;
+  type: 'number';
   min?: number;
   max?: number;
 }
+
+export type ObjectSchemaItem = ObjectSchemaItemString | ObjectSchemaItemNumber;
 export type ObjectSchema = ObjectSchemaItem[];
 export type ModuleUserOptionObjectList = ModuleUserOptionBase<object[]> & {
   type: `${ModuleUserOptionFieldType.OBJECTLIST}`;
@@ -89,7 +97,7 @@ export type ModuleUserOption =
   | ModuleUserOptionText
   | ModuleUserOptionTextarea
   | ModuleUserOptionNumber
-  | ModuleUserOptionList
+  | ModuleUserOptionStringList
   | ModuleUserOptionNumberList
   | ModuleUserOptionObjectList;
 export type ModuleUserOptions = (ModuleUserOption | undefined | false)[];

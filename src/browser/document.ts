@@ -14,7 +14,16 @@ import { textFromNode } from './fn/text-from-node';
 import { withElement } from './fn/with-element';
 import { withElements } from './fn/with-elements';
 
-import { _button, _checkbox, _container, _radiobutton, _textarea, _textfield } from './util/index';
+import {
+  _appendHelptext,
+  _button,
+  _checkbox,
+  _collapsible,
+  _container,
+  _radiobutton,
+  _textarea,
+  _textfield,
+} from './util/index';
 
 interface DOMElementBaseOptions {
   id?: string;
@@ -54,6 +63,9 @@ declare global {
       radiobutton: typeof _radiobutton;
       textarea: typeof _textarea;
       textfield: typeof _textfield;
+      collapsible: typeof _collapsible;
+
+      appendHelpText: typeof _appendHelptext;
     };
   }
 
@@ -93,4 +105,6 @@ document.util = {
   radiobutton: _radiobutton,
   textarea: _textarea,
   textfield: _textfield,
+  collapsible: _collapsible,
+  appendHelpText: _appendHelptext,
 };

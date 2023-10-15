@@ -30,7 +30,9 @@ export class ModuleSection {
 
   private getCategory(category: string): HTMLDivElement {
     if (!this._categories.has(category)) {
-      const cat = document.util.container([{ tag: 'h6', innerText: category }]);
+      const cat = document.util.container([{ tag: 'h6', innerText: category }], {
+        class: 'user-settings',
+      });
 
       this._categories.set(category, cat);
       this.renderCategory(category, cat);
