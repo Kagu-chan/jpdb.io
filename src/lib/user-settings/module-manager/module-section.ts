@@ -1,5 +1,5 @@
 import { ModuleOptions } from './module-options';
-import { IModuleOptions } from './module-options.type';
+import { IModuleOptions, ModuleUserOption, ModuleUserOptions } from './module-options.type';
 
 export class ModuleSection {
   private _categories = new Map<string, HTMLDivElement>();
@@ -20,6 +20,8 @@ export class ModuleSection {
   }
 
   public register(options: IModuleOptions): void {
+    this.walkAndInitOptions(options.name, options.options);
+
     const container = this.getCategory(options.category);
     const renderer = new ModuleOptions(options);
 
@@ -46,5 +48,15 @@ export class ModuleSection {
     const node = previousItem ? this._categories.get(previousItem)! : this._titleNode;
 
     document.jpdb.adjacentElement(node, 'afterend', item);
+  }
+
+  private walkAndInitOptions(name: string, options?: ModuleUserOptions): void {
+    options?.filter(Boolean).forEach((option: ModuleUserOption) => {
+      jpdb.settings.persistence.getModuleOption(name, option.key, option.default);
+
+      if (option.children?.length) {
+        this.walkAndInitOptions(name, option.children);
+      }
+    });
   }
 }

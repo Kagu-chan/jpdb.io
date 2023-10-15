@@ -22,6 +22,7 @@
         key: 'rem-highlight-hover',
         type: 'checkbox',
         text: 'Tap to reveal',
+        default: false,
         description:
           // eslint-disable-next-line max-len
           "Reveals the target word on sentence click or tap - this is useful if the sample sentence contains multiple currently learning words or complex grammar you're not familiar with",

@@ -33,9 +33,7 @@ class ScrollControls {
         });
     };
 
-    jpdb.runOnceOnEnable('/settings', SCROLL_CONTROLS, () =>
-      this.enableOnSettings(buttonOrder, buttonPositon),
-    );
+    jpdb.runOnceOnEnable('/settings', SCROLL_CONTROLS, () => this.enableOnSettings());
     jpdb.runOnceOnDisable('/settings', SCROLL_CONTROLS, () => this.disableOnSettings());
 
     jpdb.runOnceWhenActive('/deck-list', SCROLL_CONTROLS, () => {
@@ -65,18 +63,15 @@ class ScrollControls {
   }
 
   //#region Settings
-  private enableOnSettings(
-    buttonOrder: ScrollControlOrder,
-    buttonPositon: ScrollControlPosition,
-  ): void {
+  private enableOnSettings(): void {
     const relevant = ['in-settings', 'button-order', 'button-position'];
 
     relevant
       .map((r) => `update-${SCROLL_CONTROLS}-${r}`)
       .concat('settings-nav-enabled', 'settings-nav-disabled')
-      .forEach((e) => jpdb.on(e, () => this.updateOnSettings(buttonOrder, buttonPositon)));
+      .forEach((e) => jpdb.on(e, () => this.updateOnSettings()));
 
-    this.updateOnSettings(buttonOrder, buttonPositon);
+    this.updateOnSettings();
   }
 
   private disableOnSettings(): void {
@@ -87,11 +82,16 @@ class ScrollControls {
     unrenderSettings();
   }
 
-  private updateOnSettings(
-    buttonOrder: ScrollControlOrder,
-    buttonPositon: ScrollControlPosition,
-  ): void {
+  private updateOnSettings(): void {
     const { persistence } = jpdb.settings;
+    const buttonOrder = persistence.getModuleOption<ScrollControlOrder>(
+      SCROLL_CONTROLS,
+      'button-order',
+    );
+    const buttonPositon = persistence.getModuleOption<ScrollControlPosition>(
+      SCROLL_CONTROLS,
+      'button-position',
+    );
 
     unrenderSettings();
 

@@ -29,12 +29,9 @@ type ModuleUserOptionBase<T> = {
   key: string;
   text?: string;
   description?: string;
-  default?: T;
+  default: T;
   type: `${ModuleUserOptionFieldType}`;
 } & (HasChildren | HasNoChildren);
-
-type ModuleUserOptionBaseRequired<T> = ModuleUserOptionBase<T> &
-  Required<Pick<ModuleUserOptionBase<T>, 'default'>>;
 
 export type ModuleUserOptionCheckbox = ModuleUserOptionBase<boolean> & {
   type: 'checkbox';
@@ -59,7 +56,7 @@ export type ModuleUserOptionNumber = ModuleUserOptionBase<number> & {
   max?: number;
 };
 
-export type ModuleUserOptionList = ModuleUserOptionBaseRequired<string[]> & {
+export type ModuleUserOptionList = ModuleUserOptionBase<string[]> & {
   type: 'list';
   text: string;
 };
@@ -72,7 +69,7 @@ export interface ObjectSchemaItem {
   max?: number;
 }
 export type ObjectSchema = ObjectSchemaItem[];
-export type ModuleUserOptionObjectList = ModuleUserOptionBaseRequired<object[]> & {
+export type ModuleUserOptionObjectList = ModuleUserOptionBase<object[]> & {
   type: 'objectlist';
   text: string;
   schema: ObjectSchema;

@@ -32,7 +32,7 @@ export class ModuleOption {
           this._name,
           c,
           childsContainer,
-          () => jpdb.settings.persistence.getModuleOption(this._name, c.key, c.default),
+          () => jpdb.settings.persistence.getModuleOption(this._name, c.key),
           (value: unknown) => {
             jpdb.toaster.toast('Saved...', 'success');
             jpdb.settings.persistence.setModuleOption(this._name, c.key, value);

@@ -11,6 +11,7 @@ export class ModuleOptions {
         type: 'checkbox',
         key: '_',
         hideOrDisable: 'hide',
+        default: false,
         children: _data.options!,
         indent: true,
         text: _data.displayText,

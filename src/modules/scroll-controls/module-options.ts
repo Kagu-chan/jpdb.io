@@ -33,11 +33,13 @@ export const moduleOptions: IModuleOptions = {
       key: 'in-settings',
       type: 'checkbox',
       text: 'Enable in settings',
+      default: false,
     },
     {
       key: 'in-media-search',
       type: 'checkbox',
       text: 'Enable in media search',
+      default: false,
       description: `
 <div>Enables scroll controls on deck searches, namely the following:</div>
 <ul>
@@ -54,6 +56,7 @@ export const moduleOptions: IModuleOptions = {
       key: 'in-deck-list',
       type: 'checkbox',
       text: 'Enable in deck list',
+      default: false,
       description: 'Enables scroll controls on your deck list',
       hideOrDisable: 'hide',
       indent: true,
@@ -83,18 +86,21 @@ export const moduleOptions: IModuleOptions = {
       key: 'in-kanji-wall',
       type: 'checkbox',
       text: 'Enable on the wall of kanj',
+      default: false,
       description: 'Enables scroll controls on the <a href="/labs/wall-of-kanji">wall of kanji</a>',
     },
     {
       key: 'in-kanken-kanji',
       type: 'checkbox',
       text: 'Enable on Kanken kanji list',
+      default: false,
       description: 'Enables scroll controls on the <a href="/kanken-kanji">Kanken kanji list</a>',
     },
     {
       key: 'in-kanji-freq',
       type: 'checkbox',
       text: 'Enable on kanji frequency list',
+      default: false,
       description:
         'Enables scroll controls on the <a href="/kanji-by-frequency">kanji frequency list</a>',
     },
