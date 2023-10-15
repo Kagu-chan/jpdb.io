@@ -80,7 +80,7 @@ export abstract class ListRenderer<
   protected refresh(): void {
     this._inputs.replaceChildren();
 
-    this.renderInputList(true);
+    this.renderInputList(!isMobile() && true);
   }
 
   //#region Main Input
