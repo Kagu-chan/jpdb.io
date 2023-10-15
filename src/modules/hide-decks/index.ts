@@ -18,7 +18,11 @@
   jpdb.runOnceWhenActive('/learn', HIDE_DECKS, () => {
     const decks =
       document.jpdb.countElements('#deck_list + .deck-list .deck') +
-      Number(document.jpdb.findElement('a[href="/deck-list"')?.innerText.replace(/[^\d]/g, ''));
+      Number(
+        document.jpdb
+          .findElement('a[href="/deck-list"]:not(.nav-item)')
+          ?.innerText.replace(/[^\d]/g, ''),
+      );
 
     const btn = document.jpdb.adjacentElement(
       'form',
