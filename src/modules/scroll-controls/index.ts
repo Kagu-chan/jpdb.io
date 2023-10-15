@@ -28,7 +28,7 @@ class ScrollControls {
 
     const runOn = (path: Path | Path[], setting: string): void => {
       persistence.getModuleOption(SCROLL_CONTROLS, setting) &&
-        jpdb.runOnceWhenActive(path, SCROLL_CONTROLS, () => {
+        jpdb.runAlwaysWhenActive(path, SCROLL_CONTROLS, () => {
           renderCommon(buttonOrder, buttonPositon);
         });
     };
@@ -36,7 +36,7 @@ class ScrollControls {
     jpdb.runOnceOnEnable('/settings', SCROLL_CONTROLS, () => this.enableOnSettings());
     jpdb.runOnceOnDisable('/settings', SCROLL_CONTROLS, () => this.disableOnSettings());
 
-    jpdb.runOnceWhenActive('/deck-list', SCROLL_CONTROLS, () => {
+    jpdb.runAlwaysWhenActive('/deck-list', SCROLL_CONTROLS, () => {
       if (
         persistence.getModuleOption(SCROLL_CONTROLS, 'in-deck-list') &&
         persistence.getModuleOption(SCROLL_CONTROLS, 'set-threshold') &&
