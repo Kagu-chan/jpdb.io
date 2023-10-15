@@ -24,12 +24,12 @@
     "learning-stats",
     "move-cards",
     "search-compilation",
-    "scroll-controls",
     "sticky-navbar",
     "tsc",
     "unsuspend",
     "user-css",
     "widen-viewport",
+    "scroll-controls",
     "settings-nav"
   ],
   "output": {

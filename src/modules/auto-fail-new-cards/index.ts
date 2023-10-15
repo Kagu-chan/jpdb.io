@@ -44,10 +44,9 @@ class AutoFailNewCards {
       }
 
       if (
-        jpdb.settings.persistence.getModuleOption(
+        jpdb.settings.persistence.getModuleOption<boolean>(
           this.AUTO_FAIL_NEW_CARDS,
           'forbid-permaknown',
-          false,
         )
       ) {
         document.jpdb.withElement('#grade-permaknown', (e) => e.remove());

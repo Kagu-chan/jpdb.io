@@ -1,0 +1,99 @@
+.scroll-control {
+  border-radius: 0.5rem;
+  width: 2.8rem;
+  position: fixed;
+  padding: 0rem !important;
+}
+
+.scroll-control:focus {
+  text-decoration: none !important;
+}
+
+.scroll-control.c-0.left,
+.scroll-control.c-0.both {
+  left: 1rem;
+}
+
+.scroll-control.c-0.right {
+  right: 4.5rem;
+}
+
+.scroll-control.c-1.right,
+.scroll-control.c-1.both {
+  right: 1rem;
+}
+
+.scroll-control.c-1.left {
+  left: 4.5rem;
+}
+
+/** SETTINGS */
+.settings-scroll-controls .scroll-control {
+  border: none !important;
+}
+
+@media only screen and (max-width: 1080px) {
+  .settings-scroll-controls .scroll-control.c-0.right.shift-left {
+    right: 6.5rem;
+  }
+
+  .settings-scroll-controls .scroll-control.c-1.right.shift-left,
+  .settings-scroll-controls .scroll-control.c-1.both.shift-left {
+    right: 3rem;
+  }
+}
+
+/** COMMON */
+@media only screen and (max-width: 1080px) {
+  .footer.controls-both {
+    padding-right: 4rem;
+  }
+  .footer.controls-right {
+    padding-right: 7.5rem;
+  }
+}
+
+.common-scroll-controls {
+  position: absolute;
+  bottom: 3.5rem;
+}
+
+/** With sticky footer activated */
+.footer.has-scroll-controls .scroll-control {
+  border: none !important;
+}
+
+.footer.has-scroll-controls .common-scroll-controls {
+  bottom: 3.3rem;
+}
+
+.footer.has-scroll-controls.controls-both {
+  padding-right: 4rem;
+}
+.footer.has-scroll-controls.controls-right {
+  padding-right: 7.5rem;
+}
+
+@media only screen and (max-width: 41rem) {
+  .footer.has-scroll-controls .common-scroll-controls {
+    bottom: 3rem;
+  }
+
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-0.left,
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-0.both {
+    left: 0.5rem;
+  }
+
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-0.right {
+    right: 3.5rem;
+  }
+
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-1.right,
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-1.both {
+    right: 0.5rem;
+  }
+
+  .footer.has-scroll-controls .common-scroll-controls .scroll-control.c-1.left {
+    left: 3.5rem;
+  }
+}

@@ -38,7 +38,17 @@ export const moduleOptions: IModuleOptions = {
       key: 'in-media-search',
       type: 'checkbox',
       text: 'Enable in media search',
-      description: 'Enables scroll controls on deck search, e.g. `Built-in decks`',
+      description: `
+<div>Enables scroll controls on deck searches, namely the following:</div>
+<ul>
+<li><a href="/prebuilt_decks">Build-in decks</a></li>
+<li><a href="/anime-difficulty-list">Anime difficulty list</a></li>
+<li><a href="/novel-difficulty-list">Novel difficulty list</a></li>
+<li><a href="/visual-novel-difficulty-list">Visual novel difficulty list</a></li>
+<li><a href="/web-novel-difficulty-list">Web novel diffuculty list</a></li>
+<li><a href="/live-action-difficulty-list">Live action difficulty list</a></li>
+</ul>
+<div>They are all the same, but with different filter presets.</div>`,
     },
     {
       key: 'in-deck-list',
@@ -68,6 +78,25 @@ export const moduleOptions: IModuleOptions = {
           ],
         },
       ],
+    },
+    jpdb.settings.hasPatreonPerks() && {
+      key: 'in-kanji-wall',
+      type: 'checkbox',
+      text: 'Enable on the wall of kanj',
+      description: 'Enables scroll controls on the <a href="/labs/wall-of-kanji">wall of kanji</a>',
+    },
+    {
+      key: 'in-kanken-kanji',
+      type: 'checkbox',
+      text: 'Enable on Kanken kanji list',
+      description: 'Enables scroll controls on the <a href="/kanken-kanji">Kanken kanji list</a>',
+    },
+    {
+      key: 'in-kanji-freq',
+      type: 'checkbox',
+      text: 'Enable on kanji frequency list',
+      description:
+        'Enables scroll controls on the <a href="/kanji-by-frequency">kanji frequency list</a>',
     },
   ],
 };

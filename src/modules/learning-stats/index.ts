@@ -344,7 +344,10 @@ export class LearningStats {
 
   private appendNewCardsToday(): void {
     const showMains = !document.jpdb.findElement('.dropdown.right-aligned');
-    const target = jpdb.settings.persistence.getModuleOption(this.LEARNING_STATS, this.SETTING, 20);
+    const target = jpdb.settings.persistence.getModuleOption<number>(
+      this.LEARNING_STATS,
+      this.SETTING,
+    );
 
     if (!showMains) {
       return;
@@ -386,15 +389,13 @@ export class LearningStats {
   }
 
   private renderUpdatedTable(): void {
-    const showSmallTable = jpdb.settings.persistence.getModuleOption(
+    const showSmallTable = jpdb.settings.persistence.getModuleOption<boolean>(
       this.LEARNING_STATS,
       'show-small-table',
-      false,
     );
-    const showAbsolutes = jpdb.settings.persistence.getModuleOption(
+    const showAbsolutes = jpdb.settings.persistence.getModuleOption<boolean>(
       this.LEARNING_STATS,
       'show-total-total',
-      false,
     );
     // Search for Menu dropdown only existend on deck pages
     const showMains = !document.jpdb.findElement('.dropdown.right-aligned');

@@ -1,6 +1,14 @@
 export class UserSettingsPersistence {
-  public getModuleOption<T>(module: string, key: string, defaultValue: T): T {
-    return this.read<Record<string, T>>(module, { [key]: defaultValue })[key];
+  public getModuleOption<T>(module: string, key: string, defaultValue?: T): T {
+    const options = this.read<Record<string, T>>(module, {});
+
+    if (!options[key] && defaultValue !== undefined) {
+      this.setModuleOption(module, key, defaultValue);
+
+      options[key] = defaultValue;
+    }
+
+    return options[key];
   }
 
   public setModuleOption<T>(module: string, key: string, value: T): void {

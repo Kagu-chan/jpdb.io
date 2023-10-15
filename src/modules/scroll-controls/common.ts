@@ -2,20 +2,27 @@ import { SCROLL_CONTROLS } from './constants';
 import { ScrollTarget, down, up } from './scroll';
 import { ScrollControlOrder, ScrollControlPosition } from './types';
 
-export const renderSettings = (
-  order: ScrollControlOrder,
-  position: ScrollControlPosition,
-): void => {
+export const renderCommon = (order: ScrollControlOrder, position: ScrollControlPosition): void => {
   jpdb.css.add(SCROLL_CONTROLS, __load_css('./src/modules/scroll-controls/scroll-controls.css'));
 
-  const l = document.jpdb.prependElement('#save-all-settings-box', {
+  const l = document.jpdb.prependElement('.footer', {
     tag: 'span',
-    class: ['settings-scroll-controls'],
+    class: ['common-scroll-controls'],
   });
-  const r = document.jpdb.appendElement('#save-all-settings-box', {
+  const r = document.jpdb.appendElement('.footer', {
     tag: 'span',
-    class: ['settings-scroll-controls'],
+    class: ['common-scroll-controls'],
   });
+
+  if (jpdb.settings.moduleManager.getActiveState('sticky-footer')) {
+    l.classList.add('is-sticky');
+    r.classList.add('is-sticky');
+
+    document.jpdb.withElement('.footer', (f) => f.classList.add('has-scroll-controls'));
+  }
+
+  document.jpdb.withElement('.footer', (f) => f.classList.add(`controls-${position}`));
+
   const orderEl = (
     {
       [ScrollControlOrder.BT]: [down, up],
@@ -50,10 +57,4 @@ export const renderSettings = (
       handler: orderEl[i].fn,
     });
   });
-};
-
-export const unrenderSettings = (): void => {
-  document.jpdb.withElements('.settings-scroll-controls', (e) => document.jpdb.destroyElement(e));
-
-  jpdb.css.remove(SCROLL_CONTROLS);
 };

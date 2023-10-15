@@ -53,7 +53,7 @@ export function createElement(
 
   if (options.class) {
     options.class = Array.isArray(options.class) ? options.class : [options.class];
-    e.classList.add(...options.class);
+    e.classList.add(...options.class.filter(Boolean));
   }
 
   (options.children ?? [])

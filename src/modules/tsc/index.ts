@@ -49,7 +49,7 @@
 
       target.classList.add('rem');
 
-      if (jpdb.settings.persistence.getModuleOption(TSC, 'rem-highlight-hover', false)) {
+      if (jpdb.settings.persistence.getModuleOption(TSC, 'rem-highlight-hover')) {
         const mouseTarget = document.jpdb.findElement('.sentence');
 
         mouseTarget.addEventListener('click', () => target.classList.remove('rem'));

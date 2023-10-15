@@ -1,20 +1,20 @@
 /** List */
 .s-nav-wrapper {
   max-height: 200px;
-  
+
   border: 1px solid var(--button-background-color);
   background-color: var(--outline-input-background-color);
-  
+
   box-shadow: none;
   transform: none;
-  border-radius: .5rem;
-  
+  border-radius: 0.5rem;
+
   padding: 1rem;
 
   overflow-y: auto;
 
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .s-nav-wrapper::-webkit-scrollbar {
@@ -24,8 +24,8 @@
 .settings-navigation {
   margin-bottom: unset;
 
-  font-size: 1.0rem;
-  line-height: 2.0rem;
+  font-size: 1rem;
+  line-height: 2rem;
 
   list-style: none;
 }
@@ -42,17 +42,21 @@
   list-style: none;
 }
 
-.settings-subnavigation:empty { display: none; }
+.settings-subnavigation:empty {
+  display: none;
+}
 
 /** Burger */
-.s-nav-btn { display: none !important; }
+.s-nav-btn {
+  display: none !important;
+}
 
 .s-nav-icon {
   cursor: pointer;
   display: inline-block;
   padding: 1.4rem;
   padding-top: 1.3rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 2rem;
   padding-right: 0.3rem;
   user-select: none;
 }
@@ -62,20 +66,25 @@
   display: block;
   height: 2px;
   position: relative;
-  transition: background .2s ease-out;
+  transition: background 0.2s ease-out;
   width: 1rem;
 }
 
-.s-nav-icon .navicon:before { top: 5px; }
-.s-nav-icon .navicon:after { top: -5px; }
+.s-nav-icon .navicon:before {
+  top: 5px;
+}
+.s-nav-icon .navicon:after {
+  top: -5px;
+}
 
-.s-nav-icon .navicon:before, .s-nav-icon .navicon:after {
+.s-nav-icon .navicon:before,
+.s-nav-icon .navicon:after {
   background: var(--burger-color);
   content: '';
   display: block;
   height: 100%;
   position: absolute;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
   width: 100%;
 }
 
@@ -95,7 +104,9 @@
     padding-left: unset;
   }
 
-  .s-nav-menu { display: none; }
+  .s-nav-menu {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 1690px) {
@@ -111,7 +122,7 @@
     top: 7rem;
     max-height: calc(100% - 13rem);
 
-    transition: all ease-in-out .2s;
+    transition: all ease-in-out 0.2s;
   }
 
   .s-nav-wrapper.closed {
@@ -119,7 +130,7 @@
     padding: 0;
     border-width: 0;
 
-    transition: all ease-in-out .2s;
+    transition: all ease-in-out 0.2s;
   }
 }
 
