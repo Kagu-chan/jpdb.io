@@ -44,17 +44,6 @@ export class ObjectListRenderer extends ListRenderer<
     return JSON.stringify(val);
   }
 
-  protected renderInputHeaderContent(): void {
-    this._options.schema.forEach((current: ObjectSchemaItem) => {
-      document.jpdb.appendElement(this._accordionHeader, {
-        tag: 'label',
-        innerText: current.label,
-        attributes: { for: `${this._options.key}-${current.key}-0` },
-        style: { paddingTop: '1rem', paddingLeft: '.5rem' },
-      });
-    });
-  }
-
   protected getSingleInputRow(
     value: Record<string, string | number>,
     id: number,
@@ -74,11 +63,14 @@ export class ObjectListRenderer extends ListRenderer<
       class: ['hidden'],
     });
 
+    container.classList.add(`c-${schema.length}`);
+
     schema.forEach((current: ObjectSchemaItem, cid: number) => {
       const attributes: Record<string, string | boolean> = {
         name: `${this._options.key}-${current.key}-${id}`,
         type: current.type,
         value: value[current.key] as string,
+        placeholder: current.label,
       };
 
       switch (current.type) {

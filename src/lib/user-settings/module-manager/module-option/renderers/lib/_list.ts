@@ -26,10 +26,6 @@ export abstract class ListRenderer<
    * The accirdion where all input data resides
    */
   protected _accordion: HTMLDetailsElement;
-  /**
-   * The accordion inner header element, containing the alignment of input elements
-   */
-  protected _accordionHeader: HTMLDivElement;
 
   /**
    * The main panel containing all interactable data
@@ -111,85 +107,6 @@ export abstract class ListRenderer<
 
     this._accordion.addEventListener('toggle', () => {
       jpdb.state.writeState(stateKey, this._accordion.open);
-    });
-
-    this.createAccordionHeader();
-  }
-  //#endregion
-
-  //#region Accordion Header
-  protected createAccordionHeader(): void {
-    this._accordionHeader = document.jpdb.createElement('div', {
-      class: ['input-list', 'input-header'],
-      style: {
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        placeContent: 'space-between',
-        alignItems: 'flex-start',
-      },
-    });
-
-    document.jpdb.appendElement(this._accordionPanel, this._accordionHeader);
-
-    this.renderInputHeaderContent();
-    this.extendInputHeaderContent();
-  }
-
-  protected renderInputHeaderContent(): void {
-    return;
-  }
-
-  protected extendInputHeaderContent(): void {
-    if (this._accordionHeader.innerHTML === '') {
-      return;
-    }
-
-    /**
-     * Append some fake items to this container
-     *
-     * This is to realign the flex items inside this container
-     * It is the same HTML as the input controls, so it gains the same box sizing
-     */
-    document.jpdb.appendElement(this._accordionHeader, {
-      tag: 'div',
-      class: 'side-controls',
-      children: [
-        {
-          tag: 'div',
-          class: 'deck-sidebar',
-          children: [
-            {
-              tag: 'input',
-              class: ['arrow-control', 'up'],
-              attributes: {
-                type: 'submit',
-                value: '⮝',
-                disabled: '',
-              },
-            },
-            {
-              tag: 'input',
-              class: ['arrow-control', 'down'],
-              attributes: {
-                type: 'submit',
-                value: '⮟',
-                disabled: '',
-              },
-            },
-          ],
-        },
-        {
-          tag: 'input',
-          id: `${this._options.key}-v-rem`,
-          class: ['outline', 'v1'],
-          attributes: {
-            type: 'submit',
-            value: '-',
-            disabled: '',
-          },
-        },
-      ],
-      style: { opacity: '0' },
     });
   }
   //#endregion
