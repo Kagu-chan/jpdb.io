@@ -51,13 +51,16 @@ class HideCompletedDecks {
 
       jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
-      if (rbs?.includes('all-decks')) {
+      if (rbs === 'by-frequency-local-all-decks') {
         jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_FIRST);
       } else {
         jpdb.settings.moduleManager.register({
           name: this.HIDE_NON_NEW_FIRST,
           category: 'Decks',
-          displayText: 'Hide non-new decks from front',
+          displayText:
+            rbs === 'by-frequency-global-all-decks'
+              ? 'Hide non-new decks'
+              : 'Hide non-new decks from front',
           description:
             // eslint-disable-next-line max-len
             'Hides decks which do not contain new cards. This is evaluated taking suspended cards into account and hides decks until the first deck serving new cards',
@@ -133,16 +136,29 @@ class HideCompletedDecks {
 
   private hideNonNewFirstDecks(): void {
     jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
+      const rbs = jpdb.settings.persistence.getModuleOption(this.HIDE_NON_NEW_FIRST, 'order');
       const hide: Deck[] = [];
-      const found = this._deckList.find((d) => {
-        if (!d.hasNewCards) {
-          hide.push(d);
+      let found: undefined | boolean | Deck;
 
-          return false;
-        }
+      if (rbs === 'by-frequency-global-all-decks') {
+        this._deckList.forEach((d) => {
+          if (!d.hasNewCards) {
+            hide.push(d);
+          }
+        });
 
-        return true;
-      });
+        found = !!hide.length;
+      } else {
+        found = this._deckList.find((d) => {
+          if (!d.hasNewCards) {
+            hide.push(d);
+
+            return false;
+          }
+
+          return true;
+        });
+      }
 
       if (!found) {
         return;
