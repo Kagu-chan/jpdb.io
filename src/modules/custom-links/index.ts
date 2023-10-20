@@ -116,12 +116,12 @@ class CustomLinks {
 
   private addListeners(): void {
     jpdb.runOnceOnEnable('/settings', this.CUSTOM_LINKS, () => {
-      document.jpdb.withElements('.menu a', (a) => a.classList.add('hidden'));
+      document.jpdb.withElements('.nav > .menu a', (a) => a.classList.add('hidden'));
 
       this.addHeaderLinks();
 
       jpdb.on(`update-${this.CUSTOM_LINKS}-header`, () => {
-        document.jpdb.withElements('.menu a', (a) => {
+        document.jpdb.withElements('.nav > .menu a', (a) => {
           if (a.classList.contains('hidden')) {
             return;
           }
@@ -133,7 +133,7 @@ class CustomLinks {
       });
     });
     jpdb.runOnceOnDisable('/settings', this.CUSTOM_LINKS, () => {
-      document.jpdb.withElements('.menu a', (a) => {
+      document.jpdb.withElements('.nav > .menu a', (a) => {
         if (a.classList.contains('hidden')) {
           a.classList.remove('hidden');
 
@@ -145,7 +145,7 @@ class CustomLinks {
     });
 
     jpdb.runOnceWhenActive(/^(?!\/settings)/, this.CUSTOM_LINKS, () => {
-      document.jpdb.withElements('.menu a', (a) => a.remove());
+      document.jpdb.withElements('.nav > .menu a', (a) => a.remove());
       document.jpdb.withElements('.footer a', (a) => a.remove());
 
       this.addHeaderLinks();
