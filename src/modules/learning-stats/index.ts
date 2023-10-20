@@ -79,11 +79,19 @@ export class LearningStats {
   }
 
   private removeHeader(): void {
-    document.jpdb.withElement('h4', (e) => e.remove());
+    if (this.nodes) {
+      document.jpdb.withElement('h4', (e) => e.remove());
+    }
   }
 
   private updateTable(): void {
-    this.nodes = this.getDataNodes();
+    const nodes = this.getDataNodes();
+
+    if (!nodes) {
+      return;
+    }
+
+    this.nodes = nodes;
     this.present = this.getPresentStats();
     this.additional = this.getAdditionalStats();
 
@@ -94,7 +102,7 @@ export class LearningStats {
     this.removeObsoleteNodes();
   }
 
-  private getDataNodes(): LearningStatsDataNodes {
+  private getDataNodes(): LearningStatsDataNodes | false {
     const header =
       document.jpdb.findElement('h4') ||
       document.jpdb.findElement('div[style="margin-bottom: 1rem; display: flex;"]');
@@ -110,6 +118,10 @@ export class LearningStats {
     };
     const [t1, t2] = document.jpdb.findElements<'table'>(dataNodes.container, 'table');
     const nextItem = dataNodes.container.nextSibling as HTMLParagraphElement;
+
+    if (!t1) {
+      return false;
+    }
 
     dataNodes.stats = t1;
     dataNodes.statsBody = document.jpdb.findElement<'tbody'>(t1, 'tbody');

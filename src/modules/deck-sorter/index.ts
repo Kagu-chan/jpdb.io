@@ -33,7 +33,7 @@ Uses Coverage if available, otherwise Vocabulary.<br />
 Respects the value of 'Reverse priority...' to choose breaking point.`;
 
   constructor() {
-    this.register();
+    // this.register();
   }
 
   private register(): void {
