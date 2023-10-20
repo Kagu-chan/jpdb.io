@@ -1,8 +1,32 @@
+enum NEVER_FORGET {
+  HIDE = 'HIDE',
+  REMOVE = 'REMOVE',
+}
+
+enum FAIL_AT {
+  ALL = 'ALL',
+  VOCAB = 'VOCAB',
+  KANJI = 'KANJI',
+}
+
 /**
  * automatically fail new cards so the model does not yeet them to "in 80 years"
  */
 class AutoFailNewCards {
-  private AUTO_FAIL_NEW_CARDS: string = 'auto-fail-new';
+  private AUTO_FAIL_ENABLE: string = 'auto-fail-new';
+  private AUTO_FAIL_MODE: string = 'auto-fail-mode';
+  private AUTO_FAIL_LABELS: Record<FAIL_AT, string> = {
+    [FAIL_AT.ALL]: 'Always',
+    [FAIL_AT.VOCAB]: 'Only Vocab cards',
+    [FAIL_AT.KANJI]: 'Only Kanji cards',
+  };
+
+  private NEVER_FORGET_ENABLE: string = 'move-never-forget';
+  private NEVER_FORGET_ACTION: string = 'never-forget-action';
+  private NEVER_FORGET_LABELS: Record<NEVER_FORGET, string> = {
+    [NEVER_FORGET.HIDE]: 'Hide in dropdown',
+    [NEVER_FORGET.REMOVE]: 'Remove action',
+  };
 
   constructor() {
     this.register();
@@ -11,52 +35,101 @@ class AutoFailNewCards {
   }
 
   private register(): void {
-    jpdb.settings.moduleManager.register({
-      name: this.AUTO_FAIL_NEW_CARDS,
-      category: 'Reviews',
-      displayText: 'Automatically fail new cards',
-      description: `
-<div>Automatically fail new cards once.</div>
-<p>This should avoid new vocab to be set to known and review in a very long period initially</p>
-`,
-      options: [
-        {
-          key: 'forbid-permaknown',
-          type: 'checkbox',
-          text: 'Forbid marking cards as known permanently',
-          description:
-            // eslint-disable-next-line max-len
-            'Removes the possibility to mark cards as known permanents (I know this, will never forget)',
-          default: false,
-        },
-      ],
+    jpdb.runOnce('/settings', () => {
+      if (
+        jpdb.settings.hasPatreonPerks() &&
+        jpdb.settings.getJpdbRadioSetting('auto-reveal-new-cards')
+      ) {
+        jpdb.settings.moduleManager.register({
+          name: this.AUTO_FAIL_ENABLE,
+          category: 'Reviews',
+          displayText: 'Automatically fail new cards',
+          description: 'Automatically fail new cards once.',
+          options: [
+            {
+              key: this.AUTO_FAIL_MODE,
+              type: 'radio',
+              options: FAIL_AT,
+              labels: this.AUTO_FAIL_LABELS,
+              default: FAIL_AT.ALL,
+            },
+          ],
+        });
+      } else {
+        jpdb.settings.moduleManager.disableModule(this.AUTO_FAIL_ENABLE);
+      }
+
+      jpdb.settings.moduleManager.register({
+        name: this.NEVER_FORGET_ENABLE,
+        category: 'Reviews',
+        displayText: 'Modify `I know this, will never forget`',
+        description: 'Move or remove the `I know this, will never forget` button on new cards.',
+        options: [
+          {
+            key: this.NEVER_FORGET_ACTION,
+            type: 'radio',
+            options: NEVER_FORGET,
+            labels: this.NEVER_FORGET_LABELS,
+            default: NEVER_FORGET.HIDE,
+          },
+        ],
+      });
     });
   }
 
   private addListeners(): void {
-    jpdb.runOnceWhenActive('/review', this.AUTO_FAIL_NEW_CARDS, () => {
+    jpdb.runOnceWhenActive('/review', this.AUTO_FAIL_ENABLE, () => {
+      const mode = jpdb.settings.persistence.getModuleOption<FAIL_AT>(
+        this.AUTO_FAIL_ENABLE,
+        this.AUTO_FAIL_MODE,
+      );
       const showAnswer = document.jpdb.findElement('#show-answer');
       const fail = document.jpdb.findElement('input[value="✘ Fail"]');
       const nothing = document.jpdb.findElement('input[value="✘ Nothing"]');
+      const isVocab = !!document.jpdb.findElement('.result.vocabulary');
 
       if (showAnswer || fail || nothing) {
         return;
       }
 
       if (
-        jpdb.settings.persistence.getModuleOption<boolean>(
-          this.AUTO_FAIL_NEW_CARDS,
-          'forbid-permaknown',
-        )
+        mode === FAIL_AT.ALL ||
+        (isVocab && mode === FAIL_AT.VOCAB) ||
+        (!isVocab && mode === FAIL_AT.KANJI)
+      ) {
+        document.jpdb.withElement('#grade-p', (e) => e.closest('.row.row-1')?.remove());
+        document.jpdb.withElement<'input'>('#grade-f', (e: HTMLInputElement) => {
+          e.classList.remove('v1');
+
+          e.value = 'Next';
+        });
+      }
+    });
+
+    jpdb.runOnceWhenActive('/review', this.NEVER_FORGET_ENABLE, () => {
+      if (
+        jpdb.settings.persistence.getModuleOption<NEVER_FORGET>(
+          this.NEVER_FORGET_ENABLE,
+          this.NEVER_FORGET_ACTION,
+        ) === NEVER_FORGET.REMOVE
       ) {
         document.jpdb.withElement('#grade-permaknown', (e) => e.remove());
+
+        return;
       }
 
-      document.jpdb.withElement('#grade-p', (e) => e.remove());
-      document.jpdb.withElement<'input'>('#grade-f', (e: HTMLInputElement) => {
-        e.classList.remove('v1');
+      jpdb.css.add(
+        this.NEVER_FORGET_ENABLE,
+        __load_css('./src/modules/auto-fail-new-cards/hide-permaknown.css'),
+      );
 
-        e.value = 'Next';
+      document.jpdb.withElement('#grade-permaknown', (e) => {
+        const parentDiv = e.closest('.row.row-1');
+        const target = document.jpdb.findElement('.hidden-body');
+
+        if (parentDiv && target) {
+          document.jpdb.adjacentElement(target, 'afterbegin', parentDiv as HTMLElement);
+        }
       });
     });
   }

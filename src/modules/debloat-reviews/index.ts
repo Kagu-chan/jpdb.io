@@ -14,7 +14,7 @@ class DebloadReviewsModule {
     jpdb.settings.moduleManager.register({
       name: this.DEBLOAT_REVIEWS,
       category: 'Reviews',
-      displayText: 'Remove unneccessary labels from review, vocabulary and search results',
+      displayText: 'Remove some header labels from review, vocabulary and search results',
       description:
         'Remove text that takes up valuable screen space on review, vocabulary and search results',
     });

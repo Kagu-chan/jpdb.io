@@ -1,0 +1,9 @@
+.review-button-group .show-hide-checkbox:checked ~ .hidden-body {
+  height: 7rem;
+}
+
+@media (min-width: 34rem) {
+  .review-button-group .show-hide-checkbox:checked ~ .hidden-body {
+    height: 7.7rem;
+  }
+}
