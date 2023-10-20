@@ -3,7 +3,7 @@
 
   jpdb.settings.moduleManager.register({
     name: HIDE_DECK_NUMBERS,
-    category: 'Decks',
+    category: 'Learn Page',
     displayText: 'Hide deck numbers',
     description: 'Hide deck numbers on learn page and deck list',
   });

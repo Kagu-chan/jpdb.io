@@ -4,13 +4,13 @@
 
   jpdb.settings.moduleManager.register({
     name: HIDE_DECKS,
-    category: 'Decks',
+    category: 'Learn Page',
     displayText: 'Hide decks',
     description: 'Hide your decks from learn page',
   });
   jpdb.settings.moduleManager.register({
     name: HIDE_SPECIAL_DECKS,
-    category: 'Decks',
+    category: 'Learn Page',
     displayText: 'Hide special decks',
     description: 'Hide special decks from learn page',
   });

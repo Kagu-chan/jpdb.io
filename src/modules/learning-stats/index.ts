@@ -23,7 +23,7 @@ export class LearningStats {
   private register(): void {
     jpdb.settings.moduleManager.register({
       name: this.LEARNING_STATS,
-      category: 'Decks',
+      category: 'Learn Page',
       displayText: 'Display deck statistics in one table',
       description: `
 <div>Display deck statistics, like new or learning cards, in a more compact way by including those stats into the present table.</div>
