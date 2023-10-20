@@ -113,6 +113,7 @@ class HideCompletedDecks {
         .filter((d) => d.completed)
         .forEach((d) => {
           d.parameters.set('hidden', true);
+
           d.classList.add('completed');
         });
     });
@@ -156,25 +157,29 @@ class HideCompletedDecks {
   }
 
   private displayShowControl(): void {
-    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
-      const amount: number = this._deckList.filter((d) => d.parameters.get('hidden')).length;
+    jpdb.runAlwaysWhenEitherIsActive(
+      /\/deck-list/,
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
+      () => {
+        const amount: number = this._deckList.filter((d) => d.parameters.get('hidden')).length;
 
-      if (!amount) {
-        return;
-      }
+        if (!amount) {
+          return;
+        }
 
-      const btn = document.jpdb.createElement('span', {
-        class: 'show-control',
-        innerText: `Show ${amount} hidden deck${amount > 1 ? 's' : ''}`,
-        handler: () => {
-          this._deckContainer.classList.toggle('hide-decks');
+        const btn = document.jpdb.createElement('span', {
+          class: 'show-control',
+          innerText: `Show ${amount} hidden deck${amount > 1 ? 's' : ''}`,
+          handler: () => {
+            this._deckContainer.classList.toggle('hide-decks');
 
-          btn.remove();
-        },
-      });
+            btn.remove();
+          },
+        });
 
-      document.jpdb.appendElement(this._labelContainer, btn);
-    });
+        document.jpdb.appendElement(this._labelContainer, btn);
+      },
+    );
   }
 
   private getTargetCoverage(): string {
