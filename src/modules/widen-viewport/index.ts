@@ -1,7 +1,7 @@
 class WidenViewport {
-  constructor() {
-    jpdb.settings.renameModuleSetting('widen-viewport', WidenViewport.name);
+  private WIDEN_VIEWPORT = 'widen-viewport';
 
+  constructor() {
     jpdb.onDesktop(() => {
       this.register();
 
@@ -11,7 +11,7 @@ class WidenViewport {
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: WidenViewport.name,
+      name: this.WIDEN_VIEWPORT,
       category: 'UI',
       displayText: 'Widen viewport',
       description: 'Widens the viewport of the main frame, making the page wider on bigger screens',
@@ -20,14 +20,14 @@ class WidenViewport {
   }
 
   private addEventListeners(): void {
-    jpdb.runOnceOnEnable(/.*/, WidenViewport.name, () => {
+    jpdb.runOnceOnEnable(/.*/, this.WIDEN_VIEWPORT, () => {
       jpdb.css.add({
-        key: WidenViewport.name,
+        key: this.WIDEN_VIEWPORT,
         css: __load_css('./src/modules/widen-viewport/viewport.css'),
       });
     });
 
-    jpdb.runOnceOnDisable(/.*/, WidenViewport.name, () => jpdb.css.remove(WidenViewport.name));
+    jpdb.runOnceOnDisable(/.*/, this.WIDEN_VIEWPORT, () => jpdb.css.remove(this.WIDEN_VIEWPORT));
   }
 }
 

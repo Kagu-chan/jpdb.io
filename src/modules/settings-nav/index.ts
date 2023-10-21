@@ -1,14 +1,14 @@
 class SettingsNav {
-  constructor() {
-    jpdb.settings.renameModuleSetting('settings-nav', SettingsNav.name);
+  private SETTINGS_NAV: string = 'settings-nav';
 
+  constructor() {
     this.register();
     this.addListeners();
   }
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: SettingsNav.name,
+      name: this.SETTINGS_NAV,
       category: 'Navigation',
       displayText: 'Add table of contents to settings',
       description:
@@ -18,8 +18,8 @@ class SettingsNav {
   }
 
   private addListeners(): void {
-    jpdb.runOnceOnEnable('/settings', SettingsNav.name, () => this.enable());
-    jpdb.runOnceOnDisable('/settings', SettingsNav.name, () => this.disable());
+    jpdb.runOnceOnEnable('/settings', this.SETTINGS_NAV, () => this.enable());
+    jpdb.runOnceOnDisable('/settings', this.SETTINGS_NAV, () => this.disable());
   }
 
   private enable(): void {
@@ -27,7 +27,7 @@ class SettingsNav {
     document.jpdb.appendElement('.container.bugfix', this.getBurgerMenu());
 
     jpdb.css.add({
-      key: SettingsNav.name,
+      key: this.SETTINGS_NAV,
       css: __load_css('./src/modules/settings-nav/css-declarations'),
     });
   }

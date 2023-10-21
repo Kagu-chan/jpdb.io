@@ -14,7 +14,7 @@ export const renderCommon = (order: ScrollControlOrder, position: ScrollControlP
     class: ['common-scroll-controls'],
   });
 
-  if (jpdb.settings.moduleManager.getActiveState('StickyFooter')) {
+  if (jpdb.settings.moduleManager.getActiveState('sticky-footer')) {
     l.classList.add('is-sticky');
     r.classList.add('is-sticky');
 
@@ -29,7 +29,7 @@ export const renderCommon = (order: ScrollControlOrder, position: ScrollControlP
       [ScrollControlOrder.TB]: [up, down],
     } as Record<ScrollControlOrder, [ScrollTarget, ScrollTarget]>
   )[order];
-  const hasNavMenu = jpdb.settings.moduleManager.getActiveState('SettingsNav');
+  const hasNavMenu = jpdb.settings.moduleManager.getActiveState('settings-nav');
 
   const targets: [HTMLSpanElement, HTMLSpanElement] = (
     {

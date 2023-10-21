@@ -1,5 +1,6 @@
 import { migrateOldRunner } from './migrate-old-runner';
 import { redButton } from './red-button';
+import { resetSettingsParagraph } from './reset-settings.paragraph';
 import { versionParagraph } from './version.paragraph';
 
 export class InfoSection {
@@ -10,25 +11,6 @@ export class InfoSection {
     this.appendResetSettings();
 
     document.jpdb.appendElement(this._container, versionParagraph());
-  }
-
-  public addRenameMigrator(fromKey: string, toKey: string): void {
-    setTimeout(() => {
-      if (
-        localStorage.getItem(fromKey) !== null ||
-        jpdb.settings.moduleManager.getActiveState(fromKey)
-      ) {
-        if (localStorage.getItem(fromKey) !== null) {
-          localStorage.setItem(toKey, localStorage.getItem(fromKey)!);
-          localStorage.removeItem(fromKey);
-        }
-
-        if (jpdb.settings.moduleManager.getActiveState(fromKey)) {
-          jpdb.settings.moduleManager.disableModule(fromKey);
-          jpdb.settings.moduleManager.enableModule(toKey);
-        }
-      }
-    }, 10);
   }
 
   // @TODO: Will be DELETED in January 2024!
@@ -50,13 +32,7 @@ export class InfoSection {
 
           location.reload();
         }),
-        {
-          tag: 'p',
-          innerText: 'This will reset all Settings to default and reload the page.',
-          style: {
-            opacity: '.8',
-          },
-        },
+        resetSettingsParagraph(),
       ]),
     );
   }

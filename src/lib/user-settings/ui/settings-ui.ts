@@ -1,8 +1,6 @@
 import { InfoSection } from './info-section/info-section';
 
 export class SettingsUI {
-  public readonly infoSection: InfoSection;
-
   public readonly stable = document.jpdb.appendElement(
     '.container.bugfix',
     document.util.container([]),
@@ -14,6 +12,6 @@ export class SettingsUI {
   );
 
   constructor() {
-    this.infoSection = new InfoSection();
+    new InfoSection();
   }
 }

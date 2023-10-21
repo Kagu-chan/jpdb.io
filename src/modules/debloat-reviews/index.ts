@@ -1,7 +1,7 @@
-class DebloadReviews {
-  constructor() {
-    jpdb.settings.renameModuleSetting('debloat-reviews', DebloadReviews.name);
+class DebloadReviewsModule {
+  private DEBLOAT_REVIEWS: string = 'debloat-reviews';
 
+  constructor() {
     this.register();
 
     this.on('/review', false, () => this.review());
@@ -12,7 +12,7 @@ class DebloadReviews {
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: DebloadReviews.name,
+      name: this.DEBLOAT_REVIEWS,
       category: 'Reviews',
       displayText: 'Remove some header labels from review, vocabulary and search results',
       description:
@@ -21,7 +21,7 @@ class DebloadReviews {
   }
 
   private on(reg: Path, once: boolean, fn: Function): void {
-    jpdb.runWhenActive(reg, DebloadReviews.name, fn, once);
+    jpdb.runWhenActive(reg, this.DEBLOAT_REVIEWS, fn, once);
   }
 
   private review(): void {
@@ -59,4 +59,4 @@ class DebloadReviews {
   }
 }
 
-new DebloadReviews();
+new DebloadReviewsModule();

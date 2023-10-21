@@ -7,6 +7,7 @@ import {
 } from './types';
 
 export class LearningStats {
+  private LEARNING_STATS: string = 'learning-stats';
   private SETTING: string = 'max-new-cards-per-day';
 
   private nodes: LearningStatsDataNodes;
@@ -14,8 +15,6 @@ export class LearningStats {
   private additional: LearningStatsAdditionalStats;
 
   constructor() {
-    jpdb.settings.renameModuleSetting('learning-stats', LearningStats.name);
-
     this.register();
 
     this.addListeners();
@@ -23,7 +22,7 @@ export class LearningStats {
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: LearningStats.name,
+      name: this.LEARNING_STATS,
       category: 'Learn Page',
       displayText: 'Display deck statistics in one table',
       description: `
@@ -58,24 +57,24 @@ export class LearningStats {
   }
 
   private addListeners(): void {
-    jpdb.runOnceOnEnable('/settings', LearningStats.name, () => {
+    jpdb.runOnceOnEnable('/settings', this.LEARNING_STATS, () => {
       jpdb.settings.persistence.setModuleOption(
-        LearningStats.name,
+        this.LEARNING_STATS,
         this.SETTING,
         jpdb.settings.getJpdbSetting(this.SETTING),
       );
     });
 
-    jpdb.runAlwaysWhenActive('/learn', LearningStats.name, () => {
+    jpdb.runAlwaysWhenActive('/learn', this.LEARNING_STATS, () => {
       this.updateTable();
       this.removeHeader();
     });
-    jpdb.runAlwaysWhenActive('/deck', LearningStats.name, () => {
+    jpdb.runAlwaysWhenActive('/deck', this.LEARNING_STATS, () => {
       this.updateTable();
       this.removeHeader();
     });
-    jpdb.runAlwaysWhenActive('/review', LearningStats.name, () =>
-      jpdb.cache.invalidate(LearningStats.name, 'new'),
+    jpdb.runAlwaysWhenActive('/review', this.LEARNING_STATS, () =>
+      jpdb.cache.invalidate(this.LEARNING_STATS, 'new'),
     );
   }
 
@@ -96,7 +95,7 @@ export class LearningStats {
     this.present = this.getPresentStats();
     this.additional = this.getAdditionalStats();
 
-    jpdb.css.add(LearningStats.name, __load_css('./src/modules/learning-stats/stats.css'));
+    jpdb.css.add(this.LEARNING_STATS, __load_css('./src/modules/learning-stats/stats.css'));
 
     this.renderUpdatedTable();
     this.appendNewCardsToday();
@@ -367,7 +366,7 @@ export class LearningStats {
   private appendNewCardsToday(): void {
     const showMains = !document.jpdb.findElement('.dropdown.right-aligned');
     const target = jpdb.settings.persistence.getModuleOption<number>(
-      LearningStats.name,
+      this.LEARNING_STATS,
       this.SETTING,
     );
 
@@ -377,7 +376,7 @@ export class LearningStats {
 
     void jpdb.cache
       .fromCacheAsync<string>(
-        LearningStats.name,
+        this.LEARNING_STATS,
         'new',
         60,
         (): Promise<string> =>
@@ -412,11 +411,11 @@ export class LearningStats {
 
   private renderUpdatedTable(): void {
     const showSmallTable = jpdb.settings.persistence.getModuleOption<boolean>(
-      LearningStats.name,
+      this.LEARNING_STATS,
       'show-small-table',
     );
     const showAbsolutes = jpdb.settings.persistence.getModuleOption<boolean>(
-      LearningStats.name,
+      this.LEARNING_STATS,
       'show-total-total',
     );
     // Search for Menu dropdown only existend on deck pages

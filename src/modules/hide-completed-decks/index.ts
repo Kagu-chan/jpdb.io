@@ -1,7 +1,7 @@
 class HideCompletedDecks {
-  private HIDE_COMPLETED_DECKS: string = 'HideCompletedDecks';
-  private HIDE_THRESHOLD_DECKS: string = 'HideThresholdDecks';
-  private HIDE_NON_NEW_DECKS: string = 'HideNonNewDecks';
+  private HIDE_COMPLETED_DECKS: string = 'hide-completed-decks';
+  private HIDE_THRESHOLD_DECKS: string = 'hide-threshold-decks';
+  private HIDE_NON_NEW_FIRST: string = 'hide-non-new-first';
   private DECK_EXCLUSION: string = "[id|='deck']:not([id*='l']):not([id*='n'])";
 
   private _deckList: Deck[];
@@ -9,10 +9,6 @@ class HideCompletedDecks {
   private _deckContainer: HTMLDivElement;
 
   constructor() {
-    jpdb.settings.renameModuleSetting('hide-completed-decks', this.HIDE_COMPLETED_DECKS);
-    jpdb.settings.renameModuleSetting('hide-threshold-decks', this.HIDE_THRESHOLD_DECKS);
-    jpdb.settings.renameModuleSetting('hide-non-new-first', this.HIDE_NON_NEW_DECKS);
-
     this.register();
 
     this.addRootElements();
@@ -53,13 +49,13 @@ class HideCompletedDecks {
     jpdb.runOnce('/settings', () => {
       const rbs = jpdb.settings.getJpdbRadioSetting('learning-order');
 
-      jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_DECKS, 'order', rbs);
+      jpdb.settings.persistence.setModuleOption(this.HIDE_NON_NEW_FIRST, 'order', rbs);
 
       if (rbs === 'by-frequency-local-all-decks') {
-        jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_DECKS);
+        jpdb.settings.moduleManager.disableModule(this.HIDE_NON_NEW_FIRST);
       } else {
         jpdb.settings.moduleManager.register({
-          name: this.HIDE_NON_NEW_DECKS,
+          name: this.HIDE_NON_NEW_FIRST,
           category: 'Decks',
           displayText:
             rbs === 'by-frequency-global-all-decks'
@@ -76,10 +72,10 @@ class HideCompletedDecks {
   private addRootElements(): void {
     jpdb.runOnceWhenEitherIsActive(
       /\/deck-list/,
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         jpdb.css.add(
-          `${this.HIDE_COMPLETED_DECKS}-${this.HIDE_THRESHOLD_DECKS}-${this.HIDE_NON_NEW_DECKS}`,
+          `${this.HIDE_COMPLETED_DECKS}-${this.HIDE_THRESHOLD_DECKS}-${this.HIDE_NON_NEW_FIRST}`,
           __load_css('./src/modules/hide-completed-decks/root.css'),
         );
       },
@@ -87,7 +83,7 @@ class HideCompletedDecks {
 
     jpdb.runAlwaysWhenEitherIsActive(
       /\/deck-list/,
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         this._labelContainer = document.jpdb.adjacentElement(
           'h4',
@@ -105,7 +101,7 @@ class HideCompletedDecks {
   private buildDeckList(): void {
     jpdb.runAlwaysWhenEitherIsActive(
       /\/deck-list/,
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         this._deckList = document.jpdb
           .findElements<'div'>(`.deck${this.DECK_EXCLUSION}`)
@@ -139,8 +135,8 @@ class HideCompletedDecks {
   }
 
   private hideNonNewFirstDecks(): void {
-    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_DECKS, () => {
-      const rbs = jpdb.settings.persistence.getModuleOption(this.HIDE_NON_NEW_DECKS, 'order');
+    jpdb.runAlwaysWhenActive(/\/deck-list/, this.HIDE_NON_NEW_FIRST, () => {
+      const rbs = jpdb.settings.persistence.getModuleOption(this.HIDE_NON_NEW_FIRST, 'order');
       const hide: Deck[] = [];
       let found: undefined | boolean | Deck;
 
@@ -179,7 +175,7 @@ class HideCompletedDecks {
   private displayShowControl(): void {
     jpdb.runAlwaysWhenEitherIsActive(
       /\/deck-list/,
-      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_DECKS],
+      [this.HIDE_COMPLETED_DECKS, this.HIDE_THRESHOLD_DECKS, this.HIDE_NON_NEW_FIRST],
       () => {
         const amount: number = this._deckList.filter((d) => d.parameters.get('hidden')).length;
 

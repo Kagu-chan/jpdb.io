@@ -1,9 +1,6 @@
 ((): void => {
-  const HIDE_DECKS: string = 'HideDecks';
-  const HIDE_SPECIAL_DECKS: string = 'HideSpecialDecks';
-
-  jpdb.settings.renameModuleSetting('hide-decks', HIDE_DECKS);
-  jpdb.settings.renameModuleSetting('hide-special-decks', HIDE_SPECIAL_DECKS);
+  const HIDE_DECKS: string = 'hide-decks';
+  const HIDE_SPECIAL_DECKS: string = 'hide-special-decks';
 
   jpdb.settings.moduleManager.register({
     name: HIDE_DECKS,
