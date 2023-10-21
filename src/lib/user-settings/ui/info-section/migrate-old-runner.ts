@@ -44,13 +44,13 @@ export const migrateOldRunner = (): void => {
     }
 
     if (options.plugins.HideDeckNumbersPlugin?.enabled) {
-      jpdb.settings.moduleManager.enableModule('HideDeckNumbers');
+      jpdb.settings.moduleManager.enableModule('hide-deck-numbers');
 
       return wipeExtension('HideDeckNumbersPlugin');
     }
 
     if (options.plugins.LearningStatsPlugin?.enabled) {
-      jpdb.settings.moduleManager.enableModule('LearningStats');
+      jpdb.settings.moduleManager.enableModule('learning-stats');
 
       return wipeExtension('LearningStatsPlugin');
     }
@@ -67,9 +67,9 @@ export const migrateOldRunner = (): void => {
     }
 
     if (options.plugins.UserCSSPlugin?.enabled) {
-      jpdb.settings.moduleManager.enableModule('UserCSS');
+      jpdb.settings.moduleManager.enableModule('user-css');
       jpdb.settings.persistence.setModuleOption(
-        'UserCSS',
+        'user-css',
         'styles',
         options.plugins.UserCSSPlugin.styles,
       );
@@ -78,7 +78,7 @@ export const migrateOldRunner = (): void => {
     }
 
     if (options.plugins.ScrollControlsPlugin?.enabled) {
-      const s = 'ScrollControls';
+      const s = 'scroll-controls';
       const o = options.plugins.ScrollControlsPlugin as unknown as {
         'button-order': string;
         'button-position': string;
@@ -104,7 +104,7 @@ export const migrateOldRunner = (): void => {
     }
 
     if (options.plugins.CustomLinksPlugin?.enabled) {
-      const s = 'CustomLinks';
+      const s = 'custom-links';
       const o = options.plugins.CustomLinksPlugin as unknown as {
         'top-links': { url: string; label: string }[];
         'bottom-links': { url: string; label: string }[];
