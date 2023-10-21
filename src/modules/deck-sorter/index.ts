@@ -2,6 +2,7 @@
  * @TODO: Implement
  */
 class DeckSorter {
+  private DECK_SORTER: string = 'deck-sorter';
   private deckListDescription = `A value can either be a simple string or a regular expression.<br />
 <br />
 For <a href="https://en.wikipedia.org/wiki/Regular_expression#Basic_concepts" target="_blank">regular expressions (pattern search)</a>, enclose the value with slahes (<code>/</code>).<br />
@@ -38,7 +39,7 @@ Respects the value of 'Reverse priority...' to choose breaking point.`;
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: DeckSorter.name,
+      name: this.DECK_SORTER,
       category: 'Decks',
       displayText: 'Enable automatic deck sorting',
       description: 'Sort your decks on certain conditions locally',

@@ -9,6 +9,7 @@ type VocabData = {
 };
 
 class MoveCards {
+  private MOVE_CARDS: string = 'move-cards';
   private _currentDeckId: number;
 
   constructor() {
@@ -19,7 +20,7 @@ class MoveCards {
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: MoveCards.name,
+      name: this.MOVE_CARDS,
       category: 'Decks',
       displayText: 'Allow moving cards between decks',
       description: 'Adds a `Move card` option to the menu of single vocab cards',
@@ -49,7 +50,7 @@ class MoveCards {
   }
 
   private addEventListeners(): void {
-    jpdb.runAlwaysWhenActive('/deck', MoveCards.name, () => {
+    jpdb.runAlwaysWhenActive('/deck', this.MOVE_CARDS, () => {
       if (this.isPremadeDeck()) {
         return;
       }
@@ -61,7 +62,7 @@ class MoveCards {
       }
 
       const targets = jpdb.settings.persistence
-        .getModuleOption<DeckTarget[]>(MoveCards.name, 'objects')
+        .getModuleOption<DeckTarget[]>(this.MOVE_CARDS, 'objects')
         .filter(({ deckId }) => deckId != this._currentDeckId);
 
       if (!targets.length) {
