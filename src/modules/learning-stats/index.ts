@@ -169,7 +169,7 @@ export class LearningStats {
       present.wordsIndirectKnown +
       present.kanjiKnown +
       present.kanjiIndirectKnown;
-    const sumPercent = Math.floor((sumKnown / sumTotal) * 100);
+    const sumPercent = sumTotal === 0 ? 100 : Math.floor((sumKnown / sumTotal) * 100);
 
     const result: Partial<LearningStatsAdditionalStats> = {
       sumTotal,
@@ -248,17 +248,26 @@ export class LearningStats {
       result.kanjiProgress + result.kanjiUpcoming + present.kanjiKnown + present.kanjiIndirectKnown;
     result.sumABS = result.wordsABS + result.kanjiABS;
 
-    result.wordsABSPercent = Math.floor(
-      ((result.wordsProgress + present.wordsKnown + present.wordsIndirectKnown) / result.wordsABS) *
-        100,
-    );
-    result.kanjiABSPercent = Math.floor(
-      ((result.kanjiProgress + present.kanjiKnown + present.kanjiIndirectKnown) / result.kanjiABS) *
-        100,
-    );
-    result.sumABSPercent = Math.floor(
-      ((result.sumProgress + (result.sumKnown ?? 0)) / result.sumABS) * 100,
-    );
+    result.wordsABSPercent =
+      result.wordsABS === 0
+        ? 100
+        : Math.floor(
+            ((result.wordsProgress + present.wordsKnown + present.wordsIndirectKnown) /
+              result.wordsABS) *
+              100,
+          );
+    result.kanjiABSPercent =
+      result.kanjiABS === 0
+        ? 100
+        : Math.floor(
+            ((result.kanjiProgress + present.kanjiKnown + present.kanjiIndirectKnown) /
+              result.kanjiABS) *
+              100,
+          );
+    result.sumABSPercent =
+      result.sumABS === 0
+        ? 100
+        : Math.floor(((result.sumProgress + (result.sumKnown ?? 0)) / result.sumABS) * 100);
 
     return this.fillEmptyAdditionalStats(result);
   }
@@ -386,9 +395,9 @@ export class LearningStats {
 
         document.jpdb.findElement('.new-today').classList.toggle('hidden');
         document.jpdb.findElement('.new-today-stats').innerText = `${today} / ${target}`;
-        document.jpdb.findElement('.new-today-percent').innerText = `${Math.floor(
-          (Number(today) / target) * 100,
-        )}%`;
+        document.jpdb.findElement('.new-today-percent').innerText = `${
+          target === 0 ? 100 : Math.floor((Number(today) / target) * 100)
+        }%`;
       });
   }
 
