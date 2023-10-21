@@ -107,7 +107,7 @@ export interface IModuleOptions {
   category: string;
   description: string;
   experimental?: boolean;
-  displayText?: string;
+  displayText: string;
   author?: string;
   source?: string;
   options?: ModuleUserOptions;

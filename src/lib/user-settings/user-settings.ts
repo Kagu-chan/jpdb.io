@@ -37,6 +37,10 @@ export class UserSettings {
     return document.jpdb.findElements<'input'>(`[name="${name}"]`).find((e) => e.checked)?.value;
   }
 
+  public renameModuleSetting(sourceKey: string, targetKey: string): void {
+    this._ui?.infoSection.addRenameMigrator(sourceKey, targetKey);
+  }
+
   private onSettings(fn: Function): void {
     if (location.match(this.SETTINGS)) {
       fn();

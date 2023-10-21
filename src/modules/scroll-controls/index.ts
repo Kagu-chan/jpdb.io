@@ -12,6 +12,7 @@ class ScrollControls {
   }
 
   private register(): void {
+    jpdb.settings.renameModuleSetting('scroll-controls', SCROLL_CONTROLS);
     jpdb.settings.moduleManager.register(moduleOptions);
   }
 

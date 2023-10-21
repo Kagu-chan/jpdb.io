@@ -1,6 +1,6 @@
 import { ScrollControlOrder, ScrollControlPosition } from './types';
 
-export const SCROLL_CONTROLS: string = 'scroll-controls';
+export const SCROLL_CONTROLS: string = 'ScrollControls';
 
 export const ScrollControlOrderLabels: Record<ScrollControlOrder, string> = {
   [ScrollControlOrder.BT]: 'Bottom -> Top',

@@ -22,7 +22,7 @@ export const renderSettings = (
       [ScrollControlOrder.TB]: [up, down],
     } as Record<ScrollControlOrder, [ScrollTarget, ScrollTarget]>
   )[order];
-  const hasNavMenu = jpdb.settings.moduleManager.getActiveState('settings-nav');
+  const hasNavMenu = jpdb.settings.moduleManager.getActiveState('SettingsNav');
 
   const targets: [HTMLSpanElement, HTMLSpanElement] = (
     {

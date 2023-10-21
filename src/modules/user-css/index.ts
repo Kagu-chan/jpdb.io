@@ -1,6 +1,7 @@
 ((): void => {
-  const USER_CSS: string = 'user-css';
+  const USER_CSS: string = 'UserCSS';
 
+  jpdb.settings.renameModuleSetting('user-css', USER_CSS);
   jpdb.settings.moduleManager.register({
     name: USER_CSS,
     category: 'UI',

@@ -1,8 +1,11 @@
 class StickyNavbar {
-  private STICKY_NAVBAR: string = 'sticky-navbar';
-  private STICKY_FOOTER: string = 'sticky-footer';
+  private STICKY_NAVBAR: string = 'StickyNavbar';
+  private STICKY_FOOTER: string = 'StickyFooter';
 
   constructor() {
+    jpdb.settings.renameModuleSetting('sticky-navbar', this.STICKY_NAVBAR);
+    jpdb.settings.renameModuleSetting('sticky-footer', this.STICKY_FOOTER);
+
     this.register();
 
     this.addListeners();

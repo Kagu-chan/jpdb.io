@@ -1,6 +1,7 @@
 ((): void => {
-  const HIDE_DECK_NUMBERS = 'hide-deck-numbers';
+  const HIDE_DECK_NUMBERS = 'HideDeckNumbers';
 
+  jpdb.settings.renameModuleSetting('hide-deck-numbers', HIDE_DECK_NUMBERS);
   jpdb.settings.moduleManager.register({
     name: HIDE_DECK_NUMBERS,
     category: 'Learn Page',

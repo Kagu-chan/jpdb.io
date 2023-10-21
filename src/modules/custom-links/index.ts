@@ -7,7 +7,6 @@ interface CustomLink {
  * add or remove custom links for header and footer
  */
 class CustomLinks {
-  private CUSTOM_LINKS: string = 'custom-links';
   private TOP_LINKS: CustomLink[] = [
     { url: '/prebuilt_decks', label: 'Built-in decks' },
     { url: '/stats', label: 'Stats' },
@@ -24,6 +23,8 @@ class CustomLinks {
   ];
 
   constructor() {
+    jpdb.settings.renameModuleSetting('custom-links', CustomLinks.name);
+
     if (jpdb.settings.hasPatreonPerks()) {
       this.BOTTOM_LINKS.push({ url: '/labs', label: 'Labs' });
     }
@@ -35,7 +36,7 @@ class CustomLinks {
 
   private register(): void {
     jpdb.settings.moduleManager.register({
-      name: this.CUSTOM_LINKS,
+      name: CustomLinks.name,
       category: 'Navigation',
       displayText: 'Custom Links',
       description: 'Allows changing the links in header and footer',
@@ -115,12 +116,12 @@ class CustomLinks {
   }
 
   private addListeners(): void {
-    jpdb.runOnceOnEnable('/settings', this.CUSTOM_LINKS, () => {
+    jpdb.runOnceOnEnable('/settings', CustomLinks.name, () => {
       document.jpdb.withElements('.nav > .menu a', (a) => a.classList.add('hidden'));
 
       this.addHeaderLinks();
 
-      jpdb.on(`update-${this.CUSTOM_LINKS}-header`, () => {
+      jpdb.on(`update-${CustomLinks.name}-header`, () => {
         document.jpdb.withElements('.nav > .menu a', (a) => {
           if (a.classList.contains('hidden')) {
             return;
@@ -132,7 +133,7 @@ class CustomLinks {
         this.addHeaderLinks();
       });
     });
-    jpdb.runOnceOnDisable('/settings', this.CUSTOM_LINKS, () => {
+    jpdb.runOnceOnDisable('/settings', CustomLinks.name, () => {
       document.jpdb.withElements('.nav > .menu a', (a) => {
         if (a.classList.contains('hidden')) {
           a.classList.remove('hidden');
@@ -144,7 +145,7 @@ class CustomLinks {
       });
     });
 
-    jpdb.runOnceWhenActive(/^(?!\/settings)/, this.CUSTOM_LINKS, () => {
+    jpdb.runOnceWhenActive(/^(?!\/settings)/, CustomLinks.name, () => {
       document.jpdb.withElements('.nav > .menu a', (a) => a.remove());
       document.jpdb.withElements('.footer a', (a) => a.remove());
 
@@ -155,7 +156,7 @@ class CustomLinks {
 
   private addHeaderLinks(): void {
     jpdb.settings.persistence
-      .getModuleOption<CustomLink[]>(this.CUSTOM_LINKS, 'header')
+      .getModuleOption<CustomLink[]>(CustomLinks.name, 'header')
       .forEach((link) => {
         const anchor = document.jpdb.appendElement('.menu', {
           tag: 'a',
@@ -174,7 +175,7 @@ class CustomLinks {
 
   private addFooterLinks(): void {
     jpdb.settings.persistence
-      .getModuleOption<CustomLink[]>(this.CUSTOM_LINKS, 'footer')
+      .getModuleOption<CustomLink[]>(CustomLinks.name, 'footer')
       .forEach((link) => {
         const anchor = document.jpdb.appendElement('.footer', {
           tag: 'a',

@@ -1,7 +1,8 @@
 ((): void => {
   const TSC = 'TSC';
-  const HIDE_HIGHLIGHT = 'hide-highlight';
+  const HIDE_HIGHLIGHT = 'HideHighlight';
 
+  jpdb.settings.renameModuleSetting('hide-highlight', HIDE_HIGHLIGHT);
   jpdb.settings.moduleManager.register({
     name: TSC,
     category: 'Reviews',
