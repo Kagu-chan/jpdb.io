@@ -2,13 +2,23 @@
 
 An extension loader for [JPDB](https://jpdb.io) containing a selection of QoL changes.
 
-# Installation
+# Installation on Computers and Laptops
 
 1. Install any user script manager of your choice, e.g. [Tampermonkey](https://www.tampermonkey.net/).
 2. Download the latest version [here](https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js).
 3. If your user script manager offers it, install or update, if not, add as a new script according to the extension.
 
 If updates are available, they can be installed via your user script manager automatically or manually.
+
+# Installation on iOS
+
+1. Create a directory in your iCloud Drive
+2. Put the extension script in this directory and sync with your device (via `Files` app)
+3. Install the extension `Userscripts` from the app store
+4. Configure the app to use the created directy as source
+5. Enable the extension script in safari
+
+If updates are available, Userscripts may attempt to automatically update, but this is currently not tested.
 
 # Features
 
