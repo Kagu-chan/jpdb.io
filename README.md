@@ -15,7 +15,7 @@ If updates are available, they can be installed via your user script manager aut
 1. Create a directory in your iCloud Drive
 2. Put the extension script in this directory and sync with your device (via `Files` app)
 3. Install the extension `Userscripts` from the app store
-4. Configure the app to use the created directy as source
+4. Configure the app to use the created directly as source
 5. Enable the extension script in safari
 
 If updates are available, Userscripts may attempt to automatically update, but this is currently not tested.
@@ -26,7 +26,7 @@ All features can be enabled or disabled in the [settings](https://jpdb.io/settin
 
 # Module Settings
 
-At the end of the usual settings a new section `Module settings` will appear. All options here automatically save upon interaction, for text boxes you need to `click or tap outside` to update then.
+At the end of the usual settings a new section `Module settings` will appear. All options here automatically save upon interaction, for text boxes you need to `click or tap outside` to update them.
 
 ## Decks
 
@@ -35,13 +35,13 @@ At the end of the usual settings a new section `Module settings` will appear. Al
 Enable this option to hide decks which do not contain new cards.
 This is evaluated against total amount, ignoring suspended cards (The `Vocabulary` bar is at 100% seen).
 
-This is useful when you have lots of decks, as those are not clogging up the space if you're interested in the progress of those not yet finnished.
+This is useful when you have lots of decks, as those are not clogging up the space if you're interested in the progress of those not yet finished.
 
 ### Hide decks at Target coverage
 
-Enable this option to hide decks which have reached the configured target coverage either globally or for this deck if overwritte (Patreon feature!).
+Enable this option to hide decks which have reached the configured target coverage either globally or where the target coverage is overwritten (Patreon feature!).
 
-This is useful when you have lots of decks, as those are not clogging up the space if you're interested in the progress of those not yet finnished.
+This is useful when you have lots of decks, as those are not clogging up the space if you're interested in the progress of those not yet finished.
 
 ### Hide non-new decks
 
@@ -57,7 +57,7 @@ This is a technical limitation due to how JPDB exposes those information and is 
 
 Enables you to **move** cards between decks.
 
-You need to configure target decks, but can do some with as many decks as you like. To do this
+To add decks to list list of possible targets
 
 - Open the `Target Decks` box
 - Click `Add` to create a new empty element
@@ -95,8 +95,8 @@ This hides special decks from your learning page. This special decks are
 ### Display deck statistics in one table
 
 This converts the text containing the information about your progress into a new table.
-It also coverts the table headers into direct links to direct links to the according filters.
-Additionally it shows you your daily progress of learning new cards according to your JPDB settings.
+It also converts the table headers into direct links to the according deck filters.
+Additionally it shows your daily progress of learning new cards according to your JPDB settings.
 
 _This also works on deck pages itself, but there the information about `new` and `due` cards is not available._
 
@@ -107,7 +107,7 @@ If your prefer a thinner table, enable this option. On mobile devices this optio
 #### Show combined totals
 
 This calculates some additional stats, which are mainly useful if you have suspended cards from your collection.
-**This stats are not accurate due to how JPDB exposes such information! They should still get a somewhat decent estimation**
+**These stats are not accurate due to how JPDB exposes such information! They should still get a somewhat decent estimation**
 
 The additional stats are as follows:
 
@@ -144,12 +144,12 @@ This sets the header to a fixed position, thus being always visible.
 
 ### Fix footer navigation
 
-This sets the footer to a fixed position, this being always visible. Also makes the footer collapse like the header on small devices.
+This sets the footer to a fixed position, thus being always visible. Also makes the footer collapse like the header on small devices.
 
 ### Add table of contents to settings
 
 This adds a table of contents to the settings, allowing you to scroll directly to specific sections.
-This table collapses on smaller space and hides in the top left or lower right corner depending on abvailable space.
+This table collapses on smaller space and hides in the top left or lower right corner depending on available space.
 
 ## Reviews
 
