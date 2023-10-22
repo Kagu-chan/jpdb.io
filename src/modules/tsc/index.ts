@@ -6,7 +6,7 @@
   jpdb.settings.moduleManager.register({
     name: TSC,
     category: 'Reviews',
-    displayText: 'Sentence cards',
+    displayText: 'Targeted Sentence Cards',
     description:
       'Remove the target word from reviews, thus turning them into targeted sentence cards',
   });

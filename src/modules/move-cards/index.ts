@@ -24,7 +24,6 @@ class MoveCards {
       category: 'Decks',
       displayText: 'Allow moving cards between decks',
       description: 'Adds a `Move card` option to the menu of single vocab cards',
-      experimental: true,
       options: [
         {
           key: 'objects',

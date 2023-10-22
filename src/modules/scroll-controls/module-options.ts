@@ -11,7 +11,6 @@ export const moduleOptions: IModuleOptions = {
   category: 'UI',
   displayText: 'Enable scrolling controls on longer pages',
   description: 'Adds a Scroll to Top and Scroll to Bottom control on pages with more content',
-  experimental: true,
   options: [
     {
       key: 'button-order',

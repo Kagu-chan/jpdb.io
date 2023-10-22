@@ -39,7 +39,6 @@ class CustomLinks {
       category: 'Navigation',
       displayText: 'Custom Links',
       description: 'Allows changing the links in header and footer',
-      experimental: true,
       options: [
         {
           key: 'header',
