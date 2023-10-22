@@ -1,4 +1,6 @@
 ((): void => {
+  const UNSUSPEND: string = 'unsuspend';
+
   const withNode = (node: HTMLDivElement): void => {
     const { adjacentElement, findElement, findElements, textFromNode } = document.jpdb;
 
@@ -52,17 +54,24 @@
     });
   };
 
-  jpdb.runAlways('/deck', () => {
+  jpdb.settings.moduleManager.register({
+    name: UNSUSPEND,
+    category: 'Reviews',
+    displayText: 'Allow manipulating card states',
+    description: 'Allows manipulating the card state when opening the context menu of a card.',
+  });
+
+  jpdb.runAlwaysWhenActive('/deck', UNSUSPEND, () => {
     document.jpdb.withElements('.entry.suspended, .entry.locked, .entry.new', withNode);
   });
-  jpdb.runAlways(/\/vocabulary/, () => {
+  jpdb.runAlwaysWhenActive(/\/vocabulary/, UNSUSPEND, () => {
     if (!document.jpdb.findElement('.tag.suspended, .tag.locked, .tag.new')) {
       return;
     }
 
     document.jpdb.withElement('.dropdown-content', withNode);
   });
-  jpdb.runAlways(/\/search/, () => {
+  jpdb.runAlwaysWhenActive(/\/search/, UNSUSPEND, () => {
     document.jpdb
       .findElements<'div'>('.result.vocabulary')
       .filter((e) => !!document.jpdb.findElement(e, '.tag.suspended, .tag.locked, .tag.new'))

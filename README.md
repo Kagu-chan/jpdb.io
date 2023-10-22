@@ -12,9 +12,7 @@ If updates are available, they can be installed via your user script manager aut
 
 # Features
 
-Most features can be enabled or disabled in the [settings](https://jpdb.io/settings).
-
-EXPLAIN UNSUSPEND!
+All features can be enabled or disabled in the [settings](https://jpdb.io/settings).
 
 # Module Settings
 
@@ -62,6 +60,8 @@ You can also
 - Click `Restore defaults` to throw away all changes ever made.
 - Click the `- (Minus)` button to remove an entry
 - Use the arrow keys to reorder the entries.
+
+If you now open the context menu of a card when being inside a deck, you can directly move this card to one of the configured targets.
 
 ## Learn Page
 
@@ -182,6 +182,14 @@ Together with `Targeted Sentence Cards` this effectively turns your vocabulary c
 Reveals the target word on sentence click or tap.
 This is useful if the sample sentence contains multiple currently learning words or complex grammar you're not familiar with.
 
+### Allow manipulating card states
+
+This option adds options to manipulate a card state to the context menu of vocabulary and name cards - they all add a failed review to those cards, forcing them into learning state.
+
+- `Unsuspend` suspended cards
+- `Unlock and learn` locked cards
+- `Add failed review` to new cards - this allows you skipping your review queue
+
 ## UI
 
 ### Add own CSS definitions
@@ -203,6 +211,18 @@ You can configure the button order as well as the button position.
 Experimental settings are features which work in general, but still require a bit more testing.
 
 _Currently there are **no** experimental features_
+
+# Planned features
+
+Features planned, but not yet implemented:
+
+- Configure custom fonts
+- Additional sort options for decks
+- Hotkeys
+- Update of the filters function
+- Make the viewport width configurable
+- Make the grading system configurable
+- Automatically remove Bunpro Contents from JPDB - dont learn twice ;)
 
 ## License
 
