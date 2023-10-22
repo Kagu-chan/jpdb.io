@@ -1,6 +1,7 @@
 ((): void => {
   const TSC = 'TSC';
   const HIDE_HIGHLIGHT = 'hide-highlight';
+  const REM_HIGHLIGHT_HOVER = 'rem-highlight-hover';
 
   jpdb.settings.moduleManager.register({
     name: TSC,
@@ -19,7 +20,7 @@
       'Remove the target word highlight in sample sentences, avoiding directly recognizing the usage without reading the sentence',
     options: [
       {
-        key: 'rem-highlight-hover',
+        key: REM_HIGHLIGHT_HOVER,
         type: 'checkbox',
         text: 'Tap to reveal',
         default: false,
@@ -50,7 +51,7 @@
 
       target.classList.add('rem');
 
-      if (jpdb.settings.persistence.getModuleOption(TSC, 'rem-highlight-hover')) {
+      if (jpdb.settings.persistence.getModuleOption(HIDE_HIGHLIGHT, REM_HIGHLIGHT_HOVER)) {
         const mouseTarget = document.jpdb.findElement('.sentence');
 
         mouseTarget.addEventListener('click', () => target.classList.remove('rem'));
