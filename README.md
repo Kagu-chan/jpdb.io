@@ -234,6 +234,11 @@ Features planned, but not yet implemented:
 - Make the grading system configurable
 - Automatically remove Bunpro Contents from JPDB - dont learn twice ;)
 
-## License
+# Thank you!
+
+- OrangeLightX - Testing and ideas
+- JwaGBoi - Testing and Code
+
+# License
 
 [GPL](https://choosealicense.com/licenses/gpl-3.0/)
