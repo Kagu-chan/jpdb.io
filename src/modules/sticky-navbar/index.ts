@@ -85,6 +85,16 @@ class StickyNavbar {
       key: this.STICKY_FOOTER,
       css: __load_css('./src/modules/sticky-navbar/footer.css'),
     });
+
+    jpdb.runAlways(/deck/, () => {
+      const lockLinks = document.jpdb.findElement('.pagination') ? 2 : 3;
+
+      document.jpdb
+        .findElements('.entry .dropdown')
+        .reverse()
+        .slice(0, lockLinks)
+        .forEach((e) => e.classList.add('add-pad'));
+    });
   }
 
   private removeStickyNavbar(): void {

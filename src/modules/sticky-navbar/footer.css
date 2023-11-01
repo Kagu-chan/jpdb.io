@@ -105,6 +105,10 @@
   top: 0;
 }
 
+.entry .dropdown.add-pad details[open] .dropdown-content {
+  padding-bottom: 3.5rem;
+}
+
 @media (min-width: 41rem) {
   .footer:not(.minimal) .a {
     align-self: auto;
