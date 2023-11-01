@@ -20,6 +20,10 @@ If updates are available, they can be installed via your user script manager aut
 
 If updates are available, Userscripts may attempt to automatically update, but this is currently not tested.
 
+# Installation on Android
+
+Everything should work with kiwi browser. Please tell me how to install, so I can add it here ;)
+
 # Features
 
 All features can be enabled or disabled in the [settings](https://jpdb.io/settings).

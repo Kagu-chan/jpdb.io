@@ -405,8 +405,13 @@ export class LearningStats {
     this.nodes.stats?.remove();
     this.nodes.locked?.remove();
     this.nodes.nonRedundant?.remove();
-    this.nodes.fulfilled?.remove();
-    this.nodes.upcoming?.remove();
+
+    const isLearnPage = !document.jpdb.findElement('.dropdown.right-aligned');
+
+    if (isLearnPage) {
+      this.nodes.fulfilled?.remove();
+      this.nodes.upcoming?.remove();
+    }
   }
 
   private renderUpdatedTable(): void {
