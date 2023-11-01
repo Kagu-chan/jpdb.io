@@ -24,17 +24,19 @@
           ?.innerText.replace(/[^\d]/g, ''),
       );
 
-    const btn = document.jpdb.adjacentElement(
-      'form',
-      'afterend',
-      document.util.button(`Show ${decks} decks`, {
-        handler: () => (location.href = '/deck-list'),
-        type: 'default',
-      }),
-    );
+    if (!Number.isNaN(decks)) {
+      const btn = document.jpdb.adjacentElement(
+        'form',
+        'afterend',
+        document.util.button(`Show ${decks} decks`, {
+          handler: () => (location.href = '/deck-list'),
+          type: 'default',
+        }),
+      );
 
-    btn.classList.add('show-deck-list');
-    jpdb.onMobile(() => btn.classList.add('mobile'));
+      btn.classList.add('show-deck-list');
+      jpdb.onMobile(() => btn.classList.add('mobile'));
+    }
 
     const decksH = document.jpdb.findElement('#deck_list');
     const deckL = decksH.nextSibling!;
