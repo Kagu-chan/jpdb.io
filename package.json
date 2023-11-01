@@ -1,6 +1,6 @@
 {
   "name": "jpdb.io-script-runer",
-  "version": "1.0.0.rc-0",
+  "version": "1.0.0",
   "description": "JPDB.io Script Runner",
   "main": "src/index.ts",
   "scripts": {
