@@ -1,0 +1,26 @@
+.show-container {
+  margin-bottom: 0.5rem;
+}
+
+.show-container:not(:has(.show-control)) {
+  display: none;
+}
+
+.show-control {
+  font-size: 1rem;
+  opacity: 0.8;
+  display: block;
+  cursor: pointer;
+}
+
+.completed,
+.threshold-reached,
+.non-new {
+  border-color: var(--outline-v4-color) !important;
+}
+
+.hide-decks .completed,
+.hide-decks .threshold-reached,
+.hide-decks .non-new {
+  display: none;
+}

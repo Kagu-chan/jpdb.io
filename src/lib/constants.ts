@@ -1,4 +1,9 @@
-export const VERSION: string = process.env.VERSION;
-export const NAME: string = process.env.NAME;
-export const RELEASES: string = process.env.LINK;
-export const BUGS: string = process.env.BUGS;
+export const VERSION: string = manifest.VERSION;
+export const NAME: string = manifest.NAME;
+export const HOMEPAGE: string = manifest.HOMEPAGEURL;
+export const RELEASES: string = manifest.RELEASESURL;
+export const BUGS: string = manifest.SUPPORTURL;
+
+declare global {
+  const manifest: Record<string, string>;
+}

@@ -1,0 +1,48 @@
+{
+  "name": "JPDB.io UserScript Runner",
+  "namespace": "https://jpdb.io",
+  "match": "https://jpdb.io/*",
+  "icon": "https://www.google.com/s2/favicons?sz=64&domain=jpdb.io",
+  "homepageURL": "https://github.com/Kagu-chan/jpdb.io",
+  "releasesURL": "https://github.com/Kagu-chan/jpdb.io/releases",
+  "supportURL": "https://github.com/Kagu-chan/jpdb.io/issues",
+  "downloadURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
+  "updateURL": "https://github.com/Kagu-chan/jpdb.io/releases/latest/download/JPDB.io.user.js",
+  "grant": [],
+  "build": [
+    "browser",
+    "lib",
+    "auto-fail-new-cards",
+    "custom-fonts",
+    "custom-links",
+    "debloat-reviews",
+    "deck-sorter",
+    "hide-completed-decks",
+    "hide-deck-numbers",
+    "hide-decks",
+    "hotkeys",
+    "learning-stats",
+    "move-cards",
+    "search-compilation",
+    "sticky-navbar",
+    "tsc",
+    "unsuspend",
+    "user-css",
+    "widen-viewport",
+    "scroll-controls",
+    "settings-nav"
+  ],
+  "output": {
+    "build": {
+      "script": "JPDB.io.user.js",
+      "assets": [{ "from": "LICENSE.md", "to": "./" }],
+      "merge": [".artifacts/build-bundle.js", "script"],
+      "minimize": true
+    },
+    "watch": {
+      "script": "bundle.js",
+      "assets": [{ "from": ".artifacts/watch-bundle.js", "to": "./" }],
+      "minimize": false
+    }
+  }
+}
