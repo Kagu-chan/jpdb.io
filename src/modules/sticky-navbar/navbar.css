@@ -12,3 +12,7 @@
 .notifications {
   top: calc(80px + 2rem);
 }
+
+.vocabulary-list .tag {
+  z-index: 9999;
+}
