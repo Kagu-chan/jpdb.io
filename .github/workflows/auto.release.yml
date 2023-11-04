@@ -30,6 +30,6 @@ jobs:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           prerelease: false
           files: |
-            dist/JPDB.io.user.js
-            dist/LICENSE.md
+            .dist/JPDB.io.user.js
+            .dist/LICENSE.md
         id: 'automatic_releases'
