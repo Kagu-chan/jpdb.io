@@ -26,7 +26,7 @@
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jsdoc": "^46.8.2",
+    "eslint-plugin-jsdoc": "^47.0.2",
     "eslint-plugin-prettier": "^5.0.1",
     "fast-xml-parser": "^4.3.2",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
