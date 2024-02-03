@@ -2,7 +2,7 @@ export class UserSettingsPersistence {
   public getModuleOption<T>(module: string, key: string, defaultValue?: T): T {
     const options = this.read<Record<string, T>>(module, {});
 
-    if (!options[key] && defaultValue !== undefined) {
+    if (options[key] === undefined && defaultValue !== undefined) {
       this.setModuleOption(module, key, defaultValue);
 
       options[key] = defaultValue;

@@ -33,7 +33,7 @@ export const textfield = <T extends string | number>(
   });
 
   input.onchange = (): void =>
-    options.change((options.type === 'number' ? Number(input.value) : options.value) as T);
+    options.change((options.type === 'number' ? Number(input.value) : input.value) as T);
 
   if (options.type === 'number') {
     options.min !== undefined && input.setAttribute('min', options.min.toString());
