@@ -13,6 +13,7 @@
     "browser",
     "lib",
     "auto-fail-new-cards",
+    "remove-review-links",
     "custom-fonts",
     "custom-links",
     "debloat-reviews",
