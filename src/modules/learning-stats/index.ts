@@ -123,6 +123,13 @@ export class LearningStats {
       return false;
     }
 
+    if (
+      header.tagName === 'DIV' &&
+      (header.nextSibling as HTMLDivElement).getAttribute('style') === null
+    ) {
+      return false;
+    }
+
     dataNodes.stats = t1;
     dataNodes.statsBody = document.jpdb.findElement<'tbody'>(t1, 'tbody');
 
