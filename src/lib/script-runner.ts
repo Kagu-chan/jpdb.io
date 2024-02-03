@@ -253,10 +253,12 @@ export class ScriptRunner {
   }
 
   public emit(eventName: string, ...args: unknown[]): void {
-    this._listen[eventName]?.forEach((cb) => cb(...args) as unknown);
-    this._listenOnce[eventName]?.forEach((cb) => cb(...args) as unknown);
+    const cbs = [...(this._listen[eventName] ?? []), ...(this._listenOnce[eventName] ?? [])];
 
     this._listenOnce[eventName] = [];
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    cbs.forEach((cb) => cb(...args));
   }
 
   public clearEvents(eventName: string): void {
