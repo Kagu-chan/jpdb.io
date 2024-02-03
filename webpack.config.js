@@ -66,6 +66,7 @@ class JPDBioWebpackPlugin {
     'releasesURL',
     'supportURL',
     'updateURL',
+    'downloadURL',
     'grant',
     'build',
     'output',
