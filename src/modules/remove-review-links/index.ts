@@ -37,7 +37,7 @@ export class RemoveReviewLinks {
     jpdb.runAlwaysWhenActive(['/', '/learn'], this.REMOVE_REVIEW_LINKS, () => {
       document.jpdb.destroyElement('form[action="/review#a"]');
     });
-    jpdb.runOnceWhenActive('/deck-list', this.REMOVE_REVIEW_LINKS, () => {
+    jpdb.runAlwaysWhenActive('/deck-list', this.REMOVE_REVIEW_LINKS, () => {
       document.jpdb.withElements('div.tooltip', (e: HTMLDivElement) => e.remove());
     });
   }
