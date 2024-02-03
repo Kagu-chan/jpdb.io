@@ -16,3 +16,7 @@
 .vocabulary-list .tag {
   z-index: 9999;
 }
+
+.dropdown .dropdown-content {
+  z-index: 99999;
+}
