@@ -1,6 +1,7 @@
 export class Deck {
   public readonly parameters = new Map<string, any>();
 
+  protected _id: string;
   protected _title: string;
   protected _newCards: HTMLDivElement;
   protected _body: HTMLDivElement;
@@ -32,8 +33,16 @@ export class Deck {
     return this._deckNode.classList;
   }
 
+  public get id(): string {
+    return this._id;
+  }
+
   public get title(): string {
     return this._title;
+  }
+
+  public get cleanTitle(): string {
+    return this._title.replace(/^\d+\. /, '');
   }
 
   public get done(): number {
@@ -93,8 +102,14 @@ export class Deck {
   }
   //#endregion
 
-  constructor(protected _deckNode: HTMLDivElement) {
-    this._title = document.jpdb.findElement(this._deckNode, '.deck-title a')?.innerText;
+  constructor(
+    protected _deckNode: HTMLDivElement,
+    public readonly position: number = 0,
+  ) {
+    const a: HTMLAnchorElement = document.jpdb.findElement<'a'>(this._deckNode, '.deck-title a');
+
+    this._id = a?.href.split('=').pop() ?? '0';
+    this._title = a?.innerText;
     this._body = document.jpdb.findElement<'div'>(this._deckNode, '.deck-body div');
     this._newCards = document.jpdb.findElement<'div'>(this._deckNode, '.deck-title .tooltip');
 
@@ -120,7 +135,7 @@ export class Deck {
       second.childNodes.length ? this.childs(second) : this.childs(third)
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
-    const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+    const [done, seen] = this.percentageFromtext(text);
 
     this._donePercent = done;
     this._seenPercent = seen ?? done;
@@ -138,7 +153,7 @@ export class Deck {
       second.childNodes.length ? this.childs(second) : this.childs(third)
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
-    const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+    const [done, seen] = this.percentageFromtext(text);
 
     this._covPercent = done;
     this._recPercent = seen ?? done;
@@ -166,7 +181,7 @@ export class Deck {
       second.childNodes.length ? this.childs(second) : this.childs(third)
     )[0]?.innerText?.replace(/\&nbsp;/g, '');
 
-    const [done, seen] = Array.from(text.matchAll(/(\d+)%/g)).map(([, e]) => Number(e));
+    const [done, seen] = this.percentageFromtext(text);
 
     this._kanjiDonePercent = done;
     this._kanjiSeenPercent = seen ?? done;
@@ -174,5 +189,9 @@ export class Deck {
 
   protected childs<T extends HTMLElement = HTMLDivElement>(e: HTMLDivElement): T[] {
     return Array.from(e?.childNodes ?? []) as T[];
+  }
+
+  protected percentageFromtext(text: string): [done: number, seen: number] {
+    return Array.from(text.matchAll(/([\d\.]+)%/g)).map(([, e]) => Number(e)) as [number, number];
   }
 }
