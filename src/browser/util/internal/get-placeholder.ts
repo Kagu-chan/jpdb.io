@@ -1,4 +1,4 @@
-export const getPlacehoolder = (options: {
+export const getPlaceholder = (options: {
   placeholder?: string;
   helpText?: string | HTMLElement;
 }): string =>

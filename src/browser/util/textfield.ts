@@ -1,6 +1,6 @@
 import { container } from './container';
 import { appendHelpText } from './internal/append-help-text';
-import { getPlacehoolder } from './internal/get-place-holder';
+import { getPlaceholder } from './internal/get-placeholder';
 
 declare global {
   interface TextfieldOptions<T extends string | number> {
@@ -24,7 +24,7 @@ export const textfield = <T extends string | number>(
       name: options.name,
       type: options.type,
       value: options.value?.toString(),
-      placeholder: getPlacehoolder(options),
+      placeholder: getPlaceholder(options),
       'data-key': options.name,
     },
     style: {

@@ -1,6 +1,6 @@
 import { container } from './container';
 import { appendHelpText } from './internal/append-help-text';
-import { getPlacehoolder } from './internal/get-place-holder';
+import { getPlaceholder } from './internal/get-placeholder';
 
 declare global {
   interface TextareaOptions {
@@ -18,7 +18,7 @@ export const textarea = (options: TextareaOptions): HTMLDivElement => {
     innerHTML: options.value,
     attributes: {
       name: options.name,
-      placeholder: getPlacehoolder(options),
+      placeholder: getPlaceholder(options),
       'data-key': options.name,
       spellcheck: 'false',
     },
