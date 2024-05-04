@@ -288,12 +288,12 @@ export class LearningStats {
       key === 'Words'
         ? 'words'
         : key.startsWith('Words')
-        ? key.includes('(indirect)')
-          ? 'wordsIndirect'
-          : 'words'
-        : key.includes('(indirect)')
-        ? 'kanjiIndirect'
-        : 'kanji';
+          ? key.includes('(indirect)')
+            ? 'wordsIndirect'
+            : 'words'
+          : key.includes('(indirect)')
+            ? 'kanjiIndirect'
+            : 'kanji';
 
     const total = Number(t);
     const learning = Number(l);

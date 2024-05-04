@@ -42,8 +42,8 @@
                 value: isUnsuspend
                   ? 'Unsuspend'
                   : isUnlock
-                  ? 'Unlock and learn'
-                  : 'Add failed review',
+                    ? 'Unlock and learn'
+                    : 'Add failed review',
                 type: 'submit',
                 onclick: `post_refresh_and_notify('Added review to ${word}')`,
               },

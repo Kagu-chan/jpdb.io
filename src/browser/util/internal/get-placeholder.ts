@@ -5,5 +5,5 @@ export const getPlaceholder = (options: {
   options.placeholder !== undefined
     ? options.placeholder
     : typeof options.helpText === 'string'
-    ? options.helpText
-    : options.helpText?.innerHTML ?? '';
+      ? options.helpText
+      : options.helpText?.innerHTML ?? '';
