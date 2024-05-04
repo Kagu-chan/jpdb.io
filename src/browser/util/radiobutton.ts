@@ -1,4 +1,5 @@
 import { container } from './container';
+import { appendHelpText } from './internal/append-help-text';
 
 declare global {
   interface RadiobuttonOptions {
@@ -24,7 +25,7 @@ export const radiobutton = (options: RadiobuttonOptions): HTMLDivElement => {
     class: 'hidden',
   });
 
-  const i = container(
+  const radioOptions = container(
     Object.values(options.options).map((option: string) => {
       const cInp = document.jpdb.createElement('input', {
         attributes: {
@@ -63,7 +64,9 @@ export const radiobutton = (options: RadiobuttonOptions): HTMLDivElement => {
       },
     },
   );
-  const c = container([
+
+  const helpContainer = container([]);
+  const mainContainer = container([
     input,
     {
       tag: 'label',
@@ -72,10 +75,12 @@ export const radiobutton = (options: RadiobuttonOptions): HTMLDivElement => {
         for: input.id,
       },
     },
-    i,
+    helpContainer,
+    radioOptions,
   ]);
 
   input.onchange = (): void => options.change(input.value);
+  appendHelpText(helpContainer, options.helpText);
 
-  return c;
+  return mainContainer;
 };

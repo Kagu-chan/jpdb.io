@@ -12,6 +12,7 @@ export enum ModuleUserOptionFieldType {
   STRINGLIST = 'stringlist',
   NUMBERLIST = 'numberlist',
   OBJECTLIST = 'objectlist',
+  DESCRIPTION = 'description',
 }
 
 export interface HasChildren {
@@ -26,14 +27,23 @@ export interface HasNoChildren {
   children?: [] | undefined;
 }
 
-type ModuleUserOptionBase<T> = {
+interface ModuleUserOptionRoot {
   key: string;
+  type: `${ModuleUserOptionFieldType}`;
+}
+type ModuleUserOptionBase<T> = ModuleUserOptionRoot & {
   text?: string;
   description?: string;
   default: T;
-  type: `${ModuleUserOptionFieldType}`;
 } & (HasChildren | HasNoChildren);
 
+export type ModuleUserOptionDescription = ModuleUserOptionRoot & {
+  type: `${ModuleUserOptionFieldType.DESCRIPTION}`;
+  text: string;
+  description?: string;
+  collapsible?: boolean;
+  default?: never;
+} & HasNoChildren;
 export type ModuleUserOptionCheckbox = ModuleUserOptionBase<boolean> & {
   type: `${ModuleUserOptionFieldType.CHECKBOX}`;
 };
@@ -92,6 +102,7 @@ export type ModuleUserOptionObjectList = ModuleUserOptionBase<object[]> & {
 };
 
 export type ModuleUserOption =
+  | ModuleUserOptionDescription
   | ModuleUserOptionCheckbox
   | ModuleUserOptionRadioButton
   | ModuleUserOptionText

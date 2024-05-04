@@ -1,5 +1,6 @@
 import { HasChildren, ModuleUserOption } from '../module-options.type';
 import { CheckboxRenderer } from './renderers/checkbox';
+import { DescriptionRenderer } from './renderers/description';
 import { EmptyRenderer } from './renderers/empty-renderer';
 import { Renderer } from './renderers/lib/_renderer';
 import { NumberRenderer } from './renderers/number';
@@ -71,6 +72,8 @@ export class ModuleOption {
         return StringListRenderer;
       case 'numberlist':
         return NumberListRenderer;
+      case 'description':
+        return DescriptionRenderer;
       default:
         return EmptyRenderer;
     }
